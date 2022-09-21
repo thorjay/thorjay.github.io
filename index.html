@@ -159,7 +159,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">1</span>
+          <span class="site-state-item-count">2</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -194,6 +194,109 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://thorjay.github.io/2022/09/21/%E4%BC%A0%E6%84%9F%E5%99%A8-%E6%96%B9%E4%BD%8D%E6%B0%B4%E5%B9%B3%E6%B5%8B%E9%87%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="小森">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jay'lab">
+      <meta itemprop="description" content="小森夜行,手可摘星辰">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | jay'lab">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/09/21/%E4%BC%A0%E6%84%9F%E5%99%A8-%E6%96%B9%E4%BD%8D%E6%B0%B4%E5%B9%B3%E6%B5%8B%E9%87%8F/" class="post-title-link" itemprop="url">传感器_方位水平测量</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-09-21 17:32:49" itemprop="dateCreated datePublished" datetime="2022-09-21T17:32:49+08:00">2022-09-21</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="需求及场景"><a href="#需求及场景" class="headerlink" title="需求及场景"></a>需求及场景</h2><ul>
+<li>角度测量</li>
+</ul>
+<p>将手机变成一个指南针或者一个水平仪的数据；要实现这种效果，就得通过上一篇文章<a href="/2022/09/20/Android%E4%BC%A0%E6%84%9F%E5%99%A8%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8/" title="Android传感器介绍及使用.md">Android传感器介绍及使用</a>中介绍的传感器来获取相应的数据。</p>
+<ul>
+<li>坐标系</li>
+</ul>
+<p>方位水平测量是以世界坐标系为基准的，详情见上一篇文章<a href="/2022/09/20/Android%E4%BC%A0%E6%84%9F%E5%99%A8%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8/" title="Android传感器介绍及使用.md">Android传感器介绍及使用</a>中的传感器事件数据章节。</p>
+<ul>
+<li>传感器</li>
+</ul>
+<p>使用两种传感器来：</p>
+<ul>
+<li>地磁场传感器</li>
+<li>加速度计传感器</li>
+</ul>
+<h2 id="关键代码"><a href="#关键代码" class="headerlink" title="关键代码"></a>关键代码</h2><ul>
+<li>获取地磁场和加速度计传感器 &amp;&amp; 注册监听事件</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sensorMgr.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)?.also &#123;</span><br><span class="line">        accSensor -&gt; sensorMgr.registerListener(sensorEventListener,accSensor,SensorManager.SENSOR_DELAY_NORMAL,SensorManager.SENSOR_DELAY_UI)</span><br><span class="line">&#125;</span><br><span class="line">sensorMgr.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)?.also &#123;</span><br><span class="line">        magSensor -&gt; sensorMgr.registerListener(sensorEventListener,magSensor,SensorManager.SENSOR_DELAY_NORMAL,SensorManager.SENSOR_DELAY_UI)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>传感器数据处理</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">event?.sensor?.type.let &#123;</span><br><span class="line">    <span class="keyword">when</span>(it)&#123;</span><br><span class="line">        <span class="comment">//加速度(带重力)</span></span><br><span class="line">        Sensor.TYPE_ACCELEROMETER -&gt; System.arraycopy(event?.values,<span class="number">0</span>,accelerometerReading,<span class="number">0</span>,accelerometerReading.size)</span><br><span class="line">        <span class="comment">//磁力</span></span><br><span class="line">        Sensor.TYPE_MAGNETIC_FIELD -&gt; System.arraycopy(event?.values,<span class="number">0</span>,magnetometerReading,<span class="number">0</span>,magnetometerReading.size)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">val</span> cal = DegreeDataCal(accelerometerReading,magnetometerReading)</span><br><span class="line">    cal.cal().let &#123;</span><br><span class="line">        result -&gt; viewModel.updateAngel(result = AngelData(result[<span class="number">0</span>], result[<span class="number">1</span>], result[<span class="number">2</span>]))</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>角度计算</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//旋转矩阵</span></span><br><span class="line"><span class="keyword">val</span> rotationMatrix = FloatArray(<span class="number">9</span>)</span><br><span class="line"><span class="comment">//计算旋转矩阵数据</span></span><br><span class="line">SensorManager.getRotationMatrix(rotationMatrix,<span class="literal">null</span>,accArray,magArray)</span><br><span class="line"><span class="comment">//手机屏幕分别沿着x,y,z的旋转数据</span></span><br><span class="line"><span class="keyword">val</span> orientationAngles = FloatArray(<span class="number">3</span>)</span><br><span class="line">rotationMatrix.forEach &#123;</span><br><span class="line">    it.let &#123; Timber.i(it.toString()) &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//计算屏幕方向数据</span></span><br><span class="line">SensorManager.getOrientation(rotationMatrix,orientationAngles)</span><br></pre></td></tr></table></figure>
+
+<h2 id="案列"><a href="#案列" class="headerlink" title="案列"></a>案列</h2><p><a target="_blank" rel="noopener" href="https://github.com/thorjay/sensor_orientation">代码仓库</a></p>
+<h2 id="TODO"><a href="#TODO" class="headerlink" title="TODO"></a>TODO</h2><ul>
+<li><input disabled="" type="checkbox"> 界面显示</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -332,7 +435,7 @@
 <li>地磁旋转矢量传感器：</li>
 <li>设备的屏幕方向：通过计算设备的屏幕方向，您可以监测设备相对于地球参照系（具体为磁北极）的位置。**<a target="_blank" rel="noopener" href="https://developer.android.com/guide/topics/sensors/sensors_position?hl=zh-cn">计算逻辑</a>**：使用地磁场和加速度计来计算屏幕方向的角度，通过2个硬件传感器，系统可以提供以下3个屏幕方向角度数据：<ul>
 <li>方位角（绕z轴旋转角度）：此为设备当前指南针方向与磁北向之间的角度。如果<strong>设备上边缘</strong>朝北，则为0度；朝南，则为180.朝东，90；朝西，270；范围0~360。<br><img src="/../imgs/Android%E4%BC%A0%E6%84%9F%E5%99%A8%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8/image-20220914170423123-3664843.png" alt="image-20220914170423123-3664843"></li>
-<li>俯仰角（绕x轴旋转角度）：此为平行与设备屏幕的屏幕与平行与地面的平面的角度。如果设备与地面平行放置，且下边缘最靠近用户，同时将设备边缘向地面倾斜，叫俯仰角变为正值。相反方向倾斜(设备上边缘向远离地面方向移动)，角度变为负值。值的范围：-90~90<br><img src="/../imgs/Android%E4%BC%A0%E6%84%9F%E5%99%A8%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8/image-20220914170408775.png" alt="image-20220914170408775"></li>
+<li>俯仰角（绕x轴旋转角度）：此为平行于设备屏幕的平面与平行与地面的平面的角度。如果设备与地面平行放置，且下边缘最靠近用户，同时将设备边缘向地面倾斜，叫俯仰角变为正值。相反方向倾斜(设备上边缘向远离地面方向移动)，角度变为负值。值的范围：-90~90<br><img src="/../imgs/Android%E4%BC%A0%E6%84%9F%E5%99%A8%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8/image-20220914170408775.png" alt="image-20220914170408775"></li>
 <li>倾测角（绕y轴旋转角度）：此为垂直于设备屏幕的平面与垂直于地面的平面之间的角度。如果将设备与地面平行放置，且其下边缘最靠近用户，同时将设备左边缘像地面倾斜，则角度变为正。沿相反方向倾斜(将设备右边缘移向地面)将使角度变为负值。范围-90~90<br><img src="/../imgs/Android%E4%BC%A0%E6%84%9F%E5%99%A8%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8/image-20220914170400122.png" alt="image-20220914170400122"></li>
 </ul>
 </li>
