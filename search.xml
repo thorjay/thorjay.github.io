@@ -165,4 +165,76 @@
         <tag>传感器</tag>
       </tags>
   </entry>
+  <entry>
+    <title>使用Github和Hexo快速搭建免费个人博客</title>
+    <url>/2022/09/22/%E4%BD%BF%E7%94%A8Github%E5%92%8CHexo%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BA%E5%85%8D%E8%B4%B9%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</url>
+    <content><![CDATA[<h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>主要是为了满足以下需求：</p>
+<ul>
+<li>日常文字笔记的记录和输出</li>
+<li>笔记内容需要本地和远端同步</li>
+<li>笔记可以发布，分享知识和经验</li>
+<li>快速搜索定位笔记</li>
+<li>笔记内容不能过于随意，不能和随笔混合，须是沉淀和总结类的</li>
+<li>支持Markdown编写笔记</li>
+</ul>
+<p>之前也使用过本地文档(MD)、记事本、印象、有道、也配合git仓库使用，但总是感觉没有完全到达自己想要的需求；</p>
+<h2 id="预研"><a href="#预研" class="headerlink" title="预研"></a>预研</h2><p>在了解了一些静态博客框架后，个人选择了Hexo，当然还有其他框架像Hugo，Jekyll等；发布服务器上白嫖，使用Github来进行托管发布；所以使用Hexo+Github Pages就能搭建出属于自己的个人博客网站。</p>
+<ul>
+<li>发布：Github Pages，是通过 GitHub 托管和发布的公共网页</li>
+<li>博客框架：Hexo</li>
+</ul>
+<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><h3 id="Node-js和npm"><a href="#Node-js和npm" class="headerlink" title="Node.js和npm"></a>Node.js和npm</h3><p>通过npm安装Hexo，所以首先得有Nodex.js的环境。</p>
+<ul>
+<li><p>安装node.js和npm</p>
+<p>可以下载包本地安装，然后配置全局变量环境中；以下操作都是针对macOS系统，通过homebrew安装，无需手动去配置环境变量；如果有其他系统安装配置，请<a href="https://www.liaoxuefeng.com/wiki/1022910821149312/1023025597810528">参考</a>；</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">请确保已安装homebrew</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装node</span></span><br><span class="line">brew install node</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看node版本</span></span><br><span class="line">node -v</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看npm版本</span></span><br><span class="line">npm -v</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h3><ul>
+<li><p>安装Hexo</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">全局安装</span></span><br><span class="line">npm install hexo-cli -g</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>hexo博客目录</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">blog为自己创建的文件夹，执行init后，blog文件夹中将会生成hexo工程</span></span><br><span class="line">hexo init blog</span><br><span class="line">cd blog</span><br><span class="line">npm install</span><br></pre></td></tr></table></figure>
+
+<p>工程结构如下：</p>
+<p><img src="/../../imgs/%E4%BD%BF%E7%94%A8Github%E5%92%8CHexo%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BA%E5%85%8D%E8%B4%B9%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/image-20220922184941527.png" alt="image-20220922184941527"></p>
+</li>
+<li><p>hexo博客搭建和启动本地服务</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install</span><br><span class="line">hexo server</span><br></pre></td></tr></table></figure>
+
+<p>这时在浏览器输入localhost:4000,你将看到hexo博客的最初版本。</p>
+</li>
+</ul>
+<p>这样一个Hexo博客框架就构建好了，但只是局限于本地。</p>
+<p>那如何将个人博客发布到互联网上让别人访问；这时就需要一个托管服务器，这里选择使用Github Pages。</p>
+<h3 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h3><p>使用Github最好本地安装了Git，Git的介绍和安装就不详细介绍了，请自行<a href="(https://www.liaoxuefeng.com/wiki/896043488029600)">搜索</a>；</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">确保git安装且配置到环境中</span></span><br><span class="line">git --version</span><br></pre></td></tr></table></figure>
+
+<h3 id="Github-Pages"><a href="#Github-Pages" class="headerlink" title="Github Pages"></a>Github Pages</h3><ul>
+<li>个人Github Pages申请</li>
+</ul>
+<p>1.首先注册一个<a href="https://github.com/">Github</a>账号</p>
+<p>2.新建一个仓库(Repository),仓库名(Repository name)为<strong>username.github.io</strong>;其中username为自己的<strong>github账号</strong>，仓库权限设置为<strong>Public</strong></p>
+<p>3.这时可以在浏览器输入<a href="https://username.github.io/">https://username.github.io</a> ，这个就是你的个人博客的访问地址。</p>
+<h2 id="发布文章"><a href="#发布文章" class="headerlink" title="发布文章"></a>发布文章</h2><p>最新版本的Hexo已经将集成，构建，发布等操作做得相当优秀了，通过一系列的配置即可快速完成以上需求</p>
+<h3 id="关联Github"><a href="#关联Github" class="headerlink" title="关联Github"></a>关联Github</h3><p>通过修改_config.yml文件配置_</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span> <span class="comment"># 发布类型</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">git@github.com:username/username.github.io.git</span> <span class="comment">#你的github仓库地址</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">main</span> <span class="comment">#分支名称</span></span><br></pre></td></tr></table></figure>
+
+<p>配置成功，执行发布命令后，hexo会自动将工程public文件夹下的文件(即博客网址静态资源)推倒github上去</p>
+<h3 id="新建、构建和发布"><a href="#新建、构建和发布" class="headerlink" title="新建、构建和发布"></a>新建、构建和发布</h3><p>hexo提供了方便的指令执行来编写文章，构建博客资源，并快速发布等一系列操作流程，无需用户手动执行</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">新建,</span></span><br><span class="line">hexo n title # 笔记文件,会在source/_post文件夹下会生成title.md文件；可以通过markdown来编写笔记</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">构建</span></span><br><span class="line">hexo clean # 清除</span><br><span class="line">hexo g # 生成静态文件</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">发布</span></span><br><span class="line">hexo d # 发布到github</span><br></pre></td></tr></table></figure>
+
+<p>这样，发布成功后，就可以通过 <a href="https://username.github.io来访问你的博客了;/">https://username.github.io来访问你的博客了；</a></p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>关于Hexo，还有很多可配置和拓展的地方，篇幅较长，将在以后陆续进行记录；</p>
+<ul>
+<li>主题</li>
+<li>插件</li>
+<li>一些常见操作和问题</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>blog</tag>
+      </tags>
+  </entry>
 </search>
