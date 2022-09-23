@@ -232,6 +232,9 @@
 <li>一些常见操作和问题</li>
 </ul>
 ]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
       <tags>
         <tag>Hexo</tag>
         <tag>blog</tag>
