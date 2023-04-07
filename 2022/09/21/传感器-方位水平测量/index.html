@@ -21,12 +21,12 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"thorjay.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.13.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"utterances","storage":true,"lazyload":false,"nav":null,"activeClass":"utterances"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="需求及场景  角度测量  将手机变成一个指南针或者一个水平仪的数据；要实现这种效果，就得通过上一篇文章Android传感器介绍及使用中介绍的传感器来获取相应的数据。  坐标系  方位水平测量是以世界坐标系为基准的，详情见上一篇文章Android传感器介绍及使用中的传感器事件数据章节。  传感器  使用两种传感器来：  地磁场传感器 加速度计传感器  关键代码  获取地磁场和加速度计传感器 &amp;amp">
+    <meta name="description" content="需求及场景 角度测量  将手机变成一个指南针或者一个水平仪的数据；要实现这种效果，就得通过上一篇文章Android传感器介绍及使用中介绍的传感器来获取相应的数据。  坐标系  方位水平测量是以世界坐标系为基准的，详情见上一篇文章Android传感器介绍及使用中的传感器事件数据章节。  传感器  使用两种传感器来：  地磁场传感器 加速度计传感器  关键代码 获取地磁场和加速度计传感器 &amp;&amp;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="传感器_方位水平测量">
 <meta property="og:url" content="https://thorjay.github.io/2022/09/21/%E4%BC%A0%E6%84%9F%E5%99%A8-%E6%96%B9%E4%BD%8D%E6%B0%B4%E5%B9%B3%E6%B5%8B%E9%87%8F/index.html">
 <meta property="og:site_name" content="jay&#39;lab">
-<meta property="og:description" content="需求及场景  角度测量  将手机变成一个指南针或者一个水平仪的数据；要实现这种效果，就得通过上一篇文章Android传感器介绍及使用中介绍的传感器来获取相应的数据。  坐标系  方位水平测量是以世界坐标系为基准的，详情见上一篇文章Android传感器介绍及使用中的传感器事件数据章节。  传感器  使用两种传感器来：  地磁场传感器 加速度计传感器  关键代码  获取地磁场和加速度计传感器 &amp;amp">
+<meta property="og:description" content="需求及场景 角度测量  将手机变成一个指南针或者一个水平仪的数据；要实现这种效果，就得通过上一篇文章Android传感器介绍及使用中介绍的传感器来获取相应的数据。  坐标系  方位水平测量是以世界坐标系为基准的，详情见上一篇文章Android传感器介绍及使用中的传感器事件数据章节。  传感器  使用两种传感器来：  地磁场传感器 加速度计传感器  关键代码 获取地磁场和加速度计传感器 &amp;&amp;">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-09-21T09:32:49.006Z">
 <meta property="article:modified_time" content="2022-09-21T13:38:16.959Z">
@@ -164,7 +164,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-count">4</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -263,8 +263,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h2 id="需求及场景">需求及场景</h2>
-<ul>
+        <h2 id="需求及场景"><a href="#需求及场景" class="headerlink" title="需求及场景"></a>需求及场景</h2><ul>
 <li>角度测量</li>
 </ul>
 <p>将手机变成一个指南针或者一个水平仪的数据；要实现这种效果，就得通过上一篇文章<a href="/2022/09/20/Android%E4%BC%A0%E6%84%9F%E5%99%A8%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8/" title="Android传感器介绍及使用.md">Android传感器介绍及使用</a>中介绍的传感器来获取相应的数据。</p>
@@ -280,24 +279,24 @@
 <li>地磁场传感器</li>
 <li>加速度计传感器</li>
 </ul>
-<h2 id="关键代码">关键代码</h2>
-<ul>
+<h2 id="关键代码"><a href="#关键代码" class="headerlink" title="关键代码"></a>关键代码</h2><ul>
 <li>获取地磁场和加速度计传感器 &amp;&amp; 注册监听事件</li>
 </ul>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sensorMgr.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)?.also &#123;</span><br><span class="line">        accSensor -&gt; sensorMgr.registerListener(sensorEventListener,accSensor,SensorManager.SENSOR_DELAY_NORMAL,SensorManager.SENSOR_DELAY_UI)</span><br><span class="line">&#125;</span><br><span class="line">sensorMgr.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)?.also &#123;</span><br><span class="line">        magSensor -&gt; sensorMgr.registerListener(sensorEventListener,magSensor,SensorManager.SENSOR_DELAY_NORMAL,SensorManager.SENSOR_DELAY_UI)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>传感器数据处理</li>
 </ul>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">event?.sensor?.type.let &#123;</span><br><span class="line">    <span class="keyword">when</span>(it)&#123;</span><br><span class="line">        <span class="comment">//加速度(带重力)</span></span><br><span class="line">        Sensor.TYPE_ACCELEROMETER -&gt; System.arraycopy(event?.values,<span class="number">0</span>,accelerometerReading,<span class="number">0</span>,accelerometerReading.size)</span><br><span class="line">        <span class="comment">//磁力</span></span><br><span class="line">        Sensor.TYPE_MAGNETIC_FIELD -&gt; System.arraycopy(event?.values,<span class="number">0</span>,magnetometerReading,<span class="number">0</span>,magnetometerReading.size)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">val</span> cal = DegreeDataCal(accelerometerReading,magnetometerReading)</span><br><span class="line">    cal.cal().let &#123;</span><br><span class="line">        result -&gt; viewModel.updateAngel(result = AngelData(result[<span class="number">0</span>], result[<span class="number">1</span>], result[<span class="number">2</span>]))</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>角度计算</li>
 </ul>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//旋转矩阵</span></span><br><span class="line"><span class="keyword">val</span> rotationMatrix = FloatArray(<span class="number">9</span>)</span><br><span class="line"><span class="comment">//计算旋转矩阵数据</span></span><br><span class="line">SensorManager.getRotationMatrix(rotationMatrix,<span class="literal">null</span>,accArray,magArray)</span><br><span class="line"><span class="comment">//手机屏幕分别沿着x,y,z的旋转数据</span></span><br><span class="line"><span class="keyword">val</span> orientationAngles = FloatArray(<span class="number">3</span>)</span><br><span class="line">rotationMatrix.forEach &#123;</span><br><span class="line">    it.let &#123; Timber.i(it.toString()) &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//计算屏幕方向数据</span></span><br><span class="line">SensorManager.getOrientation(rotationMatrix,orientationAngles)</span><br></pre></td></tr></table></figure>
-<h2 id="案列">案列</h2>
-<p><a target="_blank" rel="noopener" href="https://github.com/thorjay/sensor_orientation">代码仓库</a></p>
-<h2 id="TODO">TODO</h2>
-<ul>
-<li>[ ] 界面显示</li>
+
+<h2 id="案列"><a href="#案列" class="headerlink" title="案列"></a>案列</h2><p><a target="_blank" rel="noopener" href="https://github.com/thorjay/sensor_orientation">代码仓库</a></p>
+<h2 id="TODO"><a href="#TODO" class="headerlink" title="TODO"></a>TODO</h2><ul>
+<li><input disabled="" type="checkbox"> 界面显示</li>
 </ul>
 
     </div>
@@ -345,7 +344,7 @@
 
 <div class="copyright">
   &copy; 
-  <span itemprop="copyrightYear">2022</span>
+  <span itemprop="copyrightYear">2023</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

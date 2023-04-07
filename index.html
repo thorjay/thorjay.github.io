@@ -159,7 +159,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-count">4</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -199,6 +199,127 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://thorjay.github.io/2023/04/07/%E8%A7%A3%E5%86%B3pip%E5%AE%89%E8%A3%85%E5%90%8E%E4%BE%9D%E8%B5%96%E5%8C%85%E4%B8%8D%E7%94%9F%E6%95%88%E7%9A%84%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="小森">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jay'lab">
+      <meta itemprop="description" content="小森夜行,手可摘星辰">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | jay'lab">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/04/07/%E8%A7%A3%E5%86%B3pip%E5%AE%89%E8%A3%85%E5%90%8E%E4%BE%9D%E8%B5%96%E5%8C%85%E4%B8%8D%E7%94%9F%E6%95%88%E7%9A%84%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">未命名</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-04-07 16:27:10" itemprop="dateCreated datePublished" datetime="2023-04-07T16:27:10+08:00">2023-04-07</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>[TOC]</p>
+<h1 id="解决pip安装后，找不到依赖包的问题"><a href="#解决pip安装后，找不到依赖包的问题" class="headerlink" title="解决pip安装后，找不到依赖包的问题"></a>解决pip安装后，找不到依赖包的问题</h1><p>最近接触Python、conda，在使用过程中碰到了一个奇怪的问题，参照文档conda激活环境，pip install安装依赖包后，但是工程中却始终各种找不到各种依赖包的错误，先将原因、定位过程、解决方法以及一些思考记录下来；如果文字中有错误或者不合适的描述，请指正。</p>
+<h2 id="原因："><a href="#原因：" class="headerlink" title="原因："></a>原因：</h2><p>表象：按照文档教程pip install安装之后，仍然提示工程环境中没有安装对应的依赖包，这有点类似java和android工程中，通过maven或gradle配置后，在编译中仍然无法找到对应的依赖模块包或类的错误。</p>
+<p>解决：针对本人遇到的情况，<strong>屏蔽之前的python和pip的全局环境变量，默认使用conda环境配置</strong>，按照文档教程操作，即可将安装包下载到指定的环境路径下，工程就找到安装的依赖包。</p>
+<p>原因：对conda、python环境配置的不熟悉，用户全局环境的配置以及pip安装依赖包的操作不了解。</p>
+<h2 id="定位过程"><a href="#定位过程" class="headerlink" title="定位过程"></a>定位过程</h2><p>1.开始对着教程，进行了包安装，如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip install torch==version</span><br><span class="line">jupyter notebook</span><br></pre></td></tr></table></figure>
+<p>结果工程里报错，torch、sensor各种包都找不到；但之前使用conda activate已激活环境。</p>
+<p>2.再次重新安装pip install<br>还是找不到，用vscode中打开也找不到(其实和IDE工具无关)<br>3.网上搜索答案<br>一顿尝试，无果；没有解决问题；其实这时已经怀疑是不是和pip的全局配置有关了，但对python环境的不熟，没有去深度思考。</p>
+<p>4.自我尝试解决-更新内核或环境？<br>在notebook更换一下内核，还是有问题；<br>在vscode将环境切换到base中，依赖包问题解决，这时基本确定是安装包是没有安装到指定的环境中，而是安装到默认的base环境路径下；</p>
+<p>再次尝试pip安装，发现包安装路径是在默认的python全局环境路径下面；</p>
+<p>进入到指定环境路径下，使用.&#x2F;env&#x2F;bin&#x2F;pip 安装，这次发现安装包正确地下载到指定环境下，工程导入依赖包问题也解决。</p>
+<p>5.继续深入<br>发现只要直接使用pip就会下载到全局路径，<strong>这是因为之前安装python时，在系统环境配置中配置指定了pip的路径</strong>，所以使用pip会直接下载到全局的路径下去，如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#Python</span><br><span class="line">export PYTHON_HOME=/opt/homebrew/Cellar/python@3.9/3.9.10</span><br><span class="line">alias python=$&#123;PYTHON_HOME&#125;&quot;/bin/python3.9&quot;</span><br><span class="line">alias python3=$&#123;PYTHON_HOME&#125;&quot;/bin/python3&quot;</span><br><span class="line">alias pip3=$&#123;PYTHON_HOME&#125;&quot;/bin/pip3&quot;</span><br><span class="line">alias pip=$&#123;PYTHON_HOME&#125;&quot;/bin/pip3&quot;</span><br><span class="line">export PATH=$&#123;PATH&#125;:...$&#123;PYTHON_HOME&#125;/bin:</span><br></pre></td></tr></table></figure>
+<p>直接运行pip 命令，都会走用户环境里的pip命令即alias指定的那个路径，python指令也是，会覆盖conda的配置；</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">which pip</span><br><span class="line">#输出：pip: aliased to /opt/homebrew/Cellar/python@3.9/3.9.10/bin/pip3</span><br><span class="line">pip -V</span><br><span class="line">#输出：pip 23.0.1 from /opt/homebrew/lib/python3.9/site-packages/pip (python 3.9)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">which python</span><br><span class="line">#输出：python: aliased to /opt/homebrew/Cellar/python@3.9/3.9.10/bin/python3.9</span><br><span class="line">python --version</span><br><span class="line">#输出：Python 3.9.10</span><br></pre></td></tr></table></figure>
+<p>所以安装conda后，可以将python配置的环境屏蔽掉：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">which pip</span><br><span class="line"># 输出:/opt/anaconda3/bin/pip</span><br><span class="line">pip -V</span><br><span class="line"># 输出：pip 21.2.4 from /opt/anaconda3/lib/python3.9/site-packages/pip (python 3.9)</span><br><span class="line">which python</span><br><span class="line"># 输出：/opt/anaconda3/bin/python</span><br><span class="line">python --version</span><br><span class="line"># 输出：Python 3.9.7</span><br></pre></td></tr></table></figure>
+<p>查看当前python的环境，*代表当前环境</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">conda info -e</span><br><span class="line">输出：</span><br><span class="line"># conda environments:</span><br><span class="line">#</span><br><span class="line">base                  *  /opt/anaconda3</span><br><span class="line">d2l                      /opt/anaconda3/envs/d2l</span><br><span class="line">my_env                   /opt/anaconda3/envs/my_env</span><br></pre></td></tr></table></figure>
+<p>切换到指定环境</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">conda activate d2l</span><br><span class="line">conda info -e</span><br><span class="line">输出：</span><br><span class="line"># conda environments:</span><br><span class="line">#</span><br><span class="line">base                    /opt/anaconda3</span><br><span class="line">d2l                  *  /opt/anaconda3/envs/d2l</span><br></pre></td></tr></table></figure>
+
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>1.使用指定环境下的pip:在虚拟环境下xxx的bin目录下，执行pip，即可将安装包模块下载到虚拟环境中,如：.&#x2F;envs&#x2F;xxx&#x2F;bin&#x2F;pip install<br>虚拟环境的安装包路径.&#x2F;envs&#x2F;xxx&#x2F;lib&#x2F;<a href="mailto:&#x70;&#121;&#116;&#104;&#x6f;&#x6e;&#64;&#51;&#46;&#x39;">&#x70;&#121;&#116;&#104;&#x6f;&#x6e;&#64;&#51;&#46;&#x39;</a>&#x2F;site-packages&#x2F;</p>
+<p>2.屏蔽pip的全局环境配置，使用conda</p>
+<p>3.使用–target选项：pip install --tartget&#x3D;.&#x2F;envs&#x2F;xxx&#x2F;lib&#x2F;<a href="mailto:&#x70;&#x79;&#116;&#x68;&#111;&#x6e;&#x40;&#51;&#46;&#x39;">&#x70;&#x79;&#116;&#x68;&#111;&#x6e;&#x40;&#51;&#46;&#x39;</a>&#x2F;site-packages&#x2F;</p>
+<h2 id="回顾"><a href="#回顾" class="headerlink" title="回顾"></a>回顾</h2><p>1.现象：依赖包的找不到-&gt;为什么找不到-&gt;没有安装-&gt;为什么没有安装？明明已经安装-&gt;涉及到python、conda环境的问题！</p>
+<p>2.中途某段时间被牵引到Homebrew disutils这个工具的问题上去了,以为是这个问题导致安装失败！这个误导过程仍然是对问题的本质没有深入理解，定位问题没有逻辑性和线索；然后对Python工程的依赖、安装、虚拟环境等知识点的不熟悉；</p>
+<p>DEPRECATION: Configuring installation scheme with distutils config files is deprecated and will no longer work in the near future. If you are using a Homebrew or Linuxbrew Python, please see discussion at <a target="_blank" rel="noopener" href="https://github.com/Homebrew/homebrew-core/issues/76621">https://github.com/Homebrew/homebrew-core/issues/76621</a></p>
+<p>3.Python在安装依赖包这一点上和Maven、Gradle构建工程有不同，不同点在于maven或gradle配置工程的依赖包都是在统一的路径下，根据groupid&#x2F;artifactid&#x2F;version来区分，但Python工程不一样，它基于自己的工程的环境，相同的包可能在不同的环境下出现多次；</p>
+<p>4.重新理清归纳问题才能正确的解决问题:”pip install 安装包下载到全局环境路径中，而不是虚拟环境下”；对问题的清晰认知和准确定位，是真正解决问题的前提，如果对问题没有清晰准确的认识，那如同盲人摸象、瞎子过河，只知其一，浪费很多时间，最后问题也得不到解决。</p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>对新事物的尝试和探索，会碰到各种问题，掌握正确解决问题的思维方式和方案，加上对底层基础和背后逻辑的掌握，然后对事物原理的追根溯源，就能真正意义上地解决问题和把握新事物。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/bigtreei/p/15094293.html">https://www.cnblogs.com/bigtreei/p/15094293.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/522468985">https://zhuanlan.zhihu.com/p/522468985</a></p>
+<p><a target="_blank" rel="noopener" href="https://pythonguidecn.readthedocs.io/zh/latest/dev/virtualenvs.html">Pipenv &amp; 虚拟环境</a></p>
+<h1 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h1><ul>
+<li>conda：</li>
+</ul>
+<p>Conda是一个开源的包管理器和环境管理系统，用于管理和部署不同版本的软件包和依赖项。Conda可以同时管理多个环境，每个环境可以包含不同版本的Python解释器以及其他库和依赖项。在本质上，Conda是一个跨平台的软件包管理系统，可用于管理Python软件包，以及其他一些编程语言的软件包。</p>
+<p>下面是Conda的一些主要特点和使用原理：</p>
+<ol>
+<li>包管理器：Conda作为一个包管理器，可以轻松地安装、升级、删除软件包，以及查看已安装的包列表。Conda还可以处理软件包之间的依赖关系，以确保在安装新软件包时不会出现依赖冲突。</li>
+<li>环境管理器：Conda还可以管理多个环境，每个环境可以包含不同版本的Python解释器和其他库和依赖项。这使得用户可以轻松地创建和维护不同的开发环境，以及为不同的项目配置不同的环境。</li>
+<li>跨平台：Conda可以在多种操作系统上运行，包括Windows、macOS和Linux等。</li>
+<li>渠道：Conda的包管理系统是基于渠道的，可以从不同的渠道安装软件包，包括Anaconda官方渠道、conda-forge、PyPI等。用户可以在不同的渠道之间切换，并管理自己的私有渠道。</li>
+<li>兼容性：Conda可以管理多个版本的Python解释器和不同的软件包版本，以确保不同版本的软件包可以兼容。</li>
+</ol>
+<p>总之，Conda提供了一种方便、灵活和可扩展的方式来管理Python软件包和环境，使得用户可以更好地管理自己的开发环境，以及更方便地分享和部署自己的Python应用程序。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/conda/conda.git">conda源码</a></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -259,8 +380,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="需求">需求</h2>
-<p>主要是为了满足以下需求：</p>
+          <h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>主要是为了满足以下需求：</p>
 <ul>
 <li>日常文字笔记的记录和输出</li>
 <li>笔记内容需要本地和远端同步</li>
@@ -270,64 +390,54 @@
 <li>支持Markdown编写笔记</li>
 </ul>
 <p>之前也使用过本地文档(MD)、记事本、印象、有道、也配合git仓库使用，但总是感觉没有完全到达自己想要的需求；</p>
-<h2 id="预研">预研</h2>
-<p>在了解了一些静态博客框架后，个人选择了Hexo，当然还有其他框架像Hugo，Jekyll等；发布服务器上白嫖，使用Github来进行托管发布；所以使用Hexo+Github Pages就能搭建出属于自己的个人博客网站。</p>
+<h2 id="预研"><a href="#预研" class="headerlink" title="预研"></a>预研</h2><p>在了解了一些静态博客框架后，个人选择了Hexo，当然还有其他框架像Hugo，Jekyll等；发布服务器上白嫖，使用Github来进行托管发布；所以使用Hexo+Github Pages就能搭建出属于自己的个人博客网站。</p>
 <ul>
 <li>发布：Github Pages，是通过 GitHub 托管和发布的公共网页</li>
 <li>博客框架：Hexo</li>
 </ul>
-<h2 id="环境">环境</h2>
-<h3 id="Node-js和npm">Node.js和npm</h3>
-<p>通过npm安装Hexo，所以首先得有Nodex.js的环境。</p>
+<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><h3 id="Node-js和npm"><a href="#Node-js和npm" class="headerlink" title="Node.js和npm"></a>Node.js和npm</h3><p>通过npm安装Hexo，所以首先得有Nodex.js的环境。</p>
 <ul>
-<li>
-<p>安装node.js和npm</p>
+<li><p>安装node.js和npm</p>
 <p>可以下载包本地安装，然后配置全局变量环境中；以下操作都是针对macOS系统，通过homebrew安装，无需手动去配置环境变量；如果有其他系统安装配置，请<a target="_blank" rel="noopener" href="https://www.liaoxuefeng.com/wiki/1022910821149312/1023025597810528">参考</a>；</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">请确保已安装homebrew</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装node</span></span><br><span class="line">brew install node</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看node版本</span></span><br><span class="line">node -v</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看npm版本</span></span><br><span class="line">npm -v</span><br></pre></td></tr></table></figure>
-</li>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">请确保已安装homebrew</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装node</span></span><br><span class="line">brew install node</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看node版本</span></span><br><span class="line">node -v</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看npm版本</span></span><br><span class="line">npm -v</span><br></pre></td></tr></table></figure></li>
 </ul>
-<h3 id="Hexo">Hexo</h3>
-<ul>
-<li>
-<p>安装Hexo</p>
+<h3 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h3><ul>
+<li><p>安装Hexo</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">全局安装</span></span><br><span class="line">npm install hexo-cli -g</span><br></pre></td></tr></table></figure>
 </li>
-<li>
-<p>hexo博客目录</p>
+<li><p>hexo博客目录</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">blog为自己创建的文件夹，执行init后，blog文件夹中将会生成hexo工程</span></span><br><span class="line">hexo init blog</span><br><span class="line">cd blog</span><br><span class="line">npm install</span><br></pre></td></tr></table></figure>
+
 <p>工程结构如下：</p>
-<p><img src="../../imgs/%E4%BD%BF%E7%94%A8Github%E5%92%8CHexo%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BA%E5%85%8D%E8%B4%B9%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/image-20220922184941527.png" alt="image-20220922184941527"></p>
+<p><img src="/../../imgs/%E4%BD%BF%E7%94%A8Github%E5%92%8CHexo%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BA%E5%85%8D%E8%B4%B9%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/image-20220922184941527.png" alt="image-20220922184941527"></p>
 </li>
-<li>
-<p>hexo博客搭建和启动本地服务</p>
+<li><p>hexo博客搭建和启动本地服务</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install</span><br><span class="line">hexo server</span><br></pre></td></tr></table></figure>
+
 <p>这时在浏览器输入localhost:4000,你将看到hexo博客的最初版本。</p>
 </li>
 </ul>
 <p>这样一个Hexo博客框架就构建好了，但只是局限于本地。</p>
 <p>那如何将个人博客发布到互联网上让别人访问；这时就需要一个托管服务器，这里选择使用Github Pages。</p>
-<h3 id="Git">Git</h3>
-<p>使用Github最好本地安装了Git，Git的介绍和安装就不详细介绍了，请自行<a href="(https://www.liaoxuefeng.com/wiki/896043488029600)">搜索</a>；</p>
+<h3 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h3><p>使用Github最好本地安装了Git，Git的介绍和安装就不详细介绍了，请自行<a href="(https://www.liaoxuefeng.com/wiki/896043488029600)">搜索</a>；</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">确保git安装且配置到环境中</span></span><br><span class="line">git --version</span><br></pre></td></tr></table></figure>
-<h3 id="Github-Pages">Github Pages</h3>
-<ul>
+
+<h3 id="Github-Pages"><a href="#Github-Pages" class="headerlink" title="Github Pages"></a>Github Pages</h3><ul>
 <li>个人Github Pages申请</li>
 </ul>
 <p>1.首先注册一个<a target="_blank" rel="noopener" href="https://github.com/">Github</a>账号</p>
-<p>2.新建一个仓库(Repository),仓库名(Repository name)为<strong><a target="_blank" rel="noopener" href="http://username.github.io">username.github.io</a></strong>;其中username为自己的<strong>github账号</strong>，仓库权限设置为<strong>Public</strong></p>
-<p>3.这时可以在浏览器输入https://username.github.io ，这个就是你的个人博客的访问地址。</p>
-<h2 id="发布文章">发布文章</h2>
-<p>最新版本的Hexo已经将集成，构建，发布等操作做得相当优秀了，通过一系列的配置即可快速完成以上需求</p>
-<h3 id="关联Github">关联Github</h3>
-<p>通过修改_config.yml文件配置_</p>
+<p>2.新建一个仓库(Repository),仓库名(Repository name)为<strong>username.github.io</strong>;其中username为自己的<strong>github账号</strong>，仓库权限设置为<strong>Public</strong></p>
+<p>3.这时可以在浏览器输入<a target="_blank" rel="noopener" href="https://username.github.io/">https://username.github.io</a> ，这个就是你的个人博客的访问地址。</p>
+<h2 id="发布文章"><a href="#发布文章" class="headerlink" title="发布文章"></a>发布文章</h2><p>最新版本的Hexo已经将集成，构建，发布等操作做得相当优秀了，通过一系列的配置即可快速完成以上需求</p>
+<h3 id="关联Github"><a href="#关联Github" class="headerlink" title="关联Github"></a>关联Github</h3><p>通过修改_config.yml文件配置_</p>
 <figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span> <span class="comment"># 发布类型</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">git@github.com:username/username.github.io.git</span> <span class="comment">#你的github仓库地址</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">main</span> <span class="comment">#分支名称</span></span><br></pre></td></tr></table></figure>
+
 <p>配置成功，执行发布命令后，hexo会自动将工程public文件夹下的文件(即博客网址静态资源)推倒github上去</p>
-<h3 id="新建、构建和发布">新建、构建和发布</h3>
-<p>hexo提供了方便的指令执行来编写文章，构建博客资源，并快速发布等一系列操作流程，无需用户手动执行</p>
+<h3 id="新建、构建和发布"><a href="#新建、构建和发布" class="headerlink" title="新建、构建和发布"></a>新建、构建和发布</h3><p>hexo提供了方便的指令执行来编写文章，构建博客资源，并快速发布等一系列操作流程，无需用户手动执行</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">新建,</span></span><br><span class="line">hexo n title # 笔记文件,会在source/_post文件夹下会生成title.md文件；可以通过markdown来编写笔记</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">构建</span></span><br><span class="line">hexo clean # 清除</span><br><span class="line">hexo g # 生成静态文件</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">发布</span></span><br><span class="line">hexo d # 发布到github</span><br></pre></td></tr></table></figure>
-<p>这样，发布成功后，就可以通过 <a target="_blank" rel="noopener" href="https://username.github.xn--io-e62cn7ap9lpnoe6t3u1as63b4jv">https://username.github.io来访问你的博客了</a>；</p>
-<h2 id="其他">其他</h2>
-<p>关于Hexo，还有很多可配置和拓展的地方，篇幅较长，将在以后陆续进行记录；</p>
+
+<p>这样，发布成功后，就可以通过 <a target="_blank" rel="noopener" href="https://username.github.io来访问你的博客了;/">https://username.github.io来访问你的博客了；</a></p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>关于Hexo，还有很多可配置和拓展的地方，篇幅较长，将在以后陆续进行记录；</p>
 <ul>
 <li>主题</li>
 <li>插件</li>
@@ -401,8 +511,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="需求及场景">需求及场景</h2>
-<ul>
+          <h2 id="需求及场景"><a href="#需求及场景" class="headerlink" title="需求及场景"></a>需求及场景</h2><ul>
 <li>角度测量</li>
 </ul>
 <p>将手机变成一个指南针或者一个水平仪的数据；要实现这种效果，就得通过上一篇文章<a href="/2022/09/20/Android%E4%BC%A0%E6%84%9F%E5%99%A8%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8/" title="Android传感器介绍及使用.md">Android传感器介绍及使用</a>中介绍的传感器来获取相应的数据。</p>
@@ -418,24 +527,24 @@
 <li>地磁场传感器</li>
 <li>加速度计传感器</li>
 </ul>
-<h2 id="关键代码">关键代码</h2>
-<ul>
+<h2 id="关键代码"><a href="#关键代码" class="headerlink" title="关键代码"></a>关键代码</h2><ul>
 <li>获取地磁场和加速度计传感器 &amp;&amp; 注册监听事件</li>
 </ul>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sensorMgr.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)?.also &#123;</span><br><span class="line">        accSensor -&gt; sensorMgr.registerListener(sensorEventListener,accSensor,SensorManager.SENSOR_DELAY_NORMAL,SensorManager.SENSOR_DELAY_UI)</span><br><span class="line">&#125;</span><br><span class="line">sensorMgr.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)?.also &#123;</span><br><span class="line">        magSensor -&gt; sensorMgr.registerListener(sensorEventListener,magSensor,SensorManager.SENSOR_DELAY_NORMAL,SensorManager.SENSOR_DELAY_UI)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>传感器数据处理</li>
 </ul>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">event?.sensor?.type.let &#123;</span><br><span class="line">    <span class="keyword">when</span>(it)&#123;</span><br><span class="line">        <span class="comment">//加速度(带重力)</span></span><br><span class="line">        Sensor.TYPE_ACCELEROMETER -&gt; System.arraycopy(event?.values,<span class="number">0</span>,accelerometerReading,<span class="number">0</span>,accelerometerReading.size)</span><br><span class="line">        <span class="comment">//磁力</span></span><br><span class="line">        Sensor.TYPE_MAGNETIC_FIELD -&gt; System.arraycopy(event?.values,<span class="number">0</span>,magnetometerReading,<span class="number">0</span>,magnetometerReading.size)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">val</span> cal = DegreeDataCal(accelerometerReading,magnetometerReading)</span><br><span class="line">    cal.cal().let &#123;</span><br><span class="line">        result -&gt; viewModel.updateAngel(result = AngelData(result[<span class="number">0</span>], result[<span class="number">1</span>], result[<span class="number">2</span>]))</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>角度计算</li>
 </ul>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//旋转矩阵</span></span><br><span class="line"><span class="keyword">val</span> rotationMatrix = FloatArray(<span class="number">9</span>)</span><br><span class="line"><span class="comment">//计算旋转矩阵数据</span></span><br><span class="line">SensorManager.getRotationMatrix(rotationMatrix,<span class="literal">null</span>,accArray,magArray)</span><br><span class="line"><span class="comment">//手机屏幕分别沿着x,y,z的旋转数据</span></span><br><span class="line"><span class="keyword">val</span> orientationAngles = FloatArray(<span class="number">3</span>)</span><br><span class="line">rotationMatrix.forEach &#123;</span><br><span class="line">    it.let &#123; Timber.i(it.toString()) &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//计算屏幕方向数据</span></span><br><span class="line">SensorManager.getOrientation(rotationMatrix,orientationAngles)</span><br></pre></td></tr></table></figure>
-<h2 id="案列">案列</h2>
-<p><a target="_blank" rel="noopener" href="https://github.com/thorjay/sensor_orientation">代码仓库</a></p>
-<h2 id="TODO">TODO</h2>
-<ul>
-<li>[ ] 界面显示</li>
+
+<h2 id="案列"><a href="#案列" class="headerlink" title="案列"></a>案列</h2><p><a target="_blank" rel="noopener" href="https://github.com/thorjay/sensor_orientation">代码仓库</a></p>
+<h2 id="TODO"><a href="#TODO" class="headerlink" title="TODO"></a>TODO</h2><ul>
+<li><input disabled="" type="checkbox"> 界面显示</li>
 </ul>
 
       
@@ -505,127 +614,95 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1>传感器</h1>
-<h2 id="传感器简介">传感器简介</h2>
-<p>设备上的传感器能为我们的应用添加丰富的位置和运动功能，包括 GPS 或网络位置以及加速度计、陀螺仪、温度、气压计等。设备传感器能用来测量运动、屏幕方向和各种环境条件，可以提供高度精确的原始数据。</p>
-<h3 id="类别vs应用场景">类别vs应用场景</h3>
-<ul>
-<li>
-<p>移动(动感)：测量<strong>3个轴</strong>向上的加速力和旋转力。包括加速度计、重力传感器、陀螺仪和旋转矢量</p>
+          <h1 id="传感器"><a href="#传感器" class="headerlink" title="传感器"></a>传感器</h1><h2 id="传感器简介"><a href="#传感器简介" class="headerlink" title="传感器简介"></a>传感器简介</h2><p>设备上的传感器能为我们的应用添加丰富的位置和运动功能，包括 GPS 或网络位置以及加速度计、陀螺仪、温度、气压计等。设备传感器能用来测量运动、屏幕方向和各种环境条件，可以提供高度精确的原始数据。</p>
+<h3 id="类别vs应用场景"><a href="#类别vs应用场景" class="headerlink" title="类别vs应用场景"></a>类别vs应用场景</h3><ul>
+<li><p>移动(动感)：测量<strong>3个轴</strong>向上的加速力和旋转力。包括加速度计、重力传感器、陀螺仪和旋转矢量</p>
 <ul>
 <li>游戏中可以跟踪设备重力传感器的读数，用来推断复杂的用户手势和动作，如倾斜、摇晃、旋转或挥动</li>
 </ul>
 </li>
-<li>
-<p>位置：测量设备的物理位置。包括屏幕方向传感器和磁力计</p>
+<li><p>位置：测量设备的物理位置。包括屏幕方向传感器和磁力计</p>
 <ul>
 <li>天气应用可以使用设备的温度和湿度传感器来计算和报告露点</li>
 </ul>
 </li>
-<li>
-<p>环境：测量各种环境参数，像环境气温、气压、照度和湿度。包括气压计、光度计和温度计</p>
+<li><p>环境：测量各种环境参数，像环境气温、气压、照度和湿度。包括气压计、光度计和温度计</p>
 <ul>
 <li>旅行应用可以使用地磁场传感器和加速度计来报告罗盘方位</li>
 </ul>
 </li>
 </ul>
-<h2 id="框架通用API">框架通用API</h2>
-<p>Android传感器框架提供了多个类和接口，帮助开发者执行各种与传感器相关的任务，利用框架可以访问设备上提供的传感器并获取原始传感器数据。使用框架可以执行以下操作：</p>
+<h2 id="框架通用API"><a href="#框架通用API" class="headerlink" title="框架通用API"></a>框架通用API</h2><p>Android传感器框架提供了多个类和接口，帮助开发者执行各种与传感器相关的任务，利用框架可以访问设备上提供的传感器并获取原始传感器数据。使用框架可以执行以下操作：</p>
 <ul>
 <li>获取设备上的传感器列表</li>
 <li>获取指定传感器的属性：例如最大量程、制造商、功率和分辨率</li>
 <li>获取原始传感器数据并定义获取数据的最低频率</li>
 <li>注册或取消注册用于监控传感器变化的事件监听器</li>
 </ul>
-<h3 id="框架核心">框架核心</h3>
-<ul>
-<li>
-<p>SensorMamanger<br>
-提供管理传感器服务。该类提供了各种方法来访问和列出传感器，注册和注销传感器事件监听器，以及获取屏幕方向信息。还提供了几个传感器常量值，用来报告传感器的精度，设置数据采集频率和校准传感器。开发者可以使用这个类来创建传感器服务的实例。</p>
+<h3 id="框架核心"><a href="#框架核心" class="headerlink" title="框架核心"></a>框架核心</h3><ul>
+<li><p>SensorMamanger<br>提供管理传感器服务。该类提供了各种方法来访问和列出传感器，注册和注销传感器事件监听器，以及获取屏幕方向信息。还提供了几个传感器常量值，用来报告传感器的精度，设置数据采集频率和校准传感器。开发者可以使用这个类来创建传感器服务的实例。</p>
 </li>
-<li>
-<p>Sensor</p>
+<li><p>Sensor</p>
 <pre><code>  传感器。使用这个类来创建特定传感器的实例。该类提供了各种方法来确定传感器的特性。
 </code></pre>
 </li>
-<li>
-<p>SensorEvent</p>
+<li><p>SensorEvent</p>
 <pre><code>  传感器事件。系统使用这个类来创建传感器事件对象，该对象提供有关传感器事件的相关信息，例如：原始传感器数据、生成事件的传感器类型、数据的准确度和事件的时间戳。
 </code></pre>
 </li>
-<li>
-<p>SensorEventListener<br>
-接口，可创建两种回调方法，以在传感器值或传感器精确度发生变化时接受通知(传感器事件)。</p>
+<li><p>SensorEventListener<br>接口，可创建两种回调方法，以在传感器值或传感器精确度发生变化时接受通知(传感器事件)。</p>
 </li>
 </ul>
-<h3 id="常规操作">常规操作</h3>
-<h4 id="流程">流程</h4>
-<p>获取服务-&gt;获取传感器-&gt;注册监听(处理事件)-&gt;注销</p>
+<h3 id="常规操作"><a href="#常规操作" class="headerlink" title="常规操作"></a>常规操作</h3><h4 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h4><p>获取服务-&gt;获取传感器-&gt;注册监听(处理事件)-&gt;注销</p>
 <div id="flowchart-0" class="flow-chart"></div>
+
+
+
 <ul>
-<li>
-<p>识别传感器</p>
+<li><p>识别传感器</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建sensorManager实例,获得对传感器服务的引用</span></span><br><span class="line">sensorManager = getSystemService(Context.SENSOR_SERVICE) <span class="keyword">as</span> SensorManager</span><br><span class="line"><span class="comment">// 获取传感器全部列表</span></span><br><span class="line"><span class="keyword">val</span> deviceSensors: List&lt;Sensor&gt; = sensorManager.getSensorList(Sensor.TYPE_ALL)</span><br><span class="line"><span class="comment">// 获取指定传感器，如磁力计</span></span><br><span class="line">sensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)</span><br></pre></td></tr></table></figure>
 </li>
-<li>
-<p>传感器特性</p>
+<li><p>传感器特性</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 分辨率、最大量程...</span></span><br><span class="line">sensor.getResolution()</span><br><span class="line">sensor.getMaxinumRange()</span><br><span class="line"><span class="comment">// 供应商和版本号</span></span><br><span class="line">sensor.getVendor();</span><br><span class="line">sendor.getVersion();</span><br><span class="line"><span class="comment">// 检测数据的最小间隔(单位:微秒)；若非0，则为流式传感器(API9引入)，会定期检测数据；为0，非流式，仅在所检测的数据变化时才会报告数据</span></span><br><span class="line">sendor.getMinDelay();</span><br></pre></td></tr></table></figure>
 </li>
-<li>
-<p>监听传感器事件</p>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 自定义一个事件监听</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">xxxEventListner</span> : <span class="type">SensorEventListener</span>&#123;</span><br><span class="line">  	</span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onSensorChanged</span><span class="params">(event: <span class="type">SensorEvent</span>?)</span></span> &#123;</span><br><span class="line">       <span class="comment">// 传感器报告了新值；提供SensorEvent对象，此对象包含关于新传感器数据的信息，包括：数据的准确度，生成数据的传感器、生成数据的时间戳及传感器记录的新数据。</span></span><br><span class="line">      </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onAccuracyChanged</span><span class="params">(sensor: <span class="type">Sensor</span>?, accuracy: <span class="type">Int</span>)</span></span> &#123;</span><br><span class="line">			<span class="comment">// 传感器的准确度发生了变化;提供发生变化的Sensor对象的引用和传感器的新准确度(4个状态常量)</span></span><br><span class="line">      </span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">//注册监听</span></span><br><span class="line">  sensorManager.register(sensorEventListener,sensor,SensorManger.Sensor_DELAY_NORMAL)</span><br><span class="line">  </span><br><span class="line"><span class="comment">//注销监听</span></span><br><span class="line">  sensorMgr.unregisterListener(sensorEventListener)</span><br></pre></td></tr></table></figure>
-</li>
+<li><p>监听传感器事件</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 自定义一个事件监听</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">xxxEventListner</span> : <span class="type">SensorEventListener</span>&#123;</span><br><span class="line">  	</span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onSensorChanged</span><span class="params">(event: <span class="type">SensorEvent</span>?)</span></span> &#123;</span><br><span class="line">       <span class="comment">// 传感器报告了新值；提供SensorEvent对象，此对象包含关于新传感器数据的信息，包括：数据的准确度，生成数据的传感器、生成数据的时间戳及传感器记录的新数据。</span></span><br><span class="line">      </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onAccuracyChanged</span><span class="params">(sensor: <span class="type">Sensor</span>?, accuracy: <span class="type">Int</span>)</span></span> &#123;</span><br><span class="line">			<span class="comment">// 传感器的准确度发生了变化;提供发生变化的Sensor对象的引用和传感器的新准确度(4个状态常量)</span></span><br><span class="line">      </span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">//注册监听</span></span><br><span class="line">  sensorManager.register(sensorEventListener,sensor,SensorManger.Sensor_DELAY_NORMAL)</span><br><span class="line">  </span><br><span class="line"><span class="comment">//注销监听</span></span><br><span class="line">  sensorMgr.unregisterListener(sensorEventListener)</span><br></pre></td></tr></table></figure></li>
 </ul>
-<h4 id="注意事项">注意事项</h4>
-<ul>
-<li>
-<p>使用前台访问</p>
+<h4 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h4><ul>
+<li><p>使用前台访问</p>
 </li>
-<li>
-<p>取消注册传感器监听器</p>
+<li><p>取消注册传感器监听器</p>
 </li>
-<li>
-<p>不要阻塞onSensorChanged()方法</p>
+<li><p>不要阻塞onSensorChanged()方法</p>
 </li>
 </ul>
 <p>传感器数据可以以高频率变化，这意味着系统可能频繁调用onSensorChanged(SensorEvnent)方法。最好是在这个方法中执行尽可能少的任务，以免阻塞它。如果需要过滤后删减传感器数据，应该在此方法外执行该任务。</p>
 <ul>
-<li>
-<p>避免使用已弃用的方法或传感器类型</p>
+<li><p>避免使用已弃用的方法或传感器类型</p>
 </li>
-<li>
-<p>使用传感器之前应先进行验证</p>
+<li><p>使用传感器之前应先进行验证</p>
 </li>
-<li>
-<p>谨慎选择传感器延迟</p>
+<li><p>谨慎选择传感器延迟</p>
 </li>
 </ul>
-<h3 id="其他">其他</h3>
-<h4 id="传感器事件数据-SensorEvent">传感器事件数据(SensorEvent)</h4>
-<ul>
-<li>运动传感器：
-<ul>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><h4 id="传感器事件数据-SensorEvent"><a href="#传感器事件数据-SensorEvent" class="headerlink" title="传感器事件数据(SensorEvent)"></a>传感器事件数据(SensorEvent)</h4><ul>
+<li>运动传感器：<ul>
 <li>数据：运动传感器为每个SensorEvent返回传感器值的<strong>多维数组</strong>。像在单个传感器事件期间，加速度计返回三个坐标轴的加速力数据，而陀螺仪返回三个坐标轴的旋转速率数据。这些数据值与其他SensorEvent参数一起在float数组中(values)返回。</li>
 <li>场景：旋转矢量和重力传感器是运动检测和监控的最常用传感器。选择矢量可用于各种与运动有关的任务，例如检测手势、监控角度变化、监控相对屏幕方向变化。AOSP提供了以下3个基于软件的运动传感器：重力监控器、线性加速和旋转矢量传感器。所有这3个传感器都依赖于陀螺仪。</li>
-<li>重力：提供重力方向和大小的三维矢量。通常用于确定设备在空间中的相对屏幕方向。单位(m/s2)。坐标系与加速传感器使用的坐标系相同。</li>
-<li>线性加速计：三维矢量，表示沿着每个设备轴的加速度（不包括重力）。可以用于执行手势检测，还可以用作惯性导航系统的输入数据，该系统使用航位推测法。单位(m/s2)</li>
+<li>重力：提供重力方向和大小的三维矢量。通常用于确定设备在空间中的相对屏幕方向。单位(m&#x2F;s2)。坐标系与加速传感器使用的坐标系相同。</li>
+<li>线性加速计：三维矢量，表示沿着每个设备轴的加速度（不包括重力）。可以用于执行手势检测，还可以用作惯性导航系统的输入数据，该系统使用航位推测法。单位(m&#x2F;s2)</li>
 <li>选择矢量：旋转矢量将设备的屏幕方向表示为角度和轴的组合，其中设备已围绕设备(x,y或z)旋转了多少度。选择矢量元素没有单位。坐标使用世界坐标系。X定义为矢量积Y x Z。其在设备当前位置与地面相切，并大约指向东。Y在设备当前位置与地面相切，并指向地磁北极。Z指向天空并与地平面垂直。</li>
 </ul>
 </li>
-<li>位置传感器：地磁场（硬件）、加速度计 以及近程传感器（硬件）
-<ul>
+<li>位置传感器：地磁场（硬件）、加速度计 以及近程传感器（硬件）<ul>
 <li>简介：位置传感器在确定设备在世界参考系的物理位置很有作用。例如，您可以结合使用地磁场传感器和加速度计来确定设备相对于磁北极点的位置。您还可以使用这两种传感器，在应用的参照系中确定设备的屏幕方向。位置传感器通常不会用于监测设备的移动或运动情况，例如晃动、倾斜，或冲击（详情请参阅<a target="_blank" rel="noopener" href="https://developer.android.com/guide/topics/sensors/sensors_motion?hl=zh-cn">运动传感器</a>）。</li>
 <li>数据：地磁场传感器和加速度计会为每个 <code>SensorEvent</code> 返回传感器值的<strong>多维数组</strong>。例如，地磁场传感器提供单个传感器事件中所有三个坐标轴的地磁场强度值。同样，加速度计传感器测量传感器事件中施加到设备的加速度。如需了解有关传感器所用坐标系的详细信息，请参阅<a target="_blank" rel="noopener" href="https://developer.android.com/guide/topics/sensors/sensors_overview?hl=zh-cn#sensors-coords">传感器坐标系</a>。近程传感器会为每个传感器事件提供一个值。表 1 总结了 Android 平台支持的位置传感器。</li>
 <li>游戏旋转矢量传感器：</li>
 <li>地磁旋转矢量传感器：</li>
-<li>设备的屏幕方向：通过计算设备的屏幕方向，您可以监测设备相对于地球参照系（具体为磁北极）的位置。<strong><a target="_blank" rel="noopener" href="https://developer.android.com/guide/topics/sensors/sensors_position?hl=zh-cn">计算逻辑</a></strong>：使用地磁场和加速度计来计算屏幕方向的角度，通过2个硬件传感器，系统可以提供以下3个屏幕方向角度数据：
-<ul>
-<li>方位角（绕z轴旋转角度）：此为设备当前指南针方向与磁北向之间的角度。如果<strong>设备上边缘</strong>朝北，则为0度；朝南，则为180.朝东，90；朝西，270；范围0~360。<br>
-<img src="../imgs/Android%E4%BC%A0%E6%84%9F%E5%99%A8%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8/image-20220914170423123-3664843.png" alt="image-20220914170423123-3664843"></li>
-<li>俯仰角（绕x轴旋转角度）：此为平行于设备屏幕的平面与平行与地面的平面的角度。如果设备与地面平行放置，且下边缘最靠近用户，同时将设备边缘向地面倾斜，叫俯仰角变为正值。相反方向倾斜(设备上边缘向远离地面方向移动)，角度变为负值。值的范围：-90~90<br>
-<img src="../imgs/Android%E4%BC%A0%E6%84%9F%E5%99%A8%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8/image-20220914170408775.png" alt="image-20220914170408775"></li>
-<li>倾测角（绕y轴旋转角度）：此为垂直于设备屏幕的平面与垂直于地面的平面之间的角度。如果将设备与地面平行放置，且其下边缘最靠近用户，同时将设备左边缘像地面倾斜，则角度变为正。沿相反方向倾斜(将设备右边缘移向地面)将使角度变为负值。范围-90~90<br>
-<img src="../imgs/Android%E4%BC%A0%E6%84%9F%E5%99%A8%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8/image-20220914170400122.png" alt="image-20220914170400122"></li>
+<li>设备的屏幕方向：通过计算设备的屏幕方向，您可以监测设备相对于地球参照系（具体为磁北极）的位置。**<a target="_blank" rel="noopener" href="https://developer.android.com/guide/topics/sensors/sensors_position?hl=zh-cn">计算逻辑</a>**：使用地磁场和加速度计来计算屏幕方向的角度，通过2个硬件传感器，系统可以提供以下3个屏幕方向角度数据：<ul>
+<li>方位角（绕z轴旋转角度）：此为设备当前指南针方向与磁北向之间的角度。如果<strong>设备上边缘</strong>朝北，则为0度；朝南，则为180.朝东，90；朝西，270；范围0~360。<br><img src="/../imgs/Android%E4%BC%A0%E6%84%9F%E5%99%A8%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8/image-20220914170423123-3664843.png" alt="image-20220914170423123-3664843"></li>
+<li>俯仰角（绕x轴旋转角度）：此为平行于设备屏幕的平面与平行与地面的平面的角度。如果设备与地面平行放置，且下边缘最靠近用户，同时将设备边缘向地面倾斜，叫俯仰角变为正值。相反方向倾斜(设备上边缘向远离地面方向移动)，角度变为负值。值的范围：-90~90<br><img src="/../imgs/Android%E4%BC%A0%E6%84%9F%E5%99%A8%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8/image-20220914170408775.png" alt="image-20220914170408775"></li>
+<li>倾测角（绕y轴旋转角度）：此为垂直于设备屏幕的平面与垂直于地面的平面之间的角度。如果将设备与地面平行放置，且其下边缘最靠近用户，同时将设备左边缘像地面倾斜，则角度变为正。沿相反方向倾斜(将设备右边缘移向地面)将使角度变为负值。范围-90~90<br><img src="/../imgs/Android%E4%BC%A0%E6%84%9F%E5%99%A8%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8/image-20220914170400122.png" alt="image-20220914170400122"></li>
 </ul>
 </li>
 </ul>
@@ -633,20 +710,15 @@
 <li>环境传感器：4种传感器，光、温度、湿度和气压</li>
 </ul>
 <p>针对不同场景下的获取不同的传感器的数据的不同，开发者应该针对通过框架获取的数据进行相应的处理；比如：天线测量中的方位计算。</p>
-<h4 id="坐标系">坐标系</h4>
-<ul>
-<li>
-<p>设备参考系<br>
-传感器框架使用标准的3轴坐标系来表示数值。设备处于默认屏幕方向时，会相对于设备屏幕来定义坐标系。X轴水平向右，Y轴垂直向上，Z轴垂直与屏幕向外。这些传感器使用此坐标系，像加速度、重力、陀螺仪、线性加速度、地磁场。</p>
+<h4 id="坐标系"><a href="#坐标系" class="headerlink" title="坐标系"></a>坐标系</h4><ul>
+<li><p>设备参考系<br>传感器框架使用标准的3轴坐标系来表示数值。设备处于默认屏幕方向时，会相对于设备屏幕来定义坐标系。X轴水平向右，Y轴垂直向上，Z轴垂直与屏幕向外。这些传感器使用此坐标系，像加速度、重力、陀螺仪、线性加速度、地磁场。</p>
 <img src="../imgs/Android传感器介绍及使用/image-20220914154747509.png" alt="image-20220914154747509" style="zoom:50%;" />
+
 <p>特别注意的是：<strong>当设备的屏幕方向改变时，坐标轴不会转换</strong>，也就是说，传感器的坐标系不会随着设备的移动而改变。此行为与 OpenGL 坐标系的行为是相同的。还需要注意的一点是，您的应用不能假设设备的自然（默认）屏幕方向是竖屏。许多平板设备的自然屏幕方向为横屏。传感器坐标系始终基于设备的自然屏幕方向。</p>
 <p>最后，如果您的应用将传感器数据对应到屏幕显示，您需要使用 <code>getRotation()</code> 方法确定屏幕的旋转度，然后使用 <code>remapCoordinateSystem()</code> 方法将<strong>传感器坐标</strong>映射到<strong>屏幕坐标</strong>。即使您的清单指定了仅限竖屏显示，您也需要这样做。</p>
 </li>
-<li>
-<p>世界参考系<br>
-有些传感器和方法使用的坐标系是基于世界参考系。这些返回的数据表示设备相对于地球的运动或位置。如需了解详情，请参阅 <code>getOrientation()</code> 方法、<code>getRotationMatrix()</code>方法、<a target="_blank" rel="noopener" href="https://developer.android.com/guide/topics/sensors/sensors_position?hl=zh-cn#sensors-pos-orient">屏幕方向传感器</a>和<a target="_blank" rel="noopener" href="https://developer.android.com/guide/topics/sensors/sensors_motion?hl=zh-cn#sensors-motion-rotate">旋转矢量传感器</a>。<br>
-<img src="../imgs/Android传感器介绍及使用/image-20220914161157456.png" alt="image-20220914161157456" style="zoom:50%;" /></p>
-</li>
+<li><p>世界参考系<br>有些传感器和方法使用的坐标系是基于世界参考系。这些返回的数据表示设备相对于地球的运动或位置。如需了解详情，请参阅 <code>getOrientation()</code> 方法、<code>getRotationMatrix()</code>方法、<a target="_blank" rel="noopener" href="https://developer.android.com/guide/topics/sensors/sensors_position?hl=zh-cn#sensors-pos-orient">屏幕方向传感器</a>和<a target="_blank" rel="noopener" href="https://developer.android.com/guide/topics/sensors/sensors_motion?hl=zh-cn#sensors-motion-rotate">旋转矢量传感器</a>。</p>
+<img src="../imgs/Android传感器介绍及使用/image-20220914161157456.png" alt="image-20220914161157456" style="zoom:50%;" /></li>
 </ul>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script><textarea id="flowchart-0-code" style="display: none"> 	sensorManager=>start: 获取服务
   sensor=>operation: 获取传感器
@@ -682,7 +754,7 @@
 
 <div class="copyright">
   &copy; 
-  <span itemprop="copyrightYear">2022</span>
+  <span itemprop="copyrightYear">2023</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

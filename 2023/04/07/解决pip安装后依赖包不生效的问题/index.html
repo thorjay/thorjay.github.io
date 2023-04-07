@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"thorjay.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.13.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"utterances","storage":true,"lazyload":false,"nav":null,"activeClass":"utterances"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="[TOC] 解决pip安装后，找不到依赖包的问题最近接触Python、conda，在使用过程中碰到了一个奇怪的问题，参照文档conda激活环境，pip install安装依赖包后，但是工程中却始终各种找不到各种依赖包的错误，先将原因、定位过程、解决方法以及一些思考记录下来；如果文字中有错误或者不合适的描述，请指正。 原因：表象：按照文档教程pip install安装之后，仍然提示工程环境中没有安装">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jay&#39;lab">
+<meta property="og:url" content="https://thorjay.github.io/2023/04/07/%E8%A7%A3%E5%86%B3pip%E5%AE%89%E8%A3%85%E5%90%8E%E4%BE%9D%E8%B5%96%E5%8C%85%E4%B8%8D%E7%94%9F%E6%95%88%E7%9A%84%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:site_name" content="jay&#39;lab">
+<meta property="og:description" content="[TOC] 解决pip安装后，找不到依赖包的问题最近接触Python、conda，在使用过程中碰到了一个奇怪的问题，参照文档conda激活环境，pip install安装依赖包后，但是工程中却始终各种找不到各种依赖包的错误，先将原因、定位过程、解决方法以及一些思考记录下来；如果文字中有错误或者不合适的描述，请指正。 原因：表象：按照文档教程pip install安装之后，仍然提示工程环境中没有安装">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-04-07T08:27:10.155Z">
+<meta property="article:modified_time" content="2023-04-07T13:00:01.260Z">
+<meta property="article:author" content="小森">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://thorjay.github.io/2023/04/07/%E8%A7%A3%E5%86%B3pip%E5%AE%89%E8%A3%85%E5%90%8E%E4%BE%9D%E8%B5%96%E5%8C%85%E4%B8%8D%E7%94%9F%E6%95%88%E7%9A%84%E9%97%AE%E9%A2%98/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://thorjay.github.io/2023/04/07/%E8%A7%A3%E5%86%B3pip%E5%AE%89%E8%A3%85%E5%90%8E%E4%BE%9D%E8%B5%96%E5%8C%85%E4%B8%8D%E7%94%9F%E6%95%88%E7%9A%84%E9%97%AE%E9%A2%98/","path":"2023/04/07/解决pip安装后依赖包不生效的问题/","title":""}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title> | jay'lab</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-241326189-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-241326189-1","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?400fd385e18402b73b66ca73741494c1"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">jay'lab</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3pip%E5%AE%89%E8%A3%85%E5%90%8E%EF%BC%8C%E6%89%BE%E4%B8%8D%E5%88%B0%E4%BE%9D%E8%B5%96%E5%8C%85%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">1.</span> <span class="nav-text">解决pip安装后，找不到依赖包的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E5%9B%A0%EF%BC%9A"><span class="nav-number">1.1.</span> <span class="nav-text">原因：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9A%E4%BD%8D%E8%BF%87%E7%A8%8B"><span class="nav-number">1.2.</span> <span class="nav-text">定位过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-number">1.3.</span> <span class="nav-text">解决方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9E%E9%A1%BE"><span class="nav-number">1.4.</span> <span class="nav-text">回顾</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%90%8E"><span class="nav-number">1.5.</span> <span class="nav-text">最后</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">1.6.</span> <span class="nav-text">参考</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8B%93%E5%B1%95"><span class="nav-number">2.</span> <span class="nav-text">拓展</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">小森</p>
+  <div class="site-description" itemprop="description">小森夜行,手可摘星辰</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://thorjay.github.io/2023/04/07/%E8%A7%A3%E5%86%B3pip%E5%AE%89%E8%A3%85%E5%90%8E%E4%BE%9D%E8%B5%96%E5%8C%85%E4%B8%8D%E7%94%9F%E6%95%88%E7%9A%84%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="小森">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jay'lab">
+      <meta itemprop="description" content="小森夜行,手可摘星辰">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | jay'lab">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-04-07 16:27:10" itemprop="dateCreated datePublished" datetime="2023-04-07T16:27:10+08:00">2023-04-07</time>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>[TOC]</p>
+<h1 id="解决pip安装后，找不到依赖包的问题"><a href="#解决pip安装后，找不到依赖包的问题" class="headerlink" title="解决pip安装后，找不到依赖包的问题"></a>解决pip安装后，找不到依赖包的问题</h1><p>最近接触Python、conda，在使用过程中碰到了一个奇怪的问题，参照文档conda激活环境，pip install安装依赖包后，但是工程中却始终各种找不到各种依赖包的错误，先将原因、定位过程、解决方法以及一些思考记录下来；如果文字中有错误或者不合适的描述，请指正。</p>
+<h2 id="原因："><a href="#原因：" class="headerlink" title="原因："></a>原因：</h2><p>表象：按照文档教程pip install安装之后，仍然提示工程环境中没有安装对应的依赖包，这有点类似java和android工程中，通过maven或gradle配置后，在编译中仍然无法找到对应的依赖模块包或类的错误。</p>
+<p>解决：针对本人遇到的情况，<strong>屏蔽之前的python和pip的全局环境变量，默认使用conda环境配置</strong>，按照文档教程操作，即可将安装包下载到指定的环境路径下，工程就找到安装的依赖包。</p>
+<p>原因：对conda、python环境配置的不熟悉，用户全局环境的配置以及pip安装依赖包的操作不了解。</p>
+<h2 id="定位过程"><a href="#定位过程" class="headerlink" title="定位过程"></a>定位过程</h2><p>1.开始对着教程，进行了包安装，如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip install torch==version</span><br><span class="line">jupyter notebook</span><br></pre></td></tr></table></figure>
+<p>结果工程里报错，torch、sensor各种包都找不到；但之前使用conda activate已激活环境。</p>
+<p>2.再次重新安装pip install<br>还是找不到，用vscode中打开也找不到(其实和IDE工具无关)<br>3.网上搜索答案<br>一顿尝试，无果；没有解决问题；其实这时已经怀疑是不是和pip的全局配置有关了，但对python环境的不熟，没有去深度思考。</p>
+<p>4.自我尝试解决-更新内核或环境？<br>在notebook更换一下内核，还是有问题；<br>在vscode将环境切换到base中，依赖包问题解决，这时基本确定是安装包是没有安装到指定的环境中，而是安装到默认的base环境路径下；</p>
+<p>再次尝试pip安装，发现包安装路径是在默认的python全局环境路径下面；</p>
+<p>进入到指定环境路径下，使用.&#x2F;env&#x2F;bin&#x2F;pip 安装，这次发现安装包正确地下载到指定环境下，工程导入依赖包问题也解决。</p>
+<p>5.继续深入<br>发现只要直接使用pip就会下载到全局路径，<strong>这是因为之前安装python时，在系统环境配置中配置指定了pip的路径</strong>，所以使用pip会直接下载到全局的路径下去，如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#Python</span><br><span class="line">export PYTHON_HOME=/opt/homebrew/Cellar/python@3.9/3.9.10</span><br><span class="line">alias python=$&#123;PYTHON_HOME&#125;&quot;/bin/python3.9&quot;</span><br><span class="line">alias python3=$&#123;PYTHON_HOME&#125;&quot;/bin/python3&quot;</span><br><span class="line">alias pip3=$&#123;PYTHON_HOME&#125;&quot;/bin/pip3&quot;</span><br><span class="line">alias pip=$&#123;PYTHON_HOME&#125;&quot;/bin/pip3&quot;</span><br><span class="line">export PATH=$&#123;PATH&#125;:...$&#123;PYTHON_HOME&#125;/bin:</span><br></pre></td></tr></table></figure>
+<p>直接运行pip 命令，都会走用户环境里的pip命令即alias指定的那个路径，python指令也是，会覆盖conda的配置；</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">which pip</span><br><span class="line">#输出：pip: aliased to /opt/homebrew/Cellar/python@3.9/3.9.10/bin/pip3</span><br><span class="line">pip -V</span><br><span class="line">#输出：pip 23.0.1 from /opt/homebrew/lib/python3.9/site-packages/pip (python 3.9)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">which python</span><br><span class="line">#输出：python: aliased to /opt/homebrew/Cellar/python@3.9/3.9.10/bin/python3.9</span><br><span class="line">python --version</span><br><span class="line">#输出：Python 3.9.10</span><br></pre></td></tr></table></figure>
+<p>所以安装conda后，可以将python配置的环境屏蔽掉：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">which pip</span><br><span class="line"># 输出:/opt/anaconda3/bin/pip</span><br><span class="line">pip -V</span><br><span class="line"># 输出：pip 21.2.4 from /opt/anaconda3/lib/python3.9/site-packages/pip (python 3.9)</span><br><span class="line">which python</span><br><span class="line"># 输出：/opt/anaconda3/bin/python</span><br><span class="line">python --version</span><br><span class="line"># 输出：Python 3.9.7</span><br></pre></td></tr></table></figure>
+<p>查看当前python的环境，*代表当前环境</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">conda info -e</span><br><span class="line">输出：</span><br><span class="line"># conda environments:</span><br><span class="line">#</span><br><span class="line">base                  *  /opt/anaconda3</span><br><span class="line">d2l                      /opt/anaconda3/envs/d2l</span><br><span class="line">my_env                   /opt/anaconda3/envs/my_env</span><br></pre></td></tr></table></figure>
+<p>切换到指定环境</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">conda activate d2l</span><br><span class="line">conda info -e</span><br><span class="line">输出：</span><br><span class="line"># conda environments:</span><br><span class="line">#</span><br><span class="line">base                    /opt/anaconda3</span><br><span class="line">d2l                  *  /opt/anaconda3/envs/d2l</span><br></pre></td></tr></table></figure>
+
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>1.使用指定环境下的pip:在虚拟环境下xxx的bin目录下，执行pip，即可将安装包模块下载到虚拟环境中,如：.&#x2F;envs&#x2F;xxx&#x2F;bin&#x2F;pip install<br>虚拟环境的安装包路径.&#x2F;envs&#x2F;xxx&#x2F;lib&#x2F;<a href="mailto:&#x70;&#121;&#116;&#104;&#x6f;&#x6e;&#64;&#51;&#46;&#x39;">&#x70;&#121;&#116;&#104;&#x6f;&#x6e;&#64;&#51;&#46;&#x39;</a>&#x2F;site-packages&#x2F;</p>
+<p>2.屏蔽pip的全局环境配置，使用conda</p>
+<p>3.使用–target选项：pip install --tartget&#x3D;.&#x2F;envs&#x2F;xxx&#x2F;lib&#x2F;<a href="mailto:&#x70;&#x79;&#116;&#x68;&#111;&#x6e;&#x40;&#51;&#46;&#x39;">&#x70;&#x79;&#116;&#x68;&#111;&#x6e;&#x40;&#51;&#46;&#x39;</a>&#x2F;site-packages&#x2F;</p>
+<h2 id="回顾"><a href="#回顾" class="headerlink" title="回顾"></a>回顾</h2><p>1.现象：依赖包的找不到-&gt;为什么找不到-&gt;没有安装-&gt;为什么没有安装？明明已经安装-&gt;涉及到python、conda环境的问题！</p>
+<p>2.中途某段时间被牵引到Homebrew disutils这个工具的问题上去了,以为是这个问题导致安装失败！这个误导过程仍然是对问题的本质没有深入理解，定位问题没有逻辑性和线索；然后对Python工程的依赖、安装、虚拟环境等知识点的不熟悉；</p>
+<p>DEPRECATION: Configuring installation scheme with distutils config files is deprecated and will no longer work in the near future. If you are using a Homebrew or Linuxbrew Python, please see discussion at <a target="_blank" rel="noopener" href="https://github.com/Homebrew/homebrew-core/issues/76621">https://github.com/Homebrew/homebrew-core/issues/76621</a></p>
+<p>3.Python在安装依赖包这一点上和Maven、Gradle构建工程有不同，不同点在于maven或gradle配置工程的依赖包都是在统一的路径下，根据groupid&#x2F;artifactid&#x2F;version来区分，但Python工程不一样，它基于自己的工程的环境，相同的包可能在不同的环境下出现多次；</p>
+<p>4.重新理清归纳问题才能正确的解决问题:”pip install 安装包下载到全局环境路径中，而不是虚拟环境下”；对问题的清晰认知和准确定位，是真正解决问题的前提，如果对问题没有清晰准确的认识，那如同盲人摸象、瞎子过河，只知其一，浪费很多时间，最后问题也得不到解决。</p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>对新事物的尝试和探索，会碰到各种问题，掌握正确解决问题的思维方式和方案，加上对底层基础和背后逻辑的掌握，然后对事物原理的追根溯源，就能真正意义上地解决问题和把握新事物。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/bigtreei/p/15094293.html">https://www.cnblogs.com/bigtreei/p/15094293.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/522468985">https://zhuanlan.zhihu.com/p/522468985</a></p>
+<p><a target="_blank" rel="noopener" href="https://pythonguidecn.readthedocs.io/zh/latest/dev/virtualenvs.html">Pipenv &amp; 虚拟环境</a></p>
+<h1 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h1><ul>
+<li>conda：</li>
+</ul>
+<p>Conda是一个开源的包管理器和环境管理系统，用于管理和部署不同版本的软件包和依赖项。Conda可以同时管理多个环境，每个环境可以包含不同版本的Python解释器以及其他库和依赖项。在本质上，Conda是一个跨平台的软件包管理系统，可用于管理Python软件包，以及其他一些编程语言的软件包。</p>
+<p>下面是Conda的一些主要特点和使用原理：</p>
+<ol>
+<li>包管理器：Conda作为一个包管理器，可以轻松地安装、升级、删除软件包，以及查看已安装的包列表。Conda还可以处理软件包之间的依赖关系，以确保在安装新软件包时不会出现依赖冲突。</li>
+<li>环境管理器：Conda还可以管理多个环境，每个环境可以包含不同版本的Python解释器和其他库和依赖项。这使得用户可以轻松地创建和维护不同的开发环境，以及为不同的项目配置不同的环境。</li>
+<li>跨平台：Conda可以在多种操作系统上运行，包括Windows、macOS和Linux等。</li>
+<li>渠道：Conda的包管理系统是基于渠道的，可以从不同的渠道安装软件包，包括Anaconda官方渠道、conda-forge、PyPI等。用户可以在不同的渠道之间切换，并管理自己的私有渠道。</li>
+<li>兼容性：Conda可以管理多个版本的Python解释器和不同的软件包版本，以确保不同版本的软件包可以兼容。</li>
+</ol>
+<p>总之，Conda提供了一种方便、灵活和可扩展的方式来管理Python软件包和环境，使得用户可以更好地管理自己的开发环境，以及更方便地分享和部署自己的Python应用程序。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/conda/conda.git">conda源码</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/09/22/%E4%BD%BF%E7%94%A8Github%E5%92%8CHexo%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BA%E5%85%8D%E8%B4%B9%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="prev" title="使用Github和Hexo快速搭建免费个人博客">
+                  <i class="fa fa-chevron-left"></i> 使用Github和Hexo快速搭建免费个人博客
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小森</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"thorjay/thorjay.github.io","issue_term":"pathname","theme":"github-light"}</script>
+<script src="/js/third-party/comments/utterances.js"></script>
+
+</body>
+</html>
