@@ -123,7 +123,7 @@
   </entry>
   <entry>
     <title>传感器_方位水平测量</title>
-    <url>/2022/09/21/%E4%BC%A0%E6%84%9F%E5%99%A8-%E6%96%B9%E4%BD%8D%E6%B0%B4%E5%B9%B3%E6%B5%8B%E9%87%8F/</url>
+    <url>/2022/09/21/%E4%BC%A0%E6%84%9F%E5%99%A8_%E6%96%B9%E4%BD%8D%E6%B0%B4%E5%B9%B3%E6%B5%8B%E9%87%8F/</url>
     <content><![CDATA[<h2 id="需求及场景"><a href="#需求及场景" class="headerlink" title="需求及场景"></a>需求及场景</h2><ul>
 <li>角度测量</li>
 </ul>
@@ -140,6 +140,8 @@
 <li>地磁场传感器</li>
 <li>加速度计传感器</li>
 </ul>
+<span id="more"></span>  
+
 <h2 id="关键代码"><a href="#关键代码" class="headerlink" title="关键代码"></a>关键代码</h2><ul>
 <li>获取地磁场和加速度计传感器 &amp;&amp; 注册监听事件</li>
 </ul>
@@ -160,6 +162,9 @@
 <li><input disabled="" type="checkbox"> 界面显示</li>
 </ul>
 ]]></content>
+      <categories>
+        <category>Android</category>
+      </categories>
       <tags>
         <tag>Android</tag>
         <tag>传感器</tag>
@@ -183,6 +188,8 @@
 <li>发布：Github Pages，是通过 GitHub 托管和发布的公共网页</li>
 <li>博客框架：Hexo</li>
 </ul>
+<span id="more"></span>  
+
 <h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><h3 id="Node-js和npm"><a href="#Node-js和npm" class="headerlink" title="Node.js和npm"></a>Node.js和npm</h3><p>通过npm安装Hexo，所以首先得有Nodex.js的环境。</p>
 <ul>
 <li><p>安装node.js和npm</p>
@@ -248,6 +255,8 @@
 <h2 id="原因："><a href="#原因：" class="headerlink" title="原因："></a>原因：</h2><p>表象：按照文档教程pip install安装之后，仍然提示工程环境中没有安装对应的依赖包，这有点类似java和android工程中，通过maven或gradle配置后，在编译中仍然无法找到对应的依赖模块包或类的错误。</p>
 <p>解决：针对本人遇到的情况，<strong>屏蔽之前的python和pip的全局环境变量，默认使用conda环境配置</strong>，按照文档教程操作，即可将安装包下载到指定的环境路径下，工程就找到安装的依赖包。</p>
 <p>原因：对conda、python环境配置的不熟悉，用户全局环境的配置以及pip安装依赖包的操作不了解。</p>
+<span id="more"></span>
+
 <h2 id="定位过程"><a href="#定位过程" class="headerlink" title="定位过程"></a>定位过程</h2><p>1.开始对着教程，进行了包安装，如下</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pip install torch==version</span><br><span class="line">jupyter notebook</span><br></pre></td></tr></table></figure>
 <p>结果工程里报错，torch、sensor各种包都找不到；但之前使用conda activate已激活环境。</p>
@@ -268,9 +277,9 @@
 <p>切换到指定环境</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">conda activate d2l</span><br><span class="line">conda info -e</span><br><span class="line">输出：</span><br><span class="line"># conda environments:</span><br><span class="line">#</span><br><span class="line">base                    /opt/anaconda3</span><br><span class="line">d2l                  *  /opt/anaconda3/envs/d2l</span><br></pre></td></tr></table></figure>
 
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>1.使用指定环境下的pip:在虚拟环境下xxx的bin目录下，执行pip，即可将安装包模块下载到虚拟环境中,如：.&#x2F;envs&#x2F;xxx&#x2F;bin&#x2F;pip install<br>虚拟环境的安装包路径.&#x2F;envs&#x2F;xxx&#x2F;lib&#x2F;<a href="mailto:&#112;&#121;&#x74;&#x68;&#111;&#x6e;&#x40;&#51;&#46;&#x39;">&#112;&#121;&#x74;&#x68;&#111;&#x6e;&#x40;&#51;&#46;&#x39;</a>&#x2F;site-packages&#x2F;</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>1.使用指定环境下的pip:在虚拟环境下xxx的bin目录下，执行pip，即可将安装包模块下载到虚拟环境中,如：.&#x2F;envs&#x2F;xxx&#x2F;bin&#x2F;pip install<br>虚拟环境的安装包路径.&#x2F;envs&#x2F;xxx&#x2F;lib&#x2F;<a href="mailto:&#112;&#121;&#x74;&#x68;&#x6f;&#110;&#x40;&#x33;&#x2e;&#57;">&#112;&#121;&#x74;&#x68;&#x6f;&#110;&#x40;&#x33;&#x2e;&#57;</a>&#x2F;site-packages&#x2F;</p>
 <p>2.屏蔽pip的全局环境配置，使用conda</p>
-<p>3.使用–target选项：pip install --tartget&#x3D;.&#x2F;envs&#x2F;xxx&#x2F;lib&#x2F;<a href="mailto:&#x70;&#121;&#x74;&#x68;&#111;&#x6e;&#64;&#51;&#x2e;&#57;">&#x70;&#121;&#x74;&#x68;&#111;&#x6e;&#64;&#51;&#x2e;&#57;</a>&#x2F;site-packages&#x2F;</p>
+<p>3.使用–target选项：pip install --tartget&#x3D;.&#x2F;envs&#x2F;xxx&#x2F;lib&#x2F;<a href="mailto:&#112;&#121;&#x74;&#104;&#111;&#x6e;&#x40;&#51;&#x2e;&#x39;">&#112;&#121;&#x74;&#104;&#111;&#x6e;&#x40;&#51;&#x2e;&#x39;</a>&#x2F;site-packages&#x2F;</p>
 <h2 id="回顾"><a href="#回顾" class="headerlink" title="回顾"></a>回顾</h2><p>1.现象：依赖包的找不到-&gt;为什么找不到-&gt;没有安装-&gt;为什么没有安装？明明已经安装-&gt;涉及到python、conda环境的问题！</p>
 <p>2.中途某段时间被牵引到Homebrew disutils这个工具的问题上去了,以为是这个问题导致安装失败！这个误导过程仍然是对问题的本质没有深入理解，定位问题没有逻辑性和线索；然后对Python工程的依赖、安装、虚拟环境等知识点的不熟悉；</p>
 <p>DEPRECATION: Configuring installation scheme with distutils config files is deprecated and will no longer work in the near future. If you are using a Homebrew or Linuxbrew Python, please see discussion at <a href="https://github.com/Homebrew/homebrew-core/issues/76621">https://github.com/Homebrew/homebrew-core/issues/76621</a></p>
