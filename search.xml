@@ -1,77 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>解决pip安装后，找不到依赖包的问题</title>
-    <url>/2023/04/07/%E8%A7%A3%E5%86%B3pip%E5%AE%89%E8%A3%85%E5%90%8E%E4%BE%9D%E8%B5%96%E5%8C%85%E4%B8%8D%E7%94%9F%E6%95%88%E7%9A%84%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<h1 id="解决pip安装后，找不到依赖包的问题"><a href="#解决pip安装后，找不到依赖包的问题" class="headerlink" title="解决pip安装后，找不到依赖包的问题"></a>解决pip安装后，找不到依赖包的问题</h1><p>最近接触Python、conda，在使用过程中碰到了一个奇怪的问题，参照文档conda激活环境，pip install安装依赖包后，但是工程中却始终各种找不到各种依赖包的错误，先将原因、定位过程、解决方法以及一些思考记录下来；如果文字中有错误或者不合适的描述，请指正。</p>
-<h2 id="原因："><a href="#原因：" class="headerlink" title="原因："></a>原因：</h2><p>表象：按照文档教程pip install安装之后，仍然提示工程环境中没有安装对应的依赖包，这有点类似java和android工程中，通过maven或gradle配置后，在编译中仍然无法找到对应的依赖模块包或类的错误。</p>
-<p>解决：针对本人遇到的情况，<strong>屏蔽之前的python和pip的全局环境变量，默认使用conda环境配置</strong>，按照文档教程操作，即可将安装包下载到指定的环境路径下，工程就找到安装的依赖包。</p>
-<p>原因：对conda、python环境配置的不熟悉，用户全局环境的配置以及pip安装依赖包的操作不了解。</p>
-<span id="more"></span>
-
-<h2 id="定位过程"><a href="#定位过程" class="headerlink" title="定位过程"></a>定位过程</h2><p>1.开始对着教程，进行了包安装，如下</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pip install torch==version</span><br><span class="line">jupyter notebook</span><br></pre></td></tr></table></figure>
-<p>结果工程里报错，torch、sensor各种包都找不到；但之前使用conda activate已激活环境。</p>
-<p>2.再次重新安装pip install<br>还是找不到，用vscode中打开也找不到(其实和IDE工具无关)<br>3.网上搜索答案<br>一顿尝试，无果；没有解决问题；其实这时已经怀疑是不是和pip的全局配置有关了，但对python环境的不熟，没有去深度思考。</p>
-<p>4.自我尝试解决-更新内核或环境？<br>在notebook更换一下内核，还是有问题；<br>在vscode将环境切换到base中，依赖包问题解决，这时基本确定是安装包是没有安装到指定的环境中，而是安装到默认的base环境路径下；</p>
-<p>再次尝试pip安装，发现包安装路径是在默认的python全局环境路径下面；</p>
-<p>进入到指定环境路径下，使用.&#x2F;env&#x2F;bin&#x2F;pip 安装，这次发现安装包正确地下载到指定环境下，工程导入依赖包问题也解决。</p>
-<p>5.继续深入<br>发现只要直接使用pip就会下载到全局路径，<strong>这是因为之前安装python时，在系统环境配置中配置指定了pip的路径</strong>，所以使用pip会直接下载到全局的路径下去，如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#Python</span><br><span class="line">export PYTHON_HOME=/opt/homebrew/Cellar/python@3.9/3.9.10</span><br><span class="line">alias python=$&#123;PYTHON_HOME&#125;&quot;/bin/python3.9&quot;</span><br><span class="line">alias python3=$&#123;PYTHON_HOME&#125;&quot;/bin/python3&quot;</span><br><span class="line">alias pip3=$&#123;PYTHON_HOME&#125;&quot;/bin/pip3&quot;</span><br><span class="line">alias pip=$&#123;PYTHON_HOME&#125;&quot;/bin/pip3&quot;</span><br><span class="line">export PATH=$&#123;PATH&#125;:...$&#123;PYTHON_HOME&#125;/bin:</span><br></pre></td></tr></table></figure>
-<p>直接运行pip 命令，都会走用户环境里的pip命令即alias指定的那个路径，python指令也是，会覆盖conda的配置；</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">which pip</span><br><span class="line">#输出：pip: aliased to /opt/homebrew/Cellar/python@3.9/3.9.10/bin/pip3</span><br><span class="line">pip -V</span><br><span class="line">#输出：pip 23.0.1 from /opt/homebrew/lib/python3.9/site-packages/pip (python 3.9)</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">which python</span><br><span class="line">#输出：python: aliased to /opt/homebrew/Cellar/python@3.9/3.9.10/bin/python3.9</span><br><span class="line">python --version</span><br><span class="line">#输出：Python 3.9.10</span><br></pre></td></tr></table></figure>
-<p>所以安装conda后，可以将python配置的环境屏蔽掉：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">which pip</span><br><span class="line"># 输出:/opt/anaconda3/bin/pip</span><br><span class="line">pip -V</span><br><span class="line"># 输出：pip 21.2.4 from /opt/anaconda3/lib/python3.9/site-packages/pip (python 3.9)</span><br><span class="line">which python</span><br><span class="line"># 输出：/opt/anaconda3/bin/python</span><br><span class="line">python --version</span><br><span class="line"># 输出：Python 3.9.7</span><br></pre></td></tr></table></figure>
-<p>查看当前python的环境，*代表当前环境</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">conda info -e</span><br><span class="line">输出：</span><br><span class="line"># conda environments:</span><br><span class="line">#</span><br><span class="line">base                  *  /opt/anaconda3</span><br><span class="line">d2l                      /opt/anaconda3/envs/d2l</span><br><span class="line">my_env                   /opt/anaconda3/envs/my_env</span><br></pre></td></tr></table></figure>
-<p>切换到指定环境</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">conda activate d2l</span><br><span class="line">conda info -e</span><br><span class="line">输出：</span><br><span class="line"># conda environments:</span><br><span class="line">#</span><br><span class="line">base                    /opt/anaconda3</span><br><span class="line">d2l                  *  /opt/anaconda3/envs/d2l</span><br></pre></td></tr></table></figure>
-
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>1.使用指定环境下的pip:在虚拟环境下xxx的bin目录下，执行pip，即可将安装包模块下载到虚拟环境中,如：.&#x2F;envs&#x2F;xxx&#x2F;bin&#x2F;pip install<br>虚拟环境的安装包路径.&#x2F;envs&#x2F;xxx&#x2F;lib&#x2F;<a href="mailto:&#x70;&#121;&#x74;&#104;&#x6f;&#110;&#x40;&#51;&#x2e;&#x39;">&#x70;&#121;&#x74;&#104;&#x6f;&#110;&#x40;&#51;&#x2e;&#x39;</a>&#x2F;site-packages&#x2F;</p>
-<p>2.屏蔽pip的全局环境配置，使用conda</p>
-<p>3.使用–target选项：pip install --tartget&#x3D;.&#x2F;envs&#x2F;xxx&#x2F;lib&#x2F;<a href="mailto:&#x70;&#121;&#x74;&#104;&#x6f;&#x6e;&#64;&#51;&#x2e;&#57;">&#x70;&#121;&#x74;&#104;&#x6f;&#x6e;&#64;&#51;&#x2e;&#57;</a>&#x2F;site-packages&#x2F;</p>
-<h2 id="回顾"><a href="#回顾" class="headerlink" title="回顾"></a>回顾</h2><p>1.现象：依赖包的找不到-&gt;为什么找不到-&gt;没有安装-&gt;为什么没有安装？明明已经安装-&gt;涉及到python、conda环境的问题！</p>
-<p>2.中途某段时间被牵引到Homebrew disutils这个工具的问题上去了,以为是这个问题导致安装失败！这个误导过程仍然是对问题的本质没有深入理解，定位问题没有逻辑性和线索；然后对Python工程的依赖、安装、虚拟环境等知识点的不熟悉；</p>
-<p>DEPRECATION: Configuring installation scheme with distutils config files is deprecated and will no longer work in the near future. If you are using a Homebrew or Linuxbrew Python, please see discussion at <a href="https://github.com/Homebrew/homebrew-core/issues/76621">https://github.com/Homebrew/homebrew-core/issues/76621</a></p>
-<p>3.Python在安装依赖包这一点上和Maven、Gradle构建工程有不同，不同点在于maven或gradle配置工程的依赖包都是在统一的路径下，根据groupid&#x2F;artifactid&#x2F;version来区分，但Python工程不一样，它基于自己的工程的环境，相同的包可能在不同的环境下出现多次；</p>
-<p>4.重新理清归纳问题才能正确的解决问题:”pip install 安装包下载到全局环境路径中，而不是虚拟环境下”；对问题的清晰认知和准确定位，是真正解决问题的前提，如果对问题没有清晰准确的认识，那如同盲人摸象、瞎子过河，只知其一，浪费很多时间，最后问题也得不到解决。</p>
-<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>对新事物的尝试和探索，会碰到各种问题，掌握正确解决问题的思维方式和方案，加上对底层基础和背后逻辑的掌握，然后对事物原理的追根溯源，就能真正意义上地解决问题和把握新事物。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://www.cnblogs.com/bigtreei/p/15094293.html">https://www.cnblogs.com/bigtreei/p/15094293.html</a></p>
-<p><a href="https://zhuanlan.zhihu.com/p/522468985">https://zhuanlan.zhihu.com/p/522468985</a></p>
-<p><a href="https://pythonguidecn.readthedocs.io/zh/latest/dev/virtualenvs.html">Pipenv &amp; 虚拟环境</a></p>
-<h1 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h1><ul>
-<li>conda：</li>
-</ul>
-<p>Conda是一个开源的包管理器和环境管理系统，用于管理和部署不同版本的软件包和依赖项。Conda可以同时管理多个环境，每个环境可以包含不同版本的Python解释器以及其他库和依赖项。在本质上，Conda是一个跨平台的软件包管理系统，可用于管理Python软件包，以及其他一些编程语言的软件包。</p>
-<p>下面是Conda的一些主要特点和使用原理：</p>
-<ol>
-<li>包管理器：Conda作为一个包管理器，可以轻松地安装、升级、删除软件包，以及查看已安装的包列表。Conda还可以处理软件包之间的依赖关系，以确保在安装新软件包时不会出现依赖冲突。</li>
-<li>环境管理器：Conda还可以管理多个环境，每个环境可以包含不同版本的Python解释器和其他库和依赖项。这使得用户可以轻松地创建和维护不同的开发环境，以及为不同的项目配置不同的环境。</li>
-<li>跨平台：Conda可以在多种操作系统上运行，包括Windows、macOS和Linux等。</li>
-<li>渠道：Conda的包管理系统是基于渠道的，可以从不同的渠道安装软件包，包括Anaconda官方渠道、conda-forge、PyPI等。用户可以在不同的渠道之间切换，并管理自己的私有渠道。</li>
-<li>兼容性：Conda可以管理多个版本的Python解释器和不同的软件包版本，以确保不同版本的软件包可以兼容。</li>
-</ol>
-<p>总之，Conda提供了一种方便、灵活和可扩展的方式来管理Python软件包和环境，使得用户可以更好地管理自己的开发环境，以及更方便地分享和部署自己的Python应用程序。</p>
-<ul>
-<li><a href="https://github.com/conda/conda.git">conda源码</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>bug</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>pip</tag>
-        <tag>conda</tag>
-        <tag>虚拟环境</tag>
-        <tag>用户环境变量</tag>
-        <tag>site-packages</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Android传感器介绍及使用.md</title>
     <url>/2022/09/20/Android%E4%BC%A0%E6%84%9F%E5%99%A8%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8/</url>
     <content><![CDATA[<h1 id="传感器"><a href="#传感器" class="headerlink" title="传感器"></a>传感器</h1><h2 id="传感器简介"><a href="#传感器简介" class="headerlink" title="传感器简介"></a>传感器简介</h2><p>设备上的传感器能为我们的应用添加丰富的位置和运动功能，包括 GPS 或网络位置以及加速度计、陀螺仪、温度、气压计等。设备传感器能用来测量运动、屏幕方向和各种环境条件，可以提供高度精确的原始数据。</p>
@@ -316,6 +245,77 @@
       <tags>
         <tag>Hexo</tag>
         <tag>blog</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>解决pip安装后，找不到依赖包的问题</title>
+    <url>/2023/04/07/%E8%A7%A3%E5%86%B3pip%E5%AE%89%E8%A3%85%E5%90%8E%E4%BE%9D%E8%B5%96%E5%8C%85%E4%B8%8D%E7%94%9F%E6%95%88%E7%9A%84%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h1 id="解决pip安装后，找不到依赖包的问题"><a href="#解决pip安装后，找不到依赖包的问题" class="headerlink" title="解决pip安装后，找不到依赖包的问题"></a>解决pip安装后，找不到依赖包的问题</h1><p>最近接触Python、conda，在使用过程中碰到了一个奇怪的问题，参照文档conda激活环境，pip install安装依赖包后，但是工程中却始终各种找不到各种依赖包的错误，先将原因、定位过程、解决方法以及一些思考记录下来；如果文字中有错误或者不合适的描述，请指正。</p>
+<h2 id="原因："><a href="#原因：" class="headerlink" title="原因："></a>原因：</h2><p>表象：按照文档教程pip install安装之后，仍然提示工程环境中没有安装对应的依赖包，这有点类似java和android工程中，通过maven或gradle配置后，在编译中仍然无法找到对应的依赖模块包或类的错误。</p>
+<p>解决：针对本人遇到的情况，<strong>屏蔽之前的python和pip的全局环境变量，默认使用conda环境配置</strong>，按照文档教程操作，即可将安装包下载到指定的环境路径下，工程就找到安装的依赖包。</p>
+<p>原因：对conda、python环境配置的不熟悉，用户全局环境的配置以及pip安装依赖包的操作不了解。</p>
+<span id="more"></span>
+
+<h2 id="定位过程"><a href="#定位过程" class="headerlink" title="定位过程"></a>定位过程</h2><p>1.开始对着教程，进行了包安装，如下</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pip install torch==version</span><br><span class="line">jupyter notebook</span><br></pre></td></tr></table></figure>
+<p>结果工程里报错，torch、sensor各种包都找不到；但之前使用conda activate已激活环境。</p>
+<p>2.再次重新安装pip install<br>还是找不到，用vscode中打开也找不到(其实和IDE工具无关)<br>3.网上搜索答案<br>一顿尝试，无果；没有解决问题；其实这时已经怀疑是不是和pip的全局配置有关了，但对python环境的不熟，没有去深度思考。</p>
+<p>4.自我尝试解决-更新内核或环境？<br>在notebook更换一下内核，还是有问题；<br>在vscode将环境切换到base中，依赖包问题解决，这时基本确定是安装包是没有安装到指定的环境中，而是安装到默认的base环境路径下；</p>
+<p>再次尝试pip安装，发现包安装路径是在默认的python全局环境路径下面；</p>
+<p>进入到指定环境路径下，使用.&#x2F;env&#x2F;bin&#x2F;pip 安装，这次发现安装包正确地下载到指定环境下，工程导入依赖包问题也解决。</p>
+<p>5.继续深入<br>发现只要直接使用pip就会下载到全局路径，<strong>这是因为之前安装python时，在系统环境配置中配置指定了pip的路径</strong>，所以使用pip会直接下载到全局的路径下去，如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#Python</span><br><span class="line">export PYTHON_HOME=/opt/homebrew/Cellar/python@3.9/3.9.10</span><br><span class="line">alias python=$&#123;PYTHON_HOME&#125;&quot;/bin/python3.9&quot;</span><br><span class="line">alias python3=$&#123;PYTHON_HOME&#125;&quot;/bin/python3&quot;</span><br><span class="line">alias pip3=$&#123;PYTHON_HOME&#125;&quot;/bin/pip3&quot;</span><br><span class="line">alias pip=$&#123;PYTHON_HOME&#125;&quot;/bin/pip3&quot;</span><br><span class="line">export PATH=$&#123;PATH&#125;:...$&#123;PYTHON_HOME&#125;/bin:</span><br></pre></td></tr></table></figure>
+<p>直接运行pip 命令，都会走用户环境里的pip命令即alias指定的那个路径，python指令也是，会覆盖conda的配置；</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">which pip</span><br><span class="line">#输出：pip: aliased to /opt/homebrew/Cellar/python@3.9/3.9.10/bin/pip3</span><br><span class="line">pip -V</span><br><span class="line">#输出：pip 23.0.1 from /opt/homebrew/lib/python3.9/site-packages/pip (python 3.9)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">which python</span><br><span class="line">#输出：python: aliased to /opt/homebrew/Cellar/python@3.9/3.9.10/bin/python3.9</span><br><span class="line">python --version</span><br><span class="line">#输出：Python 3.9.10</span><br></pre></td></tr></table></figure>
+<p>所以安装conda后，可以将python配置的环境屏蔽掉：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">which pip</span><br><span class="line"># 输出:/opt/anaconda3/bin/pip</span><br><span class="line">pip -V</span><br><span class="line"># 输出：pip 21.2.4 from /opt/anaconda3/lib/python3.9/site-packages/pip (python 3.9)</span><br><span class="line">which python</span><br><span class="line"># 输出：/opt/anaconda3/bin/python</span><br><span class="line">python --version</span><br><span class="line"># 输出：Python 3.9.7</span><br></pre></td></tr></table></figure>
+<p>查看当前python的环境，*代表当前环境</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">conda info -e</span><br><span class="line">输出：</span><br><span class="line"># conda environments:</span><br><span class="line">#</span><br><span class="line">base                  *  /opt/anaconda3</span><br><span class="line">d2l                      /opt/anaconda3/envs/d2l</span><br><span class="line">my_env                   /opt/anaconda3/envs/my_env</span><br></pre></td></tr></table></figure>
+<p>切换到指定环境</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">conda activate d2l</span><br><span class="line">conda info -e</span><br><span class="line">输出：</span><br><span class="line"># conda environments:</span><br><span class="line">#</span><br><span class="line">base                    /opt/anaconda3</span><br><span class="line">d2l                  *  /opt/anaconda3/envs/d2l</span><br></pre></td></tr></table></figure>
+
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>1.使用指定环境下的pip:在虚拟环境下xxx的bin目录下，执行pip，即可将安装包模块下载到虚拟环境中,如：.&#x2F;envs&#x2F;xxx&#x2F;bin&#x2F;pip install<br>虚拟环境的安装包路径.&#x2F;envs&#x2F;xxx&#x2F;lib&#x2F;<a href="mailto:&#x70;&#x79;&#116;&#104;&#x6f;&#x6e;&#x40;&#x33;&#46;&#57;">&#x70;&#x79;&#116;&#104;&#x6f;&#x6e;&#x40;&#x33;&#46;&#57;</a>&#x2F;site-packages&#x2F;</p>
+<p>2.屏蔽pip的全局环境配置，使用conda</p>
+<p>3.使用–target选项：pip install --tartget&#x3D;.&#x2F;envs&#x2F;xxx&#x2F;lib&#x2F;<a href="mailto:&#x70;&#x79;&#x74;&#104;&#x6f;&#110;&#x40;&#51;&#x2e;&#57;">&#x70;&#x79;&#x74;&#104;&#x6f;&#110;&#x40;&#51;&#x2e;&#57;</a>&#x2F;site-packages&#x2F;</p>
+<h2 id="回顾"><a href="#回顾" class="headerlink" title="回顾"></a>回顾</h2><p>1.现象：依赖包的找不到-&gt;为什么找不到-&gt;没有安装-&gt;为什么没有安装？明明已经安装-&gt;涉及到python、conda环境的问题！</p>
+<p>2.中途某段时间被牵引到Homebrew disutils这个工具的问题上去了,以为是这个问题导致安装失败！这个误导过程仍然是对问题的本质没有深入理解，定位问题没有逻辑性和线索；然后对Python工程的依赖、安装、虚拟环境等知识点的不熟悉；</p>
+<p>DEPRECATION: Configuring installation scheme with distutils config files is deprecated and will no longer work in the near future. If you are using a Homebrew or Linuxbrew Python, please see discussion at <a href="https://github.com/Homebrew/homebrew-core/issues/76621">https://github.com/Homebrew/homebrew-core/issues/76621</a></p>
+<p>3.Python在安装依赖包这一点上和Maven、Gradle构建工程有不同，不同点在于maven或gradle配置工程的依赖包都是在统一的路径下，根据groupid&#x2F;artifactid&#x2F;version来区分，但Python工程不一样，它基于自己的工程的环境，相同的包可能在不同的环境下出现多次；</p>
+<p>4.重新理清归纳问题才能正确的解决问题:”pip install 安装包下载到全局环境路径中，而不是虚拟环境下”；对问题的清晰认知和准确定位，是真正解决问题的前提，如果对问题没有清晰准确的认识，那如同盲人摸象、瞎子过河，只知其一，浪费很多时间，最后问题也得不到解决。</p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>对新事物的尝试和探索，会碰到各种问题，掌握正确解决问题的思维方式和方案，加上对底层基础和背后逻辑的掌握，然后对事物原理的追根溯源，就能真正意义上地解决问题和把握新事物。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://www.cnblogs.com/bigtreei/p/15094293.html">https://www.cnblogs.com/bigtreei/p/15094293.html</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/522468985">https://zhuanlan.zhihu.com/p/522468985</a></p>
+<p><a href="https://pythonguidecn.readthedocs.io/zh/latest/dev/virtualenvs.html">Pipenv &amp; 虚拟环境</a></p>
+<h1 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h1><ul>
+<li>conda：</li>
+</ul>
+<p>Conda是一个开源的包管理器和环境管理系统，用于管理和部署不同版本的软件包和依赖项。Conda可以同时管理多个环境，每个环境可以包含不同版本的Python解释器以及其他库和依赖项。在本质上，Conda是一个跨平台的软件包管理系统，可用于管理Python软件包，以及其他一些编程语言的软件包。</p>
+<p>下面是Conda的一些主要特点和使用原理：</p>
+<ol>
+<li>包管理器：Conda作为一个包管理器，可以轻松地安装、升级、删除软件包，以及查看已安装的包列表。Conda还可以处理软件包之间的依赖关系，以确保在安装新软件包时不会出现依赖冲突。</li>
+<li>环境管理器：Conda还可以管理多个环境，每个环境可以包含不同版本的Python解释器和其他库和依赖项。这使得用户可以轻松地创建和维护不同的开发环境，以及为不同的项目配置不同的环境。</li>
+<li>跨平台：Conda可以在多种操作系统上运行，包括Windows、macOS和Linux等。</li>
+<li>渠道：Conda的包管理系统是基于渠道的，可以从不同的渠道安装软件包，包括Anaconda官方渠道、conda-forge、PyPI等。用户可以在不同的渠道之间切换，并管理自己的私有渠道。</li>
+<li>兼容性：Conda可以管理多个版本的Python解释器和不同的软件包版本，以确保不同版本的软件包可以兼容。</li>
+</ol>
+<p>总之，Conda提供了一种方便、灵活和可扩展的方式来管理Python软件包和环境，使得用户可以更好地管理自己的开发环境，以及更方便地分享和部署自己的Python应用程序。</p>
+<ul>
+<li><a href="https://github.com/conda/conda.git">conda源码</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>bug</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>pip</tag>
+        <tag>conda</tag>
+        <tag>虚拟环境</tag>
+        <tag>用户环境变量</tag>
+        <tag>site-packages</tag>
       </tags>
   </entry>
 </search>
