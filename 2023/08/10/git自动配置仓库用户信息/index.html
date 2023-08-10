@@ -21,29 +21,30 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"thorjay.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.13.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"utterances","storage":true,"lazyload":false,"nav":null,"activeClass":"utterances"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="需求及场景 角度测量  将手机变成一个指南针或者一个水平仪的数据；要实现这种效果，就得通过上一篇文章Android传感器介绍及使用中介绍的传感器来获取相应的数据。  坐标系  方位水平测量是以世界坐标系为基准的，详情见上一篇文章Android传感器介绍及使用中的传感器事件数据章节。  传感器  使用两种传感器来：  地磁场传感器 加速度计传感器">
+    <meta name="description" content="[TOC] git自动配置仓库用户信息进行git提交时，发现commit记录中的Author(用户名和邮箱)与当前仓库的账户名和邮箱不匹配。特别是在操作不同项目仓库(公司仓库和私人仓库)或者多用户(Github账号，Gitee账号，公司git账号等)。这种情况是因为未配置当前仓库的用户信息，而默认使用全局配置信息导致的。 如何解决，方案如下： 解决方案查看用户信息(可选)确认全局用户信息 123g">
 <meta property="og:type" content="article">
-<meta property="og:title" content="传感器_方位水平测量">
-<meta property="og:url" content="https://thorjay.github.io/2022/09/21/%E4%BC%A0%E6%84%9F%E5%99%A8_%E6%96%B9%E4%BD%8D%E6%B0%B4%E5%B9%B3%E6%B5%8B%E9%87%8F/index.html">
+<meta property="og:title" content="git自动配置仓库用户信息">
+<meta property="og:url" content="https://thorjay.github.io/2023/08/10/git%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E4%BB%93%E5%BA%93%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF/index.html">
 <meta property="og:site_name" content="jay&#39;lab">
-<meta property="og:description" content="需求及场景 角度测量  将手机变成一个指南针或者一个水平仪的数据；要实现这种效果，就得通过上一篇文章Android传感器介绍及使用中介绍的传感器来获取相应的数据。  坐标系  方位水平测量是以世界坐标系为基准的，详情见上一篇文章Android传感器介绍及使用中的传感器事件数据章节。  传感器  使用两种传感器来：  地磁场传感器 加速度计传感器">
+<meta property="og:description" content="[TOC] git自动配置仓库用户信息进行git提交时，发现commit记录中的Author(用户名和邮箱)与当前仓库的账户名和邮箱不匹配。特别是在操作不同项目仓库(公司仓库和私人仓库)或者多用户(Github账号，Gitee账号，公司git账号等)。这种情况是因为未配置当前仓库的用户信息，而默认使用全局配置信息导致的。 如何解决，方案如下： 解决方案查看用户信息(可选)确认全局用户信息 123g">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-09-21T09:32:49.006Z">
-<meta property="article:modified_time" content="2023-04-08T01:15:07.894Z">
+<meta property="og:image" content="https://thorjay.github.io/imgs/image-20230810201441355.png">
+<meta property="og:image" content="https://thorjay.github.io/imgs/image-20230810201508279.png">
+<meta property="article:published_time" content="2023-08-10T15:50:45.000Z">
+<meta property="article:modified_time" content="2023-08-10T16:03:27.724Z">
 <meta property="article:author" content="小森">
-<meta property="article:tag" content="Android">
-<meta property="article:tag" content="传感器">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://thorjay.github.io/imgs/image-20230810201441355.png">
 
 
-<link rel="canonical" href="https://thorjay.github.io/2022/09/21/%E4%BC%A0%E6%84%9F%E5%99%A8_%E6%96%B9%E4%BD%8D%E6%B0%B4%E5%B9%B3%E6%B5%8B%E9%87%8F/">
+<link rel="canonical" href="https://thorjay.github.io/2023/08/10/git%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E4%BB%93%E5%BA%93%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://thorjay.github.io/2022/09/21/%E4%BC%A0%E6%84%9F%E5%99%A8_%E6%96%B9%E4%BD%8D%E6%B0%B4%E5%B9%B3%E6%B5%8B%E9%87%8F/","path":"2022/09/21/传感器_方位水平测量/","title":"传感器_方位水平测量"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://thorjay.github.io/2023/08/10/git%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E4%BB%93%E5%BA%93%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF/","path":"2023/08/10/git自动配置仓库用户信息/","title":"git自动配置仓库用户信息"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>传感器_方位水平测量 | jay'lab</title>
+<title>git自动配置仓库用户信息 | jay'lab</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-241326189-1"></script>
   <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-241326189-1","only_pageview":false}</script>
@@ -151,7 +152,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9C%80%E6%B1%82%E5%8F%8A%E5%9C%BA%E6%99%AF"><span class="nav-number">1.</span> <span class="nav-text">需求及场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E4%BB%A3%E7%A0%81"><span class="nav-number">2.</span> <span class="nav-text">关键代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A1%88%E5%88%97"><span class="nav-number">3.</span> <span class="nav-text">案列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TODO"><span class="nav-number">4.</span> <span class="nav-text">TODO</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#git%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E4%BB%93%E5%BA%93%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF"><span class="nav-number">1.</span> <span class="nav-text">git自动配置仓库用户信息</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-number">1.1.</span> <span class="nav-text">解决方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF-%E5%8F%AF%E9%80%89"><span class="nav-number">1.1.1.</span> <span class="nav-text">查看用户信息(可选)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%A1%881-%E6%89%8B%E5%8A%A8%E9%85%8D%E7%BD%AE"><span class="nav-number">1.1.2.</span> <span class="nav-text">方案1 手动配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%A1%882-%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE"><span class="nav-number">1.1.3.</span> <span class="nav-text">方案2 自动配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">1.2.</span> <span class="nav-text">后记</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -214,7 +215,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://thorjay.github.io/2022/09/21/%E4%BC%A0%E6%84%9F%E5%99%A8_%E6%96%B9%E4%BD%8D%E6%B0%B4%E5%B9%B3%E6%B5%8B%E9%87%8F/">
+    <link itemprop="mainEntityOfPage" href="https://thorjay.github.io/2023/08/10/git%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E4%BB%93%E5%BA%93%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -227,12 +228,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="传感器_方位水平测量 | jay'lab">
+      <meta itemprop="name" content="git自动配置仓库用户信息 | jay'lab">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          传感器_方位水平测量
+          git自动配置仓库用户信息
         </h1>
 
         <div class="post-meta-container">
@@ -243,16 +244,7 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2022-09-21 17:32:49" itemprop="dateCreated datePublished" datetime="2022-09-21T17:32:49+08:00">2022-09-21</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a>
-        </span>
+      <time title="创建时间：2023-08-10 23:50:45" itemprop="dateCreated datePublished" datetime="2023-08-10T23:50:45+08:00">2023-08-10</time>
     </span>
 
   
@@ -272,42 +264,49 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h2 id="需求及场景"><a href="#需求及场景" class="headerlink" title="需求及场景"></a>需求及场景</h2><ul>
-<li>角度测量</li>
-</ul>
-<p>将手机变成一个指南针或者一个水平仪的数据；要实现这种效果，就得通过上一篇文章<a href="/2022/09/20/Android%E4%BC%A0%E6%84%9F%E5%99%A8%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8/" title="Android传感器介绍及使用.md">Android传感器介绍及使用</a>中介绍的传感器来获取相应的数据。</p>
-<ul>
-<li>坐标系</li>
-</ul>
-<p>方位水平测量是以世界坐标系为基准的，详情见上一篇文章<a href="/2022/09/20/Android%E4%BC%A0%E6%84%9F%E5%99%A8%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8/" title="Android传感器介绍及使用.md">Android传感器介绍及使用</a>中的传感器事件数据章节。</p>
-<ul>
-<li>传感器</li>
-</ul>
-<p>使用两种传感器来：</p>
-<ul>
-<li>地磁场传感器</li>
-<li>加速度计传感器</li>
-</ul>
-<span id="more"></span>  
+        <p>[TOC]</p>
+<h1 id="git自动配置仓库用户信息"><a href="#git自动配置仓库用户信息" class="headerlink" title="git自动配置仓库用户信息"></a>git自动配置仓库用户信息</h1><p>进行git提交时，发现commit记录中的Author(用户名和邮箱)与当前仓库的账户名和邮箱不匹配。特别是在操作不同项目仓库(<strong>公司仓库和私人仓库</strong>)或者多用户(<strong>Github账号，Gitee账号，公司git账号等</strong>)。这种情况是因为未配置当前仓库的用户信息，而默认使用全局配置信息导致的。</p>
+<p>如何解决，方案如下：</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><h3 id="查看用户信息-可选"><a href="#查看用户信息-可选" class="headerlink" title="查看用户信息(可选)"></a>查看用户信息(可选)</h3><p>确认全局用户信息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git config --global --list</span><br><span class="line">#或者</span><br><span class="line">git config -l</span><br></pre></td></tr></table></figure>
+<p>提交结果：</p>
+<p><img src="/../../imgs/image-20230810201441355.png" alt="image-20230810201441355"></p>
+<h3 id="方案1-手动配置"><a href="#方案1-手动配置" class="headerlink" title="方案1 手动配置"></a>方案1 手动配置</h3><p>这个针对较少的项目仓库操作。</p>
+<p>1.进入指定仓库路径下</p>
+<p>2.手动修改<strong>当前仓库</strong>配置</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#（可选）查看确认当前仓库的配置信息</span><br><span class="line">git config --local --list</span><br><span class="line">git config user.name localuser</span><br><span class="line">git config user.email local@email.com</span><br></pre></td></tr></table></figure>
 
-<h2 id="关键代码"><a href="#关键代码" class="headerlink" title="关键代码"></a>关键代码</h2><ul>
-<li>获取地磁场和加速度计传感器 &amp;&amp; 注册监听事件</li>
-</ul>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sensorMgr.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)?.also &#123;</span><br><span class="line">        accSensor -&gt; sensorMgr.registerListener(sensorEventListener,accSensor,SensorManager.SENSOR_DELAY_NORMAL,SensorManager.SENSOR_DELAY_UI)</span><br><span class="line">&#125;</span><br><span class="line">sensorMgr.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)?.also &#123;</span><br><span class="line">        magSensor -&gt; sensorMgr.registerListener(sensorEventListener,magSensor,SensorManager.SENSOR_DELAY_NORMAL,SensorManager.SENSOR_DELAY_UI)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>提交结果：</p>
+<p><img src="/../../imgs/image-20230810201508279.png" alt="image-20230810201508279"></p>
+<h3 id="方案2-自动配置"><a href="#方案2-自动配置" class="headerlink" title="方案2 自动配置"></a>方案2 自动配置</h3><p>针对较多的仓库或用户使用，通过在全局<code>.gitconfig</code>配置文件中使用<strong>includeIf</strong>条件来自动加载不同的用户配置。</p>
+<p>1、首先，创建对应仓库的配置文件</p>
+<p>假设你有两个不同的 Git 用户，一个用于工作项目(work)，另一个用于个人项目(personal)，那就创建2个对应文件，比如.gitconfig_personal和.gitconfig_work</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi .gitconfig_personal</span><br></pre></td></tr></table></figure>
 
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[user]</span><br><span class="line">    name = Your Personal Name</span><br><span class="line">    email = personal@example.com</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi .gitconfig_work</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[user]</span><br><span class="line">    name = Your Work Name</span><br><span class="line">    email = work@example.com</span><br></pre></td></tr></table></figure>
+
+<p>2、最后，配置第一步中的文件</p>
+<p>在全局配置文件<code>~.gitconfig</code>中，使用 <code>includeIf</code> 来根据不同的条件(比如:仓库路径)加载上面的配置文件,这样就会根据不同项目或工作场景，针对<code>gitdir</code>指定的路径去加载对应path的配置文件，从而使用不同的 Git 用户配置，而不是默认的全局配置Git用户。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[includeIf &quot;gitdir:~/work/&quot;]</span><br><span class="line">    path = ~/.gitconfig_work</span><br><span class="line"></span><br><span class="line">[includeIf &quot;gitdir:~/personal/&quot;]</span><br><span class="line">    path = ~/.gitconfig_personal</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意:</p>
+<p>1.git仓库路径末尾需要带上&#x2F;，不然可能无法识别到</p>
+<p>2.如果一个目录下的所有仓库都对应相同的user，可以使用目录路径来替换</p>
+</blockquote>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><ul>
+<li>Git用户名 vs git仓库账户</li>
+</ul>
+<p>Git用户名(本地)：在终端上使用Git，需要配置用户信息(用户名和email)，表示是”谁”在操作Git，来提交代码等等一系列操作。</p>
+<p>Git仓库账户(远端):如果需要使用代码托管的git服务，比如Github，Gitee等，就需要账号信息(账号名和email)来进行注册或登录。一般使用https操作仓库时，会将账号信息配置到仓库的config中；但使用ssh操作时，并不会。</p>
 <ul>
-<li>传感器数据处理</li>
-</ul>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">event?.sensor?.type.let &#123;</span><br><span class="line">    <span class="keyword">when</span>(it)&#123;</span><br><span class="line">        <span class="comment">//加速度(带重力)</span></span><br><span class="line">        Sensor.TYPE_ACCELEROMETER -&gt; System.arraycopy(event?.values,<span class="number">0</span>,accelerometerReading,<span class="number">0</span>,accelerometerReading.size)</span><br><span class="line">        <span class="comment">//磁力</span></span><br><span class="line">        Sensor.TYPE_MAGNETIC_FIELD -&gt; System.arraycopy(event?.values,<span class="number">0</span>,magnetometerReading,<span class="number">0</span>,magnetometerReading.size)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">val</span> cal = DegreeDataCal(accelerometerReading,magnetometerReading)</span><br><span class="line">    cal.cal().let &#123;</span><br><span class="line">        result -&gt; viewModel.updateAngel(result = AngelData(result[<span class="number">0</span>], result[<span class="number">1</span>], result[<span class="number">2</span>]))</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>角度计算</li>
-</ul>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//旋转矩阵</span></span><br><span class="line"><span class="keyword">val</span> rotationMatrix = FloatArray(<span class="number">9</span>)</span><br><span class="line"><span class="comment">//计算旋转矩阵数据</span></span><br><span class="line">SensorManager.getRotationMatrix(rotationMatrix,<span class="literal">null</span>,accArray,magArray)</span><br><span class="line"><span class="comment">//手机屏幕分别沿着x,y,z的旋转数据</span></span><br><span class="line"><span class="keyword">val</span> orientationAngles = FloatArray(<span class="number">3</span>)</span><br><span class="line">rotationMatrix.forEach &#123;</span><br><span class="line">    it.let &#123; Timber.i(it.toString()) &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//计算屏幕方向数据</span></span><br><span class="line">SensorManager.getOrientation(rotationMatrix,orientationAngles)</span><br></pre></td></tr></table></figure>
-
-<h2 id="案列"><a href="#案列" class="headerlink" title="案列"></a>案列</h2><p><a target="_blank" rel="noopener" href="https://github.com/thorjay/sensor_orientation">代码仓库</a></p>
-<h2 id="TODO"><a href="#TODO" class="headerlink" title="TODO"></a>TODO</h2><ul>
-<li><input disabled="" type="checkbox"> 界面显示</li>
+<li><p>includeIf</p>
+<p>gitconfig 中的 includeIf 是 Git 2.13 版本引入的一个功能，它允许你在一个用户主配置文件中为特定的条件包含其他配置文件。这对于多用户管理以及在不同的项目或环境中使用不同的 Git 配置非常有用。通过 includeIf，你可以基于一些条件来加载特定的配置。</p>
+</li>
 </ul>
 
     </div>
@@ -317,23 +316,16 @@
     
 
     <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/Android/" rel="tag"># Android</a>
-              <a href="/tags/%E4%BC%A0%E6%84%9F%E5%99%A8/" rel="tag"># 传感器</a>
-          </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2022/09/20/Android%E4%BC%A0%E6%84%9F%E5%99%A8%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8/" rel="prev" title="Android传感器介绍及使用.md">
-                  <i class="fa fa-chevron-left"></i> Android传感器介绍及使用.md
+                <a href="/2023/04/08/linux%E5%AF%B9clash%E7%9A%84%E5%AE%89%E8%A3%85%E3%80%81%E9%85%8D%E7%BD%AE%E3%80%81%E4%BD%BF%E7%94%A8/" rel="prev" title="对接GPT第一步-clash的安装">
+                  <i class="fa fa-chevron-left"></i> 对接GPT第一步-clash的安装
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2022/09/22/%E4%BD%BF%E7%94%A8Github%E5%92%8CHexo%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BA%E5%85%8D%E8%B4%B9%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="next" title="使用Github和Hexo快速搭建免费个人博客">
-                  使用Github和Hexo快速搭建免费个人博客 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
