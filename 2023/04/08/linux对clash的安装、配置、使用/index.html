@@ -28,12 +28,12 @@
 <meta property="og:site_name" content="jay&#39;lab">
 <meta property="og:description" content="[TOC] 前言需求：目前想体验GPT服务的能力，都得通过一个网络代理；比如实现一个对接GPT接口的api的服务，就得需要代理去访问，所以选择通过Clash实现。 介绍 Clash：Clash是一个开源的跨平台网络代理工具，使用Golang语言编写，支持多种代理协议和代理模式。Clash的特点包括：多协议支持：Clash支持Shadowsocks、V2Ray、Trojan等多种协议，用户可以根据需">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://thorjay.github.io/2023/04/imgs/linux%E5%AF%B9clash%E7%9A%84%E5%AE%89%E8%A3%85%E3%80%81%E9%85%8D%E7%BD%AE%E3%80%81%E4%BD%BF%E7%94%A8_files/image-20230408093022471.png">
-<meta property="og:image" content="https://thorjay.github.io/imgs/linux%E5%AF%B9clash%E7%9A%84%E5%AE%89%E8%A3%85%E3%80%81%E9%85%8D%E7%BD%AE%E3%80%81%E4%BD%BF%E7%94%A8_files/image-20230408094245416.png">
-<meta property="og:image" content="https://thorjay.github.io/imgs/linux%E5%AF%B9clash%E7%9A%84%E5%AE%89%E8%A3%85%E3%80%81%E9%85%8D%E7%BD%AE%E3%80%81%E4%BD%BF%E7%94%A8_files/image-20230408125300901.png">
-<meta property="og:image" content="https://thorjay.github.io/imgs/linux%E5%AF%B9clash%E7%9A%84%E5%AE%89%E8%A3%85%E3%80%81%E9%85%8D%E7%BD%AE%E3%80%81%E4%BD%BF%E7%94%A8_files/image-20230408125140521.png">
+<meta property="og:image" content="https://thorjay.github.io/2023/04/imgs/image-20230408093022471.png">
+<meta property="og:image" content="https://thorjay.github.io/imgs/image-20230408094245416.png">
+<meta property="og:image" content="https://thorjay.github.io/imgs/image-20230408125300901.png">
+<meta property="og:image" content="https://thorjay.github.io/imgs/image-20230408125140521.png">
 <meta property="article:published_time" content="2023-04-08T05:20:07.000Z">
-<meta property="article:modified_time" content="2023-04-08T13:01:51.844Z">
+<meta property="article:modified_time" content="2023-09-01T14:58:39.775Z">
 <meta property="article:author" content="小森">
 <meta property="article:tag" content="gpt">
 <meta property="article:tag" content="clash">
@@ -42,7 +42,7 @@
 <meta property="article:tag" content="proxy">
 <meta property="article:tag" content="网络代理">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://thorjay.github.io/2023/04/imgs/linux%E5%AF%B9clash%E7%9A%84%E5%AE%89%E8%A3%85%E3%80%81%E9%85%8D%E7%BD%AE%E3%80%81%E4%BD%BF%E7%94%A8_files/image-20230408093022471.png">
+<meta name="twitter:image" content="https://thorjay.github.io/2023/04/imgs/image-20230408093022471.png">
 
 
 <link rel="canonical" href="https://thorjay.github.io/2023/04/08/linux%E5%AF%B9clash%E7%9A%84%E5%AE%89%E8%A3%85%E3%80%81%E9%85%8D%E7%BD%AE%E3%80%81%E4%BD%BF%E7%94%A8/">
@@ -296,7 +296,7 @@
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//默认是8080端口</span><br><span class="line">java -jar gpt-server.jar</span><br></pre></td></tr></table></figure>
 <h2 id="安装配置步骤："><a href="#安装配置步骤：" class="headerlink" title="安装配置步骤："></a>安装配置步骤：</h2><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>去<a target="_blank" rel="noopener" href="https://github.com/Dreamacro/clash/releases">资源包地址</a>下载安装包,选择对应操作系统的资源；</p>
-<img src="../../imgs/linux对clash的安装、配置、使用_files/image-20230408093022471.png" alt="image-20230408093022471" style="zoom:33%;" />
+<img src="../../imgs/image-20230408093022471.png" alt="image-20230408093022471" style="zoom:33%;" />
 
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 以linux x64为例</span><br><span class="line">cd ~/software</span><br><span class="line">curl https://github.com/Dreamacro/clash/releases/download/v1.14.0/clash-linux-amd64-v3-v1.14.0.gz</span><br><span class="line">gunzip clash-linux-amd64-v3-v1.14.0.gz</span><br></pre></td></tr></table></figure>
 
@@ -312,7 +312,7 @@
 <li><p>软连接(可选)；如果不使用这个，开启clash就得使用文件的绝对路径。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 这里新建了一个clash文件，将启动脚本/root/software/clash-linux-amd64-v1.14.0链接到此文件，就不</span><br><span class="line"># 用每次定位到软件启动脚本那里；ln -s source_file tartget_file</span><br><span class="line">ln -s /root/software/clash-linux-amd64-v1.14.0 clash</span><br></pre></td></tr></table></figure></li>
 </ul>
-<p><img src="/../../imgs/linux%E5%AF%B9clash%E7%9A%84%E5%AE%89%E8%A3%85%E3%80%81%E9%85%8D%E7%BD%AE%E3%80%81%E4%BD%BF%E7%94%A8_files/image-20230408094245416.png" alt="image-20230408094245416"></p>
+<p><img src="/../../imgs/image-20230408094245416.png" alt="image-20230408094245416"></p>
 <p>注意：实际操作中发现，如果没有创建~&#x2F;.config&#x2F;clash文件夹路径，会报二进制文件无法执行的错误！</p>
 <h2 id="基础使用"><a href="#基础使用" class="headerlink" title="基础使用"></a>基础使用</h2><ul>
 <li>开启，启动后即可访问代理<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./clash</span><br></pre></td></tr></table></figure></li>
@@ -324,8 +324,8 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890</span><br></pre></td></tr></table></figure>
 
 <h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>测试一下，通过部署自己创建的gpt-server工程，，调用gpt的api接口，效果如下：</p>
-<p><img src="/../../imgs/linux%E5%AF%B9clash%E7%9A%84%E5%AE%89%E8%A3%85%E3%80%81%E9%85%8D%E7%BD%AE%E3%80%81%E4%BD%BF%E7%94%A8_files/image-20230408125300901.png" alt="image-20230408125300901"></p>
-<p><img src="/../../imgs/linux%E5%AF%B9clash%E7%9A%84%E5%AE%89%E8%A3%85%E3%80%81%E9%85%8D%E7%BD%AE%E3%80%81%E4%BD%BF%E7%94%A8_files/image-20230408125140521.png" alt="image-20230408125140521"></p>
+<p><img src="/../../imgs/image-20230408125300901.png" alt="image-20230408125300901"></p>
+<p><img src="/../../imgs/image-20230408125140521.png" alt="image-20230408125140521"></p>
 <h2 id="进阶使用"><a href="#进阶使用" class="headerlink" title="进阶使用"></a>进阶使用</h2><ul>
 <li><p>变为系统服务</p>
 <p>Treat Clash as a daemon,将Clash实现常驻后台运行、开机启动等。</p>

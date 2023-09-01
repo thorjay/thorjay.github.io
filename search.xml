@@ -204,7 +204,7 @@
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">blog为自己创建的文件夹，执行init后，blog文件夹中将会生成hexo工程</span></span><br><span class="line">hexo init blog</span><br><span class="line">cd blog</span><br><span class="line">npm install</span><br></pre></td></tr></table></figure>
 
 <p>工程结构如下：</p>
-<p><img src="/../../imgs/%E4%BD%BF%E7%94%A8Github%E5%92%8CHexo%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BA%E5%85%8D%E8%B4%B9%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/image-20220922184941527.png" alt="image-20220922184941527"></p>
+<p><img src="/../../imgs/image-20220922184941527.png" alt="image-20220922184941527"></p>
 </li>
 <li><p>hexo博客搭建和启动本地服务</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install</span><br><span class="line">hexo server</span><br></pre></td></tr></table></figure>
@@ -252,7 +252,7 @@
     <url>/2023/09/01/LightWebviewBridge-%E4%BD%BF%E7%94%A8%E7%AF%87/</url>
     <content><![CDATA[<h1 id="LightWebviewBridge-使用篇"><a href="#LightWebviewBridge-使用篇" class="headerlink" title="LightWebviewBridge-使用篇"></a>LightWebviewBridge-使用篇</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p><code>LightWebviewBridge</code>定位为一个轻量级、小而美的Hybrid混合APP解决方案工具，帮助开发者快速实现H5APP或内嵌H5界面功能，只聚焦于业务功能开发，而不用关注H5和Native的通信实现，便可快速实现相应业务功能，达到类似<code>小程序、公众号</code>的效果；</p>
 <p><a href="https://github.com/thorjay/LightWebviewBridge">链接地址</a></p>
-<h3 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h3><p><img src="/./images/demo.gif" alt="demo"></p>
+<h3 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h3><p><img src="/../../imgs/demo.gif" alt="demo"></p>
 <h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>目前市面上平台APP中的H5应用(如小程序、快应用、流应用…)，这类程序或应用的概念的实现大都是围绕WebView而开展，实现H5与Native的通信能力，可能各自的具体细节和标准不同。</p>
 <p>如果只需要实现H5调用原生能力，比如小程序的秒开、扫码获取信息、分享链接获取应用等众多场景，目前主流的方案要么过大，得深度集成；要么只是一个实现介绍，具体得自己从头实现，而与业务侧深度绑定；</p>
 <p>有没有一个即能快速集成，又将H5-Native通信的能力封装完成，而让开发者只轻松地关注业务实现，同时将公用能力模块化，<code>LightWebviewBridge</code>正是出于这个目的而诞生。</p>
@@ -395,7 +395,7 @@
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//默认是8080端口</span><br><span class="line">java -jar gpt-server.jar</span><br></pre></td></tr></table></figure>
 <h2 id="安装配置步骤："><a href="#安装配置步骤：" class="headerlink" title="安装配置步骤："></a>安装配置步骤：</h2><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>去<a href="https://github.com/Dreamacro/clash/releases">资源包地址</a>下载安装包,选择对应操作系统的资源；</p>
-<img src="../../imgs/linux对clash的安装、配置、使用_files/image-20230408093022471.png" alt="image-20230408093022471" style="zoom:33%;" />
+<img src="../../imgs/image-20230408093022471.png" alt="image-20230408093022471" style="zoom:33%;" />
 
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 以linux x64为例</span><br><span class="line">cd ~/software</span><br><span class="line">curl https://github.com/Dreamacro/clash/releases/download/v1.14.0/clash-linux-amd64-v3-v1.14.0.gz</span><br><span class="line">gunzip clash-linux-amd64-v3-v1.14.0.gz</span><br></pre></td></tr></table></figure>
 
@@ -411,7 +411,7 @@
 <li><p>软连接(可选)；如果不使用这个，开启clash就得使用文件的绝对路径。</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 这里新建了一个clash文件，将启动脚本/root/software/clash-linux-amd64-v1.14.0链接到此文件，就不</span><br><span class="line"># 用每次定位到软件启动脚本那里；ln -s source_file tartget_file</span><br><span class="line">ln -s /root/software/clash-linux-amd64-v1.14.0 clash</span><br></pre></td></tr></table></figure></li>
 </ul>
-<p><img src="/../../imgs/linux%E5%AF%B9clash%E7%9A%84%E5%AE%89%E8%A3%85%E3%80%81%E9%85%8D%E7%BD%AE%E3%80%81%E4%BD%BF%E7%94%A8_files/image-20230408094245416.png" alt="image-20230408094245416"></p>
+<p><img src="/../../imgs/image-20230408094245416.png" alt="image-20230408094245416"></p>
 <p>注意：实际操作中发现，如果没有创建~&#x2F;.config&#x2F;clash文件夹路径，会报二进制文件无法执行的错误！</p>
 <h2 id="基础使用"><a href="#基础使用" class="headerlink" title="基础使用"></a>基础使用</h2><ul>
 <li>开启，启动后即可访问代理<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">./clash</span><br></pre></td></tr></table></figure></li>
@@ -423,8 +423,8 @@
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890</span><br></pre></td></tr></table></figure>
 
 <h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>测试一下，通过部署自己创建的gpt-server工程，，调用gpt的api接口，效果如下：</p>
-<p><img src="/../../imgs/linux%E5%AF%B9clash%E7%9A%84%E5%AE%89%E8%A3%85%E3%80%81%E9%85%8D%E7%BD%AE%E3%80%81%E4%BD%BF%E7%94%A8_files/image-20230408125300901.png" alt="image-20230408125300901"></p>
-<p><img src="/../../imgs/linux%E5%AF%B9clash%E7%9A%84%E5%AE%89%E8%A3%85%E3%80%81%E9%85%8D%E7%BD%AE%E3%80%81%E4%BD%BF%E7%94%A8_files/image-20230408125140521.png" alt="image-20230408125140521"></p>
+<p><img src="/../../imgs/image-20230408125300901.png" alt="image-20230408125300901"></p>
+<p><img src="/../../imgs/image-20230408125140521.png" alt="image-20230408125140521"></p>
 <h2 id="进阶使用"><a href="#进阶使用" class="headerlink" title="进阶使用"></a>进阶使用</h2><ul>
 <li><p>变为系统服务</p>
 <p>Treat Clash as a daemon,将Clash实现常驻后台运行、开机启动等。</p>
@@ -516,9 +516,9 @@
 <p>切换到指定环境</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">conda activate d2l</span><br><span class="line">conda info -e</span><br><span class="line">输出：</span><br><span class="line"># conda environments:</span><br><span class="line">#</span><br><span class="line">base                    /opt/anaconda3</span><br><span class="line">d2l                  *  /opt/anaconda3/envs/d2l</span><br></pre></td></tr></table></figure>
 
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>1.使用指定环境下的pip:在虚拟环境下xxx的bin目录下，执行pip，即可将安装包模块下载到虚拟环境中,如：.&#x2F;envs&#x2F;xxx&#x2F;bin&#x2F;pip install<br>虚拟环境的安装包路径.&#x2F;envs&#x2F;xxx&#x2F;lib&#x2F;<a href="mailto:&#x70;&#121;&#x74;&#x68;&#x6f;&#x6e;&#x40;&#x33;&#46;&#x39;">&#x70;&#121;&#x74;&#x68;&#x6f;&#x6e;&#x40;&#x33;&#46;&#x39;</a>&#x2F;site-packages&#x2F;</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>1.使用指定环境下的pip:在虚拟环境下xxx的bin目录下，执行pip，即可将安装包模块下载到虚拟环境中,如：.&#x2F;envs&#x2F;xxx&#x2F;bin&#x2F;pip install<br>虚拟环境的安装包路径.&#x2F;envs&#x2F;xxx&#x2F;lib&#x2F;<a href="mailto:&#112;&#x79;&#x74;&#104;&#x6f;&#110;&#64;&#x33;&#46;&#57;">&#112;&#x79;&#x74;&#104;&#x6f;&#110;&#64;&#x33;&#46;&#57;</a>&#x2F;site-packages&#x2F;</p>
 <p>2.屏蔽pip的全局环境配置，使用conda</p>
-<p>3.使用–target选项：pip install --tartget&#x3D;.&#x2F;envs&#x2F;xxx&#x2F;lib&#x2F;<a href="mailto:&#112;&#x79;&#116;&#x68;&#111;&#110;&#x40;&#x33;&#x2e;&#57;">&#112;&#x79;&#116;&#x68;&#111;&#110;&#x40;&#x33;&#x2e;&#57;</a>&#x2F;site-packages&#x2F;</p>
+<p>3.使用–target选项：pip install --tartget&#x3D;.&#x2F;envs&#x2F;xxx&#x2F;lib&#x2F;<a href="mailto:&#112;&#121;&#116;&#x68;&#111;&#110;&#x40;&#x33;&#x2e;&#x39;">&#112;&#121;&#116;&#x68;&#111;&#110;&#x40;&#x33;&#x2e;&#x39;</a>&#x2F;site-packages&#x2F;</p>
 <h2 id="回顾"><a href="#回顾" class="headerlink" title="回顾"></a>回顾</h2><p>1.现象：依赖包的找不到-&gt;为什么找不到-&gt;没有安装-&gt;为什么没有安装？明明已经安装-&gt;涉及到python、conda环境的问题！</p>
 <p>2.中途某段时间被牵引到Homebrew disutils这个工具的问题上去了,以为是这个问题导致安装失败！这个误导过程仍然是对问题的本质没有深入理解，定位问题没有逻辑性和线索；然后对Python工程的依赖、安装、虚拟环境等知识点的不熟悉；</p>
 <p>DEPRECATION: Configuring installation scheme with distutils config files is deprecated and will no longer work in the near future. If you are using a Homebrew or Linuxbrew Python, please see discussion at <a href="https://github.com/Homebrew/homebrew-core/issues/76621">https://github.com/Homebrew/homebrew-core/issues/76621</a></p>
