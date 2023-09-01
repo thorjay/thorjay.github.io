@@ -248,9 +248,67 @@
       </tags>
   </entry>
   <entry>
-    <title></title>
+    <title>git自动配置仓库用户信息</title>
+    <url>/2023/08/10/git%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E4%BB%93%E5%BA%93%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h1 id="git自动配置仓库用户信息"><a href="#git自动配置仓库用户信息" class="headerlink" title="git自动配置仓库用户信息"></a>git自动配置仓库用户信息</h1><p>进行git提交时，发现commit记录中的Author(用户名和邮箱)与当前仓库的账户名和邮箱不匹配。特别是在操作不同项目仓库(<strong>公司仓库和私人仓库</strong>)或者多用户(<strong>Github账号，Gitee账号，公司git账号等</strong>)。这种情况是因为未配置当前仓库的用户信息，而默认使用全局配置信息导致的。</p>
+<p>如何解决，方案如下：</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><h3 id="查看用户信息-可选"><a href="#查看用户信息-可选" class="headerlink" title="查看用户信息(可选)"></a>查看用户信息(可选)</h3><p>确认全局用户信息</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git config --global --list</span><br><span class="line">#或者</span><br><span class="line">git config -l</span><br></pre></td></tr></table></figure>
+<p>提交结果：</p>
+<p><img src="/../../imgs/image-20230810201441355.png" alt="image-20230810201441355"></p>
+<h3 id="方案1-手动配置"><a href="#方案1-手动配置" class="headerlink" title="方案1 手动配置"></a>方案1 手动配置</h3><p>这个针对较少的项目仓库操作。</p>
+<p>1.进入指定仓库路径下</p>
+<p>2.手动修改<strong>当前仓库</strong>配置</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#（可选）查看确认当前仓库的配置信息</span><br><span class="line">git config --local --list</span><br><span class="line">git config user.name localuser</span><br><span class="line">git config user.email local@email.com</span><br></pre></td></tr></table></figure>
+
+<p>提交结果：</p>
+<p><img src="/../../imgs/image-20230810201508279.png" alt="image-20230810201508279"></p>
+<h3 id="方案2-自动配置"><a href="#方案2-自动配置" class="headerlink" title="方案2 自动配置"></a>方案2 自动配置</h3><p>针对较多的仓库或用户使用，通过在全局<code>.gitconfig</code>配置文件中使用<strong>includeIf</strong>条件来自动加载不同的用户配置。</p>
+<p>1、首先，创建对应仓库的配置文件</p>
+<p>假设你有两个不同的 Git 用户，一个用于工作项目(work)，另一个用于个人项目(personal)，那就创建2个对应文件，比如.gitconfig_personal和.gitconfig_work</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi .gitconfig_personal</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[user]</span><br><span class="line">    name = Your Personal Name</span><br><span class="line">    email = personal@example.com</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi .gitconfig_work</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[user]</span><br><span class="line">    name = Your Work Name</span><br><span class="line">    email = work@example.com</span><br></pre></td></tr></table></figure>
+
+<p>2、最后，配置第一步中的文件</p>
+<p>在全局配置文件<code>~.gitconfig</code>中，使用 <code>includeIf</code> 来根据不同的条件(比如:仓库路径)加载上面的配置文件,这样就会根据不同项目或工作场景，针对<code>gitdir</code>指定的路径去加载对应path的配置文件，从而使用不同的 Git 用户配置，而不是默认的全局配置Git用户。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[includeIf &quot;gitdir:~/work/&quot;]</span><br><span class="line">    path = ~/.gitconfig_work</span><br><span class="line"></span><br><span class="line">[includeIf &quot;gitdir:~/personal/&quot;]</span><br><span class="line">    path = ~/.gitconfig_personal</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意:</p>
+<p>1.git仓库路径末尾需要带上&#x2F;，不然可能无法识别到</p>
+<p>2.如果一个目录下的所有仓库都对应相同的user，可以使用目录路径来替换</p>
+</blockquote>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><ul>
+<li>Git用户名 vs git仓库账户</li>
+</ul>
+<p>Git用户名(本地)：在终端上使用Git，需要配置用户信息(用户名和email)，表示是”谁”在操作Git，来提交代码等等一系列操作。</p>
+<p>Git仓库账户(远端):如果需要使用代码托管的git服务，比如Github，Gitee等，就需要账号信息(账号名和email)来进行注册或登录。一般使用https操作仓库时，会将账号信息配置到仓库的config中；但使用ssh操作时，并不会。</p>
+<ul>
+<li><p>includeIf</p>
+<p>gitconfig 中的 includeIf 是 Git 2.13 版本引入的一个功能，它允许你在一个用户主配置文件中为特定的条件包含其他配置文件。这对于多用户管理以及在不同的项目或环境中使用不同的 Git 配置非常有用。通过 includeIf，你可以基于一些条件来加载特定的配置。</p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>git</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+        <tag>技巧</tag>
+        <tag>github</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>LightWebviewBridge-使用篇</title>
     <url>/2023/09/01/LightWebviewBridge-%E4%BD%BF%E7%94%A8%E7%AF%87/</url>
-    <content><![CDATA[<h1 id="LightWebviewBridge-使用篇"><a href="#LightWebviewBridge-使用篇" class="headerlink" title="LightWebviewBridge-使用篇"></a>LightWebviewBridge-使用篇</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p><code>LightWebviewBridge</code>定位为一个轻量级、小而美的Hybrid混合APP解决方案工具，帮助开发者快速实现H5APP或内嵌H5界面功能，只聚焦于业务功能开发，而不用关注H5和Native的通信实现，便可快速实现相应业务功能，达到类似<code>小程序、公众号</code>的效果；</p>
+    <content><![CDATA[<p>[TOC]</p>
+<h1 id="LightWebviewBridge-使用篇"><a href="#LightWebviewBridge-使用篇" class="headerlink" title="LightWebviewBridge-使用篇"></a>LightWebviewBridge-使用篇</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p><code>LightWebviewBridge</code>定位为一个轻量级、小而美的Hybrid混合APP解决方案工具，帮助开发者快速实现H5APP或内嵌H5界面功能，只聚焦于业务功能开发，而不用关注H5和Native的通信实现，便可快速实现相应业务功能，达到类似<code>小程序、公众号</code>的效果；</p>
 <p><a href="https://github.com/thorjay/LightWebviewBridge">链接地址</a></p>
 <h3 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h3><p><img src="/../../imgs/demo.gif" alt="demo"></p>
 <h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>目前市面上平台APP中的H5应用(如小程序、快应用、流应用…)，这类程序或应用的概念的实现大都是围绕WebView而开展，实现H5与Native的通信能力，可能各自的具体细节和标准不同。</p>
@@ -319,62 +377,17 @@
 <h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>H5的资源可以放在本地，也可以部署到服务器；本地的效果就类似小程序，秒开；远端的效果是类似公众号，需要加载。</p>
 <p>如果大家觉得有用，请关注<a href="https://github.com/thorjay/LightWebviewBridge">GitHub</a>或<a href="https://gitee.com/larry_jay/LightWebviewBridge">码云</a>，欢迎大家留言，谢谢！</p>
 ]]></content>
-  </entry>
-  <entry>
-    <title>git自动配置仓库用户信息</title>
-    <url>/2023/08/10/git%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E4%BB%93%E5%BA%93%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<h1 id="git自动配置仓库用户信息"><a href="#git自动配置仓库用户信息" class="headerlink" title="git自动配置仓库用户信息"></a>git自动配置仓库用户信息</h1><p>进行git提交时，发现commit记录中的Author(用户名和邮箱)与当前仓库的账户名和邮箱不匹配。特别是在操作不同项目仓库(<strong>公司仓库和私人仓库</strong>)或者多用户(<strong>Github账号，Gitee账号，公司git账号等</strong>)。这种情况是因为未配置当前仓库的用户信息，而默认使用全局配置信息导致的。</p>
-<p>如何解决，方案如下：</p>
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><h3 id="查看用户信息-可选"><a href="#查看用户信息-可选" class="headerlink" title="查看用户信息(可选)"></a>查看用户信息(可选)</h3><p>确认全局用户信息</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git config --global --list</span><br><span class="line">#或者</span><br><span class="line">git config -l</span><br></pre></td></tr></table></figure>
-<p>提交结果：</p>
-<p><img src="/../../imgs/image-20230810201441355.png" alt="image-20230810201441355"></p>
-<h3 id="方案1-手动配置"><a href="#方案1-手动配置" class="headerlink" title="方案1 手动配置"></a>方案1 手动配置</h3><p>这个针对较少的项目仓库操作。</p>
-<p>1.进入指定仓库路径下</p>
-<p>2.手动修改<strong>当前仓库</strong>配置</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#（可选）查看确认当前仓库的配置信息</span><br><span class="line">git config --local --list</span><br><span class="line">git config user.name localuser</span><br><span class="line">git config user.email local@email.com</span><br></pre></td></tr></table></figure>
-
-<p>提交结果：</p>
-<p><img src="/../../imgs/image-20230810201508279.png" alt="image-20230810201508279"></p>
-<h3 id="方案2-自动配置"><a href="#方案2-自动配置" class="headerlink" title="方案2 自动配置"></a>方案2 自动配置</h3><p>针对较多的仓库或用户使用，通过在全局<code>.gitconfig</code>配置文件中使用<strong>includeIf</strong>条件来自动加载不同的用户配置。</p>
-<p>1、首先，创建对应仓库的配置文件</p>
-<p>假设你有两个不同的 Git 用户，一个用于工作项目(work)，另一个用于个人项目(personal)，那就创建2个对应文件，比如.gitconfig_personal和.gitconfig_work</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi .gitconfig_personal</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[user]</span><br><span class="line">    name = Your Personal Name</span><br><span class="line">    email = personal@example.com</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi .gitconfig_work</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[user]</span><br><span class="line">    name = Your Work Name</span><br><span class="line">    email = work@example.com</span><br></pre></td></tr></table></figure>
-
-<p>2、最后，配置第一步中的文件</p>
-<p>在全局配置文件<code>~.gitconfig</code>中，使用 <code>includeIf</code> 来根据不同的条件(比如:仓库路径)加载上面的配置文件,这样就会根据不同项目或工作场景，针对<code>gitdir</code>指定的路径去加载对应path的配置文件，从而使用不同的 Git 用户配置，而不是默认的全局配置Git用户。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[includeIf &quot;gitdir:~/work/&quot;]</span><br><span class="line">    path = ~/.gitconfig_work</span><br><span class="line"></span><br><span class="line">[includeIf &quot;gitdir:~/personal/&quot;]</span><br><span class="line">    path = ~/.gitconfig_personal</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>注意:</p>
-<p>1.git仓库路径末尾需要带上&#x2F;，不然可能无法识别到</p>
-<p>2.如果一个目录下的所有仓库都对应相同的user，可以使用目录路径来替换</p>
-</blockquote>
-<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><ul>
-<li>Git用户名 vs git仓库账户</li>
-</ul>
-<p>Git用户名(本地)：在终端上使用Git，需要配置用户信息(用户名和email)，表示是”谁”在操作Git，来提交代码等等一系列操作。</p>
-<p>Git仓库账户(远端):如果需要使用代码托管的git服务，比如Github，Gitee等，就需要账号信息(账号名和email)来进行注册或登录。一般使用https操作仓库时，会将账号信息配置到仓库的config中；但使用ssh操作时，并不会。</p>
-<ul>
-<li><p>includeIf</p>
-<p>gitconfig 中的 includeIf 是 Git 2.13 版本引入的一个功能，它允许你在一个用户主配置文件中为特定的条件包含其他配置文件。这对于多用户管理以及在不同的项目或环境中使用不同的 Git 配置非常有用。通过 includeIf，你可以基于一些条件来加载特定的配置。</p>
-</li>
-</ul>
-]]></content>
       <categories>
-        <category>git</category>
+        <category>框架</category>
       </categories>
       <tags>
-        <tag>git</tag>
-        <tag>技巧</tag>
-        <tag>github</tag>
+        <tag>hybrid</tag>
+        <tag>app</tag>
+        <tag>h5</tag>
+        <tag>jsbridge</tag>
+        <tag>小程序</tag>
+        <tag>框架</tag>
+        <tag>解决方案</tag>
       </tags>
   </entry>
   <entry>
@@ -516,9 +529,9 @@
 <p>切换到指定环境</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">conda activate d2l</span><br><span class="line">conda info -e</span><br><span class="line">输出：</span><br><span class="line"># conda environments:</span><br><span class="line">#</span><br><span class="line">base                    /opt/anaconda3</span><br><span class="line">d2l                  *  /opt/anaconda3/envs/d2l</span><br></pre></td></tr></table></figure>
 
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>1.使用指定环境下的pip:在虚拟环境下xxx的bin目录下，执行pip，即可将安装包模块下载到虚拟环境中,如：.&#x2F;envs&#x2F;xxx&#x2F;bin&#x2F;pip install<br>虚拟环境的安装包路径.&#x2F;envs&#x2F;xxx&#x2F;lib&#x2F;<a href="mailto:&#112;&#x79;&#x74;&#104;&#x6f;&#110;&#64;&#x33;&#46;&#57;">&#112;&#x79;&#x74;&#104;&#x6f;&#110;&#64;&#x33;&#46;&#57;</a>&#x2F;site-packages&#x2F;</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>1.使用指定环境下的pip:在虚拟环境下xxx的bin目录下，执行pip，即可将安装包模块下载到虚拟环境中,如：.&#x2F;envs&#x2F;xxx&#x2F;bin&#x2F;pip install<br>虚拟环境的安装包路径.&#x2F;envs&#x2F;xxx&#x2F;lib&#x2F;<a href="mailto:&#x70;&#121;&#x74;&#104;&#x6f;&#110;&#64;&#51;&#x2e;&#57;">&#x70;&#121;&#x74;&#104;&#x6f;&#110;&#64;&#51;&#x2e;&#57;</a>&#x2F;site-packages&#x2F;</p>
 <p>2.屏蔽pip的全局环境配置，使用conda</p>
-<p>3.使用–target选项：pip install --tartget&#x3D;.&#x2F;envs&#x2F;xxx&#x2F;lib&#x2F;<a href="mailto:&#112;&#121;&#116;&#x68;&#111;&#110;&#x40;&#x33;&#x2e;&#x39;">&#112;&#121;&#116;&#x68;&#111;&#110;&#x40;&#x33;&#x2e;&#x39;</a>&#x2F;site-packages&#x2F;</p>
+<p>3.使用–target选项：pip install --tartget&#x3D;.&#x2F;envs&#x2F;xxx&#x2F;lib&#x2F;<a href="mailto:&#112;&#121;&#x74;&#x68;&#111;&#110;&#64;&#51;&#46;&#x39;">&#112;&#121;&#x74;&#x68;&#111;&#110;&#64;&#51;&#46;&#x39;</a>&#x2F;site-packages&#x2F;</p>
 <h2 id="回顾"><a href="#回顾" class="headerlink" title="回顾"></a>回顾</h2><p>1.现象：依赖包的找不到-&gt;为什么找不到-&gt;没有安装-&gt;为什么没有安装？明明已经安装-&gt;涉及到python、conda环境的问题！</p>
 <p>2.中途某段时间被牵引到Homebrew disutils这个工具的问题上去了,以为是这个问题导致安装失败！这个误导过程仍然是对问题的本质没有深入理解，定位问题没有逻辑性和线索；然后对Python工程的依赖、安装、虚拟环境等知识点的不熟悉；</p>
 <p>DEPRECATION: Configuring installation scheme with distutils config files is deprecated and will no longer work in the near future. If you are using a Homebrew or Linuxbrew Python, please see discussion at <a href="https://github.com/Homebrew/homebrew-core/issues/76621">https://github.com/Homebrew/homebrew-core/issues/76621</a></p>

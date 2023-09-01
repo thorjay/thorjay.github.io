@@ -174,12 +174,12 @@
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -303,9 +303,9 @@
 <p>切换到指定环境</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">conda activate d2l</span><br><span class="line">conda info -e</span><br><span class="line">输出：</span><br><span class="line"># conda environments:</span><br><span class="line">#</span><br><span class="line">base                    /opt/anaconda3</span><br><span class="line">d2l                  *  /opt/anaconda3/envs/d2l</span><br></pre></td></tr></table></figure>
 
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>1.使用指定环境下的pip:在虚拟环境下xxx的bin目录下，执行pip，即可将安装包模块下载到虚拟环境中,如：.&#x2F;envs&#x2F;xxx&#x2F;bin&#x2F;pip install<br>虚拟环境的安装包路径.&#x2F;envs&#x2F;xxx&#x2F;lib&#x2F;<a href="mailto:&#112;&#x79;&#x74;&#104;&#x6f;&#110;&#64;&#x33;&#46;&#57;">&#112;&#x79;&#x74;&#104;&#x6f;&#110;&#64;&#x33;&#46;&#57;</a>&#x2F;site-packages&#x2F;</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>1.使用指定环境下的pip:在虚拟环境下xxx的bin目录下，执行pip，即可将安装包模块下载到虚拟环境中,如：.&#x2F;envs&#x2F;xxx&#x2F;bin&#x2F;pip install<br>虚拟环境的安装包路径.&#x2F;envs&#x2F;xxx&#x2F;lib&#x2F;<a href="mailto:&#x70;&#121;&#x74;&#104;&#x6f;&#110;&#64;&#51;&#x2e;&#57;">&#x70;&#121;&#x74;&#104;&#x6f;&#110;&#64;&#51;&#x2e;&#57;</a>&#x2F;site-packages&#x2F;</p>
 <p>2.屏蔽pip的全局环境配置，使用conda</p>
-<p>3.使用–target选项：pip install --tartget&#x3D;.&#x2F;envs&#x2F;xxx&#x2F;lib&#x2F;<a href="mailto:&#112;&#121;&#116;&#x68;&#111;&#110;&#x40;&#x33;&#x2e;&#x39;">&#112;&#121;&#116;&#x68;&#111;&#110;&#x40;&#x33;&#x2e;&#x39;</a>&#x2F;site-packages&#x2F;</p>
+<p>3.使用–target选项：pip install --tartget&#x3D;.&#x2F;envs&#x2F;xxx&#x2F;lib&#x2F;<a href="mailto:&#112;&#121;&#x74;&#x68;&#111;&#110;&#64;&#51;&#46;&#x39;">&#112;&#121;&#x74;&#x68;&#111;&#110;&#64;&#51;&#46;&#x39;</a>&#x2F;site-packages&#x2F;</p>
 <h2 id="回顾"><a href="#回顾" class="headerlink" title="回顾"></a>回顾</h2><p>1.现象：依赖包的找不到-&gt;为什么找不到-&gt;没有安装-&gt;为什么没有安装？明明已经安装-&gt;涉及到python、conda环境的问题！</p>
 <p>2.中途某段时间被牵引到Homebrew disutils这个工具的问题上去了,以为是这个问题导致安装失败！这个误导过程仍然是对问题的本质没有深入理解，定位问题没有逻辑性和线索；然后对Python工程的依赖、安装、虚拟环境等知识点的不熟悉；</p>
 <p>DEPRECATION: Configuring installation scheme with distutils config files is deprecated and will no longer work in the near future. If you are using a Homebrew or Linuxbrew Python, please see discussion at <a target="_blank" rel="noopener" href="https://github.com/Homebrew/homebrew-core/issues/76621">https://github.com/Homebrew/homebrew-core/issues/76621</a></p>
