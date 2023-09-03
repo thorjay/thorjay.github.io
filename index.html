@@ -159,7 +159,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-count">8</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -170,7 +170,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-count">27</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -199,6 +199,149 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://thorjay.github.io/2023/09/02/LightWebviewBridge-%E5%8E%9F%E7%90%86%E7%AF%87/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="小森">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jay'lab">
+      <meta itemprop="description" content="小森夜行,手可摘星辰">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | jay'lab">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/09/02/LightWebviewBridge-%E5%8E%9F%E7%90%86%E7%AF%87/" class="post-title-link" itemprop="url">LightWebviewBridge-原理篇</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-09-02 14:21:07" itemprop="dateCreated datePublished" datetime="2023-09-02T14:21:07+08:00">2023-09-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>[TOC]</p>
+<h1 id="LightWebviewBridge-原理篇"><a href="#LightWebviewBridge-原理篇" class="headerlink" title="LightWebviewBridge-原理篇"></a>LightWebviewBridge-原理篇</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p><code>LightWebviewBridge</code>定位为一个轻量级、小而美的Hybrid混合APP解决方案工具，帮助开发者快速实现H5APP或内嵌H5界面功能，只聚焦于业务功能开发，而不用关注H5和Native的通信实现，便可快速实现相应业务功能，达到类似<code>小程序、公众号</code>的效果；</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/thorjay/LightWebviewBridge">开源库地址</a></p>
+<h3 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h3><p><img src="/../../imgs/demo.gif" alt="demo"></p>
+<p>场景方案介绍及使用教程请跳转<a href="https://thorjay.github.io/2023/09/01/LightWebviewBridge-%E4%BD%BF%E7%94%A8%E7%AF%87/">这里</a></p>
+<h2 id="图解"><a href="#图解" class="headerlink" title="图解"></a>图解</h2><p>先上一张功能流程图熟悉一下：</p>
+<p><img src="/../../imgs/lightbridge-%E6%A0%B8%E5%BF%83%E6%B5%81%E7%A8%8B%E5%9B%BE.png" alt="lightbridge-核心流程图"></p>
+<p>上图是一个从H5端到Native端的完整功能流程图，形成了一个完整的闭环链。其中底层（LightWeviewBridge)是已经封装好的通信引擎，业务侧无需关注，只需要关注上面业务侧的功能实现。</p>
+<p>左边是H5端，H5端通过调用API callNative方法，发出请求Request调用Native功能，同时会注册一个回调函数，之后会回调Native端返回的数据。</p>
+<p>右边是Native端，接受到H5端的请求后，会从配置文件bridgeConfig中获取匹配的功能，</p>
+<p>执行原生能力，之后会将数据返回给H5端的回调函数。至此，整个功能闭环执行完成。</p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>实现JS调用Native很简单，但是如果要进一步实现JS与Native闭环互通、异步回调、JS与Native的调用标准化、统一入口等需求，就得将技术点逐个攻克。</p>
+<ul>
+<li><p>JS调用Native</p>
+<p>在Android侧有3种方案:</p>
+<p>一,通过@JavascriptInterface新增原生对象映射到JS；</p>
+<p>二,通过WebViewClient的shouldOverrideUrlLoading()方法回调拦截url，通过自定义协议头在原生中实现。</p>
+<p>三,通过WebChromeClient的onJsAlert()、onJsConfirm()、onJsPrompt()方法回调拦截JS对话框alert()、confirm()、prompt()方法，对消息message进行拦截。</p>
+<p>LightWeviewBridge采用的第一种方案。</p>
+</li>
+<li><p>Native调用JS</p>
+<p>通过Webview执行js，有2种</p>
+<p>一，webview.loadUrl()</p>
+<p>二，webview.evaluateJavascript()</p>
+<p>LightWeviewBridge采用的混合方案。</p>
+</li>
+<li><p>数据如何实现闭环传输</p>
+<p>通过约定请求体Request和返回体Response对象的数据格式，在请求和回调时分别将数据作为成员变量放入其中，在节点流程中进行绑定，帮助数据闭环流转到正确节点。</p>
+</li>
+<li><p>异步回调</p>
+<p>因为JS和Java的运行环境不同，浏览器UI端JS是单线程顺序执行，而Java后台功能可多线程异步执行，所以请求与回调需要考虑异步设计。</p>
+</li>
+<li><p>统一标准化引擎</p>
+</li>
+</ul>
+<p>​		如果只考虑实现，在开发中，每一个业务都需要将以上技术重复实现一遍，所以</p>
+<p>​		通信引擎的设计很有必要，将端到端到出入口及数据格式标准化、统一化，帮助开发		者只关注业务功能。</p>
+<h2 id="代码解析"><a href="#代码解析" class="headerlink" title="代码解析"></a>代码解析</h2><h3 id="核心"><a href="#核心" class="headerlink" title="核心"></a>核心</h3><ul>
+<li><p>WebViewBridge：JS调用Native的入口对象。</p>
+<p>callFunc(…)：暴露给JS的调用入口方法。</p>
+<p>call(…)：调用原生功能的统一入口方法。</p>
+</li>
+<li><p>NativeFunc：业务原生功能基础类，负责持有通信框架上下文对象，JS回调相关等。</p>
+</li>
+<li><p>IWebViewDataHandler：负责JS回调的接口，一般交给Webview实现。</p>
+</li>
+</ul>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><ul>
+<li>BridgeConfig：JS端到Native功能的映射配置。</li>
+</ul>
+<h3 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h3><ul>
+<li>Request：JS到Native的请求体，3元素：funcID(功能唯一ID值，必填)、data(传入数据，可选)、callbackKey(回调函数ID，可选)</li>
+<li>Response：Native到JS的返回体，callbackKey(回调函数ID)，data:(返回数据)</li>
+</ul>
+<h3 id="上下文"><a href="#上下文" class="headerlink" title="上下文"></a>上下文</h3><ul>
+<li>BridgeContext：持有Android上下文Activity和ActivityStarter，作为Native与JS界面交互功能的中间人。</li>
+<li>ActivityStarter：作为进阶调用另外Activity或Fragment的接口，提供给原生功能使用。</li>
+</ul>
+<h3 id="Bridge-js"><a href="#Bridge-js" class="headerlink" title="Bridge.js"></a>Bridge.js</h3><ul>
+<li>callToNative(…)：JS API，调用原生能力，传入参数为Request3元素。</li>
+<li>callbackFromNative(…)：回调函数，供Native端调用。</li>
+<li>callbacks：回调Map，保存对应回调函数key和回调函数，实现JS端异步调用，以空间换时间。</li>
+</ul>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>LightWebviewBridge就是一个轻量级的JSBridge框架，它的出现是为了帮助那些不用集成大框架，也不想从0开始写通信实现，而且又希望将这一模块单独解耦拿出来的开发者们。</p>
+<p>如果反响不错，得到了大家关注、建议，或更多场景解决需求，也欢迎大家积极反馈参与👏🏻，后续会有迭代更新。</p>
+<p>毕竟一人拾火难起灶，众人抱薪方得暖🔥</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
