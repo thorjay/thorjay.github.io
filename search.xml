@@ -1,219 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>传感器_方位水平测量</title>
-    <url>/2022/09/21/%E4%BC%A0%E6%84%9F%E5%99%A8_%E6%96%B9%E4%BD%8D%E6%B0%B4%E5%B9%B3%E6%B5%8B%E9%87%8F/</url>
-    <content><![CDATA[<h2 id="需求及场景"><a href="#需求及场景" class="headerlink" title="需求及场景"></a>需求及场景</h2><ul>
-<li>角度测量</li>
-</ul>
-<p>将手机变成一个指南针或者一个水平仪的数据；要实现这种效果，就得通过上一篇文章<a href="/2022/09/20/Android%E4%BC%A0%E6%84%9F%E5%99%A8%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8/" title="Android传感器介绍及使用.md">Android传感器介绍及使用</a>中介绍的传感器来获取相应的数据。</p>
-<ul>
-<li>坐标系</li>
-</ul>
-<p>方位水平测量是以世界坐标系为基准的，详情见上一篇文章<a href="/2022/09/20/Android%E4%BC%A0%E6%84%9F%E5%99%A8%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8/" title="Android传感器介绍及使用.md">Android传感器介绍及使用</a>中的传感器事件数据章节。</p>
-<ul>
-<li>传感器</li>
-</ul>
-<p>使用两种传感器来：</p>
-<ul>
-<li>地磁场传感器</li>
-<li>加速度计传感器</li>
-</ul>
-<span id="more"></span>  
-
-<h2 id="关键代码"><a href="#关键代码" class="headerlink" title="关键代码"></a>关键代码</h2><ul>
-<li>获取地磁场和加速度计传感器 &amp;&amp; 注册监听事件</li>
-</ul>
-<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line">sensorMgr.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)?.also &#123;</span><br><span class="line">        accSensor -&gt; sensorMgr.registerListener(sensorEventListener,accSensor,SensorManager.SENSOR_DELAY_NORMAL,SensorManager.SENSOR_DELAY_UI)</span><br><span class="line">&#125;</span><br><span class="line">sensorMgr.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)?.also &#123;</span><br><span class="line">        magSensor -&gt; sensorMgr.registerListener(sensorEventListener,magSensor,SensorManager.SENSOR_DELAY_NORMAL,SensorManager.SENSOR_DELAY_UI)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>传感器数据处理</li>
-</ul>
-<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line">event?.sensor?.type.let &#123;</span><br><span class="line">    <span class="keyword">when</span>(it)&#123;</span><br><span class="line">        <span class="comment">//加速度(带重力)</span></span><br><span class="line">        Sensor.TYPE_ACCELEROMETER -&gt; System.arraycopy(event?.values,<span class="number">0</span>,accelerometerReading,<span class="number">0</span>,accelerometerReading.size)</span><br><span class="line">        <span class="comment">//磁力</span></span><br><span class="line">        Sensor.TYPE_MAGNETIC_FIELD -&gt; System.arraycopy(event?.values,<span class="number">0</span>,magnetometerReading,<span class="number">0</span>,magnetometerReading.size)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">val</span> cal = DegreeDataCal(accelerometerReading,magnetometerReading)</span><br><span class="line">    cal.cal().let &#123;</span><br><span class="line">        result -&gt; viewModel.updateAngel(result = AngelData(result[<span class="number">0</span>], result[<span class="number">1</span>], result[<span class="number">2</span>]))</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>角度计算</li>
-</ul>
-<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="comment">//旋转矩阵</span></span><br><span class="line"><span class="keyword">val</span> rotationMatrix = FloatArray(<span class="number">9</span>)</span><br><span class="line"><span class="comment">//计算旋转矩阵数据</span></span><br><span class="line">SensorManager.getRotationMatrix(rotationMatrix,<span class="literal">null</span>,accArray,magArray)</span><br><span class="line"><span class="comment">//手机屏幕分别沿着x,y,z的旋转数据</span></span><br><span class="line"><span class="keyword">val</span> orientationAngles = FloatArray(<span class="number">3</span>)</span><br><span class="line">rotationMatrix.forEach &#123;</span><br><span class="line">    it.let &#123; Timber.i(it.toString()) &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//计算屏幕方向数据</span></span><br><span class="line">SensorManager.getOrientation(rotationMatrix,orientationAngles)</span><br></pre></td></tr></table></figure>
-
-<h2 id="案列"><a href="#案列" class="headerlink" title="案列"></a>案列</h2><p><a href="https://github.com/thorjay/sensor_orientation">代码仓库</a></p>
-<h2 id="TODO"><a href="#TODO" class="headerlink" title="TODO"></a>TODO</h2><ul>
-<li><input disabled="" type="checkbox"> 界面显示</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Android</category>
-      </categories>
-      <tags>
-        <tag>Android</tag>
-        <tag>传感器</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>LightWebviewBridge-使用篇</title>
-    <url>/2023/09/01/LightWebviewBridge-%E4%BD%BF%E7%94%A8%E7%AF%87/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<h1 id="LightWebviewBridge-使用篇"><a href="#LightWebviewBridge-使用篇" class="headerlink" title="LightWebviewBridge-使用篇"></a>LightWebviewBridge-使用篇</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p><code>LightWebviewBridge</code>定位为一个轻量级、小而美的Hybrid混合APP解决方案工具，帮助开发者快速实现H5APP或内嵌H5界面功能，只聚焦于业务功能开发，而不用关注H5和Native的通信实现，便可快速实现相应业务功能，达到类似<code>小程序、公众号</code>的效果；</p>
-<p><a href="https://github.com/thorjay/LightWebviewBridge">链接地址</a></p>
-<h3 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h3><p><img src="/../../imgs/demo.gif" alt="demo"></p>
-<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>目前市面上平台APP中的H5应用(如小程序、快应用、流应用…)，这类程序或应用的概念的实现大都是围绕WebView而开展，实现H5与Native的通信能力，可能各自的具体细节和标准不同。</p>
-<p>如果只需要实现H5调用原生能力，比如小程序的秒开、扫码获取信息、分享链接获取应用等众多场景，目前主流的方案要么过大，得深度集成；要么只是一个实现介绍，具体得自己从头实现，而与业务侧深度绑定；</p>
-<p>有没有一个即能快速集成，又将H5-Native通信的能力封装完成，而让开发者只轻松地关注业务实现，同时将公用能力模块化，<code>LightWebviewBridge</code>正是出于这个目的而诞生。</p>
-<h2 id="使用详解-基础场景"><a href="#使用详解-基础场景" class="headerlink" title="使用详解-基础场景"></a>使用详解-基础场景</h2><p>文字介绍得比较详细，尽量让闭环流程中的每个细节都解释到位，实际开发中代码比较少。</p>
-<blockquote>
-<p>初始化</p>
-</blockquote>
-<p>将框架上下文对象BridgeContext和webview(案列中是BaseWebView)绑定。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">WebViewBridge.initJsInterface(bridgeContext,mWebview)</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>场景-创建二维码</p>
-</blockquote>
-<p>这是一个典型且常用的业务场景，实现如何从H5输入数据，通过原生实现，再返回H5执行的过程。</p>
-<p>1.Native端：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">class Qr : NativeFunc&#123;    </span><br><span class="line">    fun createQr(data : String)&#123;</span><br><span class="line">        val bitmap = CodeUtils.createQRCode(data,600)</span><br><span class="line">        val bytes = ConvertUtils.bitmap2Bytes(bitmap)</span><br><span class="line">        val base64 = EncodeUtils.base64Encode2String(bytes)</span><br><span class="line">        callbackToJS(base64)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;    </span><br><span class="line">   </span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>类：Qr；继承NativeFunc。</p>
-</li>
-<li><p>方法：createQr；与类一起配置到bridgeConfig.json。</p>
-</li>
-<li><p>方法参数：data : String；从H5端的API中传入，数据格式根据业务功能约定。</p>
-</li>
-<li><p>回调方法：callbackToJS；固定API，实现从Native端将数据返回给H5。</p>
-</li>
-<li><p>回调方法参数：base64：String；从Native端返回，数据格式根据业务功能约定。</p>
-</li>
-</ul>
-<p>2.配置</p>
-<p>文件<strong>bridgeConfig.json</strong>，位于assets目录下</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;functions&quot;: &#123;</span><br><span class="line">  	...</span><br><span class="line">    &quot;createQr&quot;: &#123;</span><br><span class="line">      &quot;methodName&quot;: &quot;createQr&quot;,</span><br><span class="line">      &quot;className&quot;: &quot;com.rj.lightwebviewbridge.functions.Qr&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    ...</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>“createQr”:调用原生能力的唯一ID</li>
-<li>“methodName”：方法名</li>
-<li>“className”：类名(包路径)</li>
-</ul>
-<p>3.H5调用</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">function createQr()&#123;</span><br><span class="line">    let data = document.getElementById(&quot;qrData&quot;).value</span><br><span class="line">    callToNative(&quot;createQr&quot;,data,function (response) &#123;</span><br><span class="line">        document.getElementById(&quot;qrImg&quot;).src = &quot;data:image/jpeg;base64,&quot; + response</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>callToNative：API，调用原生能力，与Native通信；三个参数，即请求体(Request)3元素。</li>
-<li>“createQr”(必填)：3元素之一，原生能力的唯一ID，与bridgeConfig.json中配置对应。</li>
-<li>data(可选)：3元素之二，传给Native端的数据，与Native中的*<em>方法参数</em>data对应。</li>
-<li>function(可选) ：3元素之三，JS回调函数，接收Native端的回调数据再执行。</li>
-<li>response：Native端的返回的业务数据，对应Native中的回调方法参数base64。</li>
-</ul>
-<h2 id="使用-进阶"><a href="#使用-进阶" class="headerlink" title="使用-进阶"></a>使用-进阶</h2><blockquote>
-<p>场景-扫码</p>
-</blockquote>
-<p>借助相机扫码二维码、条形码等，然后将数据返回给H5再处理。其中相机能力H5端是无法实现的。</p>
-<p>流程过程与创建二维码是一样的，在调用Native、config配置、回调函数、数据传输等环节在框架里完全相同。唯一不同点是扫码调用了另外的原生界面，如果新增一个步骤。</p>
-<ul>
-<li>需要通过ActivityStarter+LifecycleObserver，将唤起能力放入scanQR方法中，代码如下：</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">fun scanQR()&#123;</span><br><span class="line">toScan()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">private fun toScan()&#123;</span><br><span class="line">        val intent = Intent(context.getContext(),FullScreenQRCodeScanActivity::class.java)</span><br><span class="line">        scanStarter = context.getActivityStarter(&quot;scanQr&quot;)!!</span><br><span class="line">        scanStarter.startActivity(intent)&#123;</span><br><span class="line">                result: ActivityResult -&gt;</span><br><span class="line">            if (result.resultCode == Activity.RESULT_OK) &#123;</span><br><span class="line">                val intent = result.data</span><br><span class="line">                val result = intent!!.getStringExtra(CameraScan.SCAN_RESULT)</span><br><span class="line">                callbackToJS(result)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>在加载WebView的上下文对象(Activity|Fragment)中初始化添加</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">bridgeContext = BridgeContext(this.requireActivity())</span><br><span class="line"></span><br><span class="line">val scanObserver = ScanObserver(this.requireActivity().activityResultRegistry)</span><br><span class="line">lifecycle.addObserver(scanObserver)</span><br><span class="line">bridgeContext.addActivityStarter(&quot;scanQr&quot;,scanObserver)</span><br></pre></td></tr></table></figure>
-
-<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>H5的资源可以放在本地，也可以部署到服务器；本地的效果就类似小程序，秒开；远端的效果是类似公众号，需要加载。</p>
-<p>如果大家觉得有用，请关注<a href="https://github.com/thorjay/LightWebviewBridge">GitHub</a>或<a href="https://gitee.com/larry_jay/LightWebviewBridge">码云</a>，欢迎大家留言，谢谢！</p>
-]]></content>
-      <categories>
-        <category>框架</category>
-      </categories>
-      <tags>
-        <tag>hybrid</tag>
-        <tag>app</tag>
-        <tag>h5</tag>
-        <tag>jsbridge</tag>
-        <tag>小程序</tag>
-        <tag>框架</tag>
-        <tag>解决方案</tag>
-        <tag>LightWebviewBridge</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>使用Github和Hexo快速搭建免费个人博客</title>
-    <url>/2022/09/22/%E4%BD%BF%E7%94%A8Github%E5%92%8CHexo%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BA%E5%85%8D%E8%B4%B9%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</url>
-    <content><![CDATA[<h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>主要是为了满足以下需求：</p>
-<ul>
-<li>日常文字笔记的记录和输出</li>
-<li>笔记内容需要本地和远端同步</li>
-<li>笔记可以发布，分享知识和经验</li>
-<li>快速搜索定位笔记</li>
-<li>笔记内容不能过于随意，不能和随笔混合，须是沉淀和总结类的</li>
-<li>支持Markdown编写笔记</li>
-</ul>
-<p>之前也使用过本地文档(MD)、记事本、印象、有道、也配合git仓库使用，但总是感觉没有完全到达自己想要的需求；</p>
-<h2 id="预研"><a href="#预研" class="headerlink" title="预研"></a>预研</h2><p>在了解了一些静态博客框架后，个人选择了Hexo，当然还有其他框架像Hugo，Jekyll等；发布服务器上白嫖，使用Github来进行托管发布；所以使用Hexo+Github Pages就能搭建出属于自己的个人博客网站。</p>
-<ul>
-<li>发布：Github Pages，是通过 GitHub 托管和发布的公共网页</li>
-<li>博客框架：Hexo</li>
-</ul>
-<span id="more"></span>  
-
-<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><h3 id="Node-js和npm"><a href="#Node-js和npm" class="headerlink" title="Node.js和npm"></a>Node.js和npm</h3><p>通过npm安装Hexo，所以首先得有Nodex.js的环境。</p>
-<ul>
-<li><p>安装node.js和npm</p>
-<p>可以下载包本地安装，然后配置全局变量环境中；以下操作都是针对macOS系统，通过homebrew安装，无需手动去配置环境变量；如果有其他系统安装配置，请<a href="https://www.liaoxuefeng.com/wiki/1022910821149312/1023025597810528">参考</a>；</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">请确保已安装homebrew</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装node</span></span><br><span class="line">brew install node</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看node版本</span></span><br><span class="line">node -v</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看npm版本</span></span><br><span class="line">npm -v</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h3 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h3><ul>
-<li><p>安装Hexo</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">全局安装</span></span><br><span class="line">npm install hexo-cli -g</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>hexo博客目录</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">blog为自己创建的文件夹，执行init后，blog文件夹中将会生成hexo工程</span></span><br><span class="line">hexo init blog</span><br><span class="line">cd blog</span><br><span class="line">npm install</span><br></pre></td></tr></table></figure>
-
-<p>工程结构如下：</p>
-<p><img src="/../../imgs/image-20220922184941527.png" alt="image-20220922184941527"></p>
-</li>
-<li><p>hexo博客搭建和启动本地服务</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install</span><br><span class="line">hexo server</span><br></pre></td></tr></table></figure>
-
-<p>这时在浏览器输入localhost:4000,你将看到hexo博客的最初版本。</p>
-</li>
-</ul>
-<p>这样一个Hexo博客框架就构建好了，但只是局限于本地。</p>
-<p>那如何将个人博客发布到互联网上让别人访问；这时就需要一个托管服务器，这里选择使用Github Pages。</p>
-<h3 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h3><p>使用Github最好本地安装了Git，Git的介绍和安装就不详细介绍了，请自行<a href="(https://www.liaoxuefeng.com/wiki/896043488029600)">搜索</a>；</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">确保git安装且配置到环境中</span></span><br><span class="line">git --version</span><br></pre></td></tr></table></figure>
-
-<h3 id="Github-Pages"><a href="#Github-Pages" class="headerlink" title="Github Pages"></a>Github Pages</h3><ul>
-<li>个人Github Pages申请</li>
-</ul>
-<p>1.首先注册一个<a href="https://github.com/">Github</a>账号</p>
-<p>2.新建一个仓库(Repository),仓库名(Repository name)为<strong>username.github.io</strong>;其中username为自己的<strong>github账号</strong>，仓库权限设置为<strong>Public</strong></p>
-<p>3.这时可以在浏览器输入<a href="https://username.github.io/">https://username.github.io</a> ，这个就是你的个人博客的访问地址。</p>
-<h2 id="发布文章"><a href="#发布文章" class="headerlink" title="发布文章"></a>发布文章</h2><p>最新版本的Hexo已经将集成，构建，发布等操作做得相当优秀了，通过一系列的配置即可快速完成以上需求</p>
-<h3 id="关联Github"><a href="#关联Github" class="headerlink" title="关联Github"></a>关联Github</h3><p>通过修改_config.yml文件配置_</p>
-<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span> <span class="comment"># 发布类型</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">git@github.com:username/username.github.io.git</span> <span class="comment">#你的github仓库地址</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">main</span> <span class="comment">#分支名称</span></span><br></pre></td></tr></table></figure>
-
-<p>配置成功，执行发布命令后，hexo会自动将工程public文件夹下的文件(即博客网址静态资源)推倒github上去</p>
-<h3 id="新建、构建和发布"><a href="#新建、构建和发布" class="headerlink" title="新建、构建和发布"></a>新建、构建和发布</h3><p>hexo提供了方便的指令执行来编写文章，构建博客资源，并快速发布等一系列操作流程，无需用户手动执行</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">新建,</span></span><br><span class="line">hexo n title # 笔记文件,会在source/_post文件夹下会生成title.md文件；可以通过markdown来编写笔记</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">构建</span></span><br><span class="line">hexo clean # 清除</span><br><span class="line">hexo g # 生成静态文件</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">发布</span></span><br><span class="line">hexo d # 发布到github</span><br></pre></td></tr></table></figure>
-
-<p>这样，发布成功后，就可以通过 <a href="https://username.github.io来访问你的博客了;/">https://username.github.io来访问你的博客了；</a></p>
-<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>关于Hexo，还有很多可配置和拓展的地方，篇幅较长，将在以后陆续进行记录；</p>
-<ul>
-<li>主题</li>
-<li>插件</li>
-<li>一些常见操作和问题</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Hexo</category>
-      </categories>
-      <tags>
-        <tag>Hexo</tag>
-        <tag>blog</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Android传感器介绍及使用.md</title>
     <url>/2022/09/20/Android%E4%BC%A0%E6%84%9F%E5%99%A8%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8/</url>
     <content><![CDATA[<h1 id="传感器"><a href="#传感器" class="headerlink" title="传感器"></a>传感器</h1><h2 id="传感器简介"><a href="#传感器简介" class="headerlink" title="传感器简介"></a>传感器简介</h2><p>设备上的传感器能为我们的应用添加丰富的位置和运动功能，包括 GPS 或网络位置以及加速度计、陀螺仪、温度、气压计等。设备传感器能用来测量运动、屏幕方向和各种环境条件，可以提供高度精确的原始数据。</p>
@@ -329,6 +116,55 @@
   unregister=>end: 注销
   
   sensorManager->sensor->sensorEventListener->register->unregister</textarea><textarea id="flowchart-0-options" style="display: none">{"scale":1,"line-width":2,"line-length":50,"text-margin":10,"font-size":12}</textarea><script>  var code = document.getElementById("flowchart-0-code").value;  var options = JSON.parse(decodeURIComponent(document.getElementById("flowchart-0-options").value));  var diagram = flowchart.parse(code);  diagram.drawSVG("flowchart-0", options);</script>]]></content>
+      <tags>
+        <tag>Android</tag>
+        <tag>传感器</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>传感器_方位水平测量</title>
+    <url>/2022/09/21/%E4%BC%A0%E6%84%9F%E5%99%A8_%E6%96%B9%E4%BD%8D%E6%B0%B4%E5%B9%B3%E6%B5%8B%E9%87%8F/</url>
+    <content><![CDATA[<h2 id="需求及场景"><a href="#需求及场景" class="headerlink" title="需求及场景"></a>需求及场景</h2><ul>
+<li>角度测量</li>
+</ul>
+<p>将手机变成一个指南针或者一个水平仪的数据；要实现这种效果，就得通过上一篇文章<a href="/2022/09/20/Android%E4%BC%A0%E6%84%9F%E5%99%A8%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8/" title="Android传感器介绍及使用.md">Android传感器介绍及使用</a>中介绍的传感器来获取相应的数据。</p>
+<ul>
+<li>坐标系</li>
+</ul>
+<p>方位水平测量是以世界坐标系为基准的，详情见上一篇文章<a href="/2022/09/20/Android%E4%BC%A0%E6%84%9F%E5%99%A8%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8/" title="Android传感器介绍及使用.md">Android传感器介绍及使用</a>中的传感器事件数据章节。</p>
+<ul>
+<li>传感器</li>
+</ul>
+<p>使用两种传感器来：</p>
+<ul>
+<li>地磁场传感器</li>
+<li>加速度计传感器</li>
+</ul>
+<span id="more"></span>  
+
+<h2 id="关键代码"><a href="#关键代码" class="headerlink" title="关键代码"></a>关键代码</h2><ul>
+<li>获取地磁场和加速度计传感器 &amp;&amp; 注册监听事件</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line">sensorMgr.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)?.also &#123;</span><br><span class="line">        accSensor -&gt; sensorMgr.registerListener(sensorEventListener,accSensor,SensorManager.SENSOR_DELAY_NORMAL,SensorManager.SENSOR_DELAY_UI)</span><br><span class="line">&#125;</span><br><span class="line">sensorMgr.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)?.also &#123;</span><br><span class="line">        magSensor -&gt; sensorMgr.registerListener(sensorEventListener,magSensor,SensorManager.SENSOR_DELAY_NORMAL,SensorManager.SENSOR_DELAY_UI)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>传感器数据处理</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line">event?.sensor?.type.let &#123;</span><br><span class="line">    <span class="keyword">when</span>(it)&#123;</span><br><span class="line">        <span class="comment">//加速度(带重力)</span></span><br><span class="line">        Sensor.TYPE_ACCELEROMETER -&gt; System.arraycopy(event?.values,<span class="number">0</span>,accelerometerReading,<span class="number">0</span>,accelerometerReading.size)</span><br><span class="line">        <span class="comment">//磁力</span></span><br><span class="line">        Sensor.TYPE_MAGNETIC_FIELD -&gt; System.arraycopy(event?.values,<span class="number">0</span>,magnetometerReading,<span class="number">0</span>,magnetometerReading.size)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">val</span> cal = DegreeDataCal(accelerometerReading,magnetometerReading)</span><br><span class="line">    cal.cal().let &#123;</span><br><span class="line">        result -&gt; viewModel.updateAngel(result = AngelData(result[<span class="number">0</span>], result[<span class="number">1</span>], result[<span class="number">2</span>]))</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>角度计算</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="comment">//旋转矩阵</span></span><br><span class="line"><span class="keyword">val</span> rotationMatrix = FloatArray(<span class="number">9</span>)</span><br><span class="line"><span class="comment">//计算旋转矩阵数据</span></span><br><span class="line">SensorManager.getRotationMatrix(rotationMatrix,<span class="literal">null</span>,accArray,magArray)</span><br><span class="line"><span class="comment">//手机屏幕分别沿着x,y,z的旋转数据</span></span><br><span class="line"><span class="keyword">val</span> orientationAngles = FloatArray(<span class="number">3</span>)</span><br><span class="line">rotationMatrix.forEach &#123;</span><br><span class="line">    it.let &#123; Timber.i(it.toString()) &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//计算屏幕方向数据</span></span><br><span class="line">SensorManager.getOrientation(rotationMatrix,orientationAngles)</span><br></pre></td></tr></table></figure>
+
+<h2 id="案列"><a href="#案列" class="headerlink" title="案列"></a>案列</h2><p><a href="https://github.com/thorjay/sensor_orientation">代码仓库</a></p>
+<h2 id="TODO"><a href="#TODO" class="headerlink" title="TODO"></a>TODO</h2><ul>
+<li><input disabled="" type="checkbox"> 界面显示</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Android</category>
+      </categories>
       <tags>
         <tag>Android</tag>
         <tag>传感器</tag>
@@ -476,6 +312,93 @@
       </tags>
   </entry>
   <entry>
+    <title>LightWebviewBridge-使用篇</title>
+    <url>/2023/09/01/LightWebviewBridge-%E4%BD%BF%E7%94%A8%E7%AF%87/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h1 id="LightWebviewBridge-使用篇"><a href="#LightWebviewBridge-使用篇" class="headerlink" title="LightWebviewBridge-使用篇"></a>LightWebviewBridge-使用篇</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p><code>LightWebviewBridge</code>定位为一个轻量级、小而美的Hybrid混合APP解决方案工具，帮助开发者快速实现H5APP或内嵌H5界面功能，只聚焦于业务功能开发，而不用关注H5和Native的通信实现，便可快速实现相应业务功能，达到类似<code>小程序、公众号</code>的效果；</p>
+<p><a href="https://github.com/thorjay/LightWebviewBridge">链接地址</a></p>
+<h3 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h3><p><img src="/../../imgs/demo.gif" alt="demo"></p>
+<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>目前市面上平台APP中的H5应用(如小程序、快应用、流应用…)，这类程序或应用的概念的实现大都是围绕WebView而开展，实现H5与Native的通信能力，可能各自的具体细节和标准不同。</p>
+<p>如果只需要实现H5调用原生能力，比如小程序的秒开、扫码获取信息、分享链接获取应用等众多场景，目前主流的方案要么过大，得深度集成；要么只是一个实现介绍，具体得自己从头实现，而与业务侧深度绑定；</p>
+<p>有没有一个即能快速集成，又将H5-Native通信的能力封装完成，而让开发者只轻松地关注业务实现，同时将公用能力模块化，<code>LightWebviewBridge</code>正是出于这个目的而诞生。</p>
+<h2 id="使用详解-基础场景"><a href="#使用详解-基础场景" class="headerlink" title="使用详解-基础场景"></a>使用详解-基础场景</h2><p>文字介绍得比较详细，尽量让闭环流程中的每个细节都解释到位，实际开发中代码比较少。</p>
+<blockquote>
+<p>初始化</p>
+</blockquote>
+<p>将框架上下文对象BridgeContext和webview(案列中是BaseWebView)绑定。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">WebViewBridge.initJsInterface(bridgeContext,mWebview)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>场景-创建二维码</p>
+</blockquote>
+<p>这是一个典型且常用的业务场景，实现如何从H5输入数据，通过原生实现，再返回H5执行的过程。</p>
+<p>1.Native端：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">class Qr : NativeFunc&#123;    </span><br><span class="line">    fun createQr(data : String)&#123;</span><br><span class="line">        val bitmap = CodeUtils.createQRCode(data,600)</span><br><span class="line">        val bytes = ConvertUtils.bitmap2Bytes(bitmap)</span><br><span class="line">        val base64 = EncodeUtils.base64Encode2String(bytes)</span><br><span class="line">        callbackToJS(base64)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;    </span><br><span class="line">   </span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>类：Qr；继承NativeFunc。</p>
+</li>
+<li><p>方法：createQr；与类一起配置到bridgeConfig.json。</p>
+</li>
+<li><p>方法参数：data : String；从H5端的API中传入，数据格式根据业务功能约定。</p>
+</li>
+<li><p>回调方法：callbackToJS；固定API，实现从Native端将数据返回给H5。</p>
+</li>
+<li><p>回调方法参数：base64：String；从Native端返回，数据格式根据业务功能约定。</p>
+</li>
+</ul>
+<p>2.配置</p>
+<p>文件<strong>bridgeConfig.json</strong>，位于assets目录下</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;functions&quot;: &#123;</span><br><span class="line">  	...</span><br><span class="line">    &quot;createQr&quot;: &#123;</span><br><span class="line">      &quot;methodName&quot;: &quot;createQr&quot;,</span><br><span class="line">      &quot;className&quot;: &quot;com.rj.lightwebviewbridge.functions.Qr&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    ...</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>“createQr”:调用原生能力的唯一ID</li>
+<li>“methodName”：方法名</li>
+<li>“className”：类名(包路径)</li>
+</ul>
+<p>3.H5调用</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">function createQr()&#123;</span><br><span class="line">    let data = document.getElementById(&quot;qrData&quot;).value</span><br><span class="line">    callToNative(&quot;createQr&quot;,data,function (response) &#123;</span><br><span class="line">        document.getElementById(&quot;qrImg&quot;).src = &quot;data:image/jpeg;base64,&quot; + response</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>callToNative：API，调用原生能力，与Native通信；三个参数，即请求体(Request)3元素。</li>
+<li>“createQr”(必填)：3元素之一，原生能力的唯一ID，与bridgeConfig.json中配置对应。</li>
+<li>data(可选)：3元素之二，传给Native端的数据，与Native中的*<em>方法参数</em>data对应。</li>
+<li>function(可选) ：3元素之三，JS回调函数，接收Native端的回调数据再执行。</li>
+<li>response：Native端的返回的业务数据，对应Native中的回调方法参数base64。</li>
+</ul>
+<h2 id="使用-进阶"><a href="#使用-进阶" class="headerlink" title="使用-进阶"></a>使用-进阶</h2><blockquote>
+<p>场景-扫码</p>
+</blockquote>
+<p>借助相机扫码二维码、条形码等，然后将数据返回给H5再处理。其中相机能力H5端是无法实现的。</p>
+<p>流程过程与创建二维码是一样的，在调用Native、config配置、回调函数、数据传输等环节在框架里完全相同。唯一不同点是扫码调用了另外的原生界面，如果新增一个步骤。</p>
+<ul>
+<li>需要通过ActivityStarter+LifecycleObserver，将唤起能力放入scanQR方法中，代码如下：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">fun scanQR()&#123;</span><br><span class="line">toScan()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">private fun toScan()&#123;</span><br><span class="line">        val intent = Intent(context.getContext(),FullScreenQRCodeScanActivity::class.java)</span><br><span class="line">        scanStarter = context.getActivityStarter(&quot;scanQr&quot;)!!</span><br><span class="line">        scanStarter.startActivity(intent)&#123;</span><br><span class="line">                result: ActivityResult -&gt;</span><br><span class="line">            if (result.resultCode == Activity.RESULT_OK) &#123;</span><br><span class="line">                val intent = result.data</span><br><span class="line">                val result = intent!!.getStringExtra(CameraScan.SCAN_RESULT)</span><br><span class="line">                callbackToJS(result)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在加载WebView的上下文对象(Activity|Fragment)中初始化添加</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">bridgeContext = BridgeContext(this.requireActivity())</span><br><span class="line"></span><br><span class="line">val scanObserver = ScanObserver(this.requireActivity().activityResultRegistry)</span><br><span class="line">lifecycle.addObserver(scanObserver)</span><br><span class="line">bridgeContext.addActivityStarter(&quot;scanQr&quot;,scanObserver)</span><br></pre></td></tr></table></figure>
+
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>H5的资源可以放在本地，也可以部署到服务器；本地的效果就类似小程序，秒开；远端的效果是类似公众号，需要加载。</p>
+<p>如果大家觉得有用，请关注<a href="https://github.com/thorjay/LightWebviewBridge">GitHub</a>或<a href="https://gitee.com/larry_jay/LightWebviewBridge">码云</a>，欢迎大家留言，谢谢！</p>
+]]></content>
+      <categories>
+        <category>框架</category>
+      </categories>
+      <tags>
+        <tag>hybrid</tag>
+        <tag>app</tag>
+        <tag>h5</tag>
+        <tag>jsbridge</tag>
+        <tag>小程序</tag>
+        <tag>框架</tag>
+        <tag>解决方案</tag>
+        <tag>LightWebviewBridge</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>对接GPT第一步-clash的安装</title>
     <url>/2023/04/08/linux%E5%AF%B9clash%E7%9A%84%E5%AE%89%E8%A3%85%E3%80%81%E9%85%8D%E7%BD%AE%E3%80%81%E4%BD%BF%E7%94%A8/</url>
     <content><![CDATA[<p>[TOC]</p>
@@ -614,9 +537,9 @@
 <p>切换到指定环境</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">conda activate d2l</span><br><span class="line">conda info -e</span><br><span class="line">输出：</span><br><span class="line"># conda environments:</span><br><span class="line">#</span><br><span class="line">base                    /opt/anaconda3</span><br><span class="line">d2l                  *  /opt/anaconda3/envs/d2l</span><br></pre></td></tr></table></figure>
 
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>1.使用指定环境下的pip:在虚拟环境下xxx的bin目录下，执行pip，即可将安装包模块下载到虚拟环境中,如：.&#x2F;envs&#x2F;xxx&#x2F;bin&#x2F;pip install<br>虚拟环境的安装包路径.&#x2F;envs&#x2F;xxx&#x2F;lib&#x2F;<a href="mailto:&#112;&#x79;&#x74;&#x68;&#x6f;&#110;&#x40;&#x33;&#x2e;&#57;">&#112;&#x79;&#x74;&#x68;&#x6f;&#110;&#x40;&#x33;&#x2e;&#57;</a>&#x2F;site-packages&#x2F;</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>1.使用指定环境下的pip:在虚拟环境下xxx的bin目录下，执行pip，即可将安装包模块下载到虚拟环境中,如：.&#x2F;envs&#x2F;xxx&#x2F;bin&#x2F;pip install<br>虚拟环境的安装包路径.&#x2F;envs&#x2F;xxx&#x2F;lib&#x2F;<a href="mailto:&#x70;&#121;&#x74;&#104;&#x6f;&#x6e;&#x40;&#51;&#x2e;&#57;">&#x70;&#121;&#x74;&#104;&#x6f;&#x6e;&#x40;&#51;&#x2e;&#57;</a>&#x2F;site-packages&#x2F;</p>
 <p>2.屏蔽pip的全局环境配置，使用conda</p>
-<p>3.使用–target选项：pip install --tartget&#x3D;.&#x2F;envs&#x2F;xxx&#x2F;lib&#x2F;<a href="mailto:&#112;&#121;&#x74;&#104;&#111;&#110;&#64;&#x33;&#x2e;&#x39;">&#112;&#121;&#x74;&#104;&#111;&#110;&#64;&#x33;&#x2e;&#x39;</a>&#x2F;site-packages&#x2F;</p>
+<p>3.使用–target选项：pip install --tartget&#x3D;.&#x2F;envs&#x2F;xxx&#x2F;lib&#x2F;<a href="mailto:&#x70;&#x79;&#116;&#104;&#x6f;&#x6e;&#x40;&#x33;&#x2e;&#57;">&#x70;&#x79;&#116;&#104;&#x6f;&#x6e;&#x40;&#x33;&#x2e;&#57;</a>&#x2F;site-packages&#x2F;</p>
 <h2 id="回顾"><a href="#回顾" class="headerlink" title="回顾"></a>回顾</h2><p>1.现象：依赖包的找不到-&gt;为什么找不到-&gt;没有安装-&gt;为什么没有安装？明明已经安装-&gt;涉及到python、conda环境的问题！</p>
 <p>2.中途某段时间被牵引到Homebrew disutils这个工具的问题上去了,以为是这个问题导致安装失败！这个误导过程仍然是对问题的本质没有深入理解，定位问题没有逻辑性和线索；然后对Python工程的依赖、安装、虚拟环境等知识点的不熟悉；</p>
 <p>DEPRECATION: Configuring installation scheme with distutils config files is deprecated and will no longer work in the near future. If you are using a Homebrew or Linuxbrew Python, please see discussion at <a href="https://github.com/Homebrew/homebrew-core/issues/76621">https://github.com/Homebrew/homebrew-core/issues/76621</a></p>
@@ -653,6 +576,83 @@
         <tag>虚拟环境</tag>
         <tag>用户环境变量</tag>
         <tag>site-packages</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>使用Github和Hexo快速搭建免费个人博客</title>
+    <url>/2022/09/22/%E4%BD%BF%E7%94%A8Github%E5%92%8CHexo%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BA%E5%85%8D%E8%B4%B9%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</url>
+    <content><![CDATA[<h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>主要是为了满足以下需求：</p>
+<ul>
+<li>日常文字笔记的记录和输出</li>
+<li>笔记内容需要本地和远端同步</li>
+<li>笔记可以发布，分享知识和经验</li>
+<li>快速搜索定位笔记</li>
+<li>笔记内容不能过于随意，不能和随笔混合，须是沉淀和总结类的</li>
+<li>支持Markdown编写笔记</li>
+</ul>
+<p>之前也使用过本地文档(MD)、记事本、印象、有道、也配合git仓库使用，但总是感觉没有完全到达自己想要的需求；</p>
+<h2 id="预研"><a href="#预研" class="headerlink" title="预研"></a>预研</h2><p>在了解了一些静态博客框架后，个人选择了Hexo，当然还有其他框架像Hugo，Jekyll等；发布服务器上白嫖，使用Github来进行托管发布；所以使用Hexo+Github Pages就能搭建出属于自己的个人博客网站。</p>
+<ul>
+<li>发布：Github Pages，是通过 GitHub 托管和发布的公共网页</li>
+<li>博客框架：Hexo</li>
+</ul>
+<span id="more"></span>  
+
+<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><h3 id="Node-js和npm"><a href="#Node-js和npm" class="headerlink" title="Node.js和npm"></a>Node.js和npm</h3><p>通过npm安装Hexo，所以首先得有Nodex.js的环境。</p>
+<ul>
+<li><p>安装node.js和npm</p>
+<p>可以下载包本地安装，然后配置全局变量环境中；以下操作都是针对macOS系统，通过homebrew安装，无需手动去配置环境变量；如果有其他系统安装配置，请<a href="https://www.liaoxuefeng.com/wiki/1022910821149312/1023025597810528">参考</a>；</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">请确保已安装homebrew</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装node</span></span><br><span class="line">brew install node</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看node版本</span></span><br><span class="line">node -v</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看npm版本</span></span><br><span class="line">npm -v</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h3><ul>
+<li><p>安装Hexo</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">全局安装</span></span><br><span class="line">npm install hexo-cli -g</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>hexo博客目录</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">blog为自己创建的文件夹，执行init后，blog文件夹中将会生成hexo工程</span></span><br><span class="line">hexo init blog</span><br><span class="line">cd blog</span><br><span class="line">npm install</span><br></pre></td></tr></table></figure>
+
+<p>工程结构如下：</p>
+<p><img src="/../../imgs/image-20220922184941527.png" alt="image-20220922184941527"></p>
+</li>
+<li><p>hexo博客搭建和启动本地服务</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install</span><br><span class="line">hexo server</span><br></pre></td></tr></table></figure>
+
+<p>这时在浏览器输入localhost:4000,你将看到hexo博客的最初版本。</p>
+</li>
+</ul>
+<p>这样一个Hexo博客框架就构建好了，但只是局限于本地。</p>
+<p>那如何将个人博客发布到互联网上让别人访问；这时就需要一个托管服务器，这里选择使用Github Pages。</p>
+<h3 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h3><p>使用Github最好本地安装了Git，Git的介绍和安装就不详细介绍了，请自行<a href="(https://www.liaoxuefeng.com/wiki/896043488029600)">搜索</a>；</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">确保git安装且配置到环境中</span></span><br><span class="line">git --version</span><br></pre></td></tr></table></figure>
+
+<h3 id="Github-Pages"><a href="#Github-Pages" class="headerlink" title="Github Pages"></a>Github Pages</h3><ul>
+<li>个人Github Pages申请</li>
+</ul>
+<p>1.首先注册一个<a href="https://github.com/">Github</a>账号</p>
+<p>2.新建一个仓库(Repository),仓库名(Repository name)为<strong>username.github.io</strong>;其中username为自己的<strong>github账号</strong>，仓库权限设置为<strong>Public</strong></p>
+<p>3.这时可以在浏览器输入<a href="https://username.github.io/">https://username.github.io</a> ，这个就是你的个人博客的访问地址。</p>
+<h2 id="发布文章"><a href="#发布文章" class="headerlink" title="发布文章"></a>发布文章</h2><p>最新版本的Hexo已经将集成，构建，发布等操作做得相当优秀了，通过一系列的配置即可快速完成以上需求</p>
+<h3 id="关联Github"><a href="#关联Github" class="headerlink" title="关联Github"></a>关联Github</h3><p>通过修改_config.yml文件配置_</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span> <span class="comment"># 发布类型</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">git@github.com:username/username.github.io.git</span> <span class="comment">#你的github仓库地址</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">main</span> <span class="comment">#分支名称</span></span><br></pre></td></tr></table></figure>
+
+<p>配置成功，执行发布命令后，hexo会自动将工程public文件夹下的文件(即博客网址静态资源)推倒github上去</p>
+<h3 id="新建、构建和发布"><a href="#新建、构建和发布" class="headerlink" title="新建、构建和发布"></a>新建、构建和发布</h3><p>hexo提供了方便的指令执行来编写文章，构建博客资源，并快速发布等一系列操作流程，无需用户手动执行</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">新建,</span></span><br><span class="line">hexo n title # 笔记文件,会在source/_post文件夹下会生成title.md文件；可以通过markdown来编写笔记</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">构建</span></span><br><span class="line">hexo clean # 清除</span><br><span class="line">hexo g # 生成静态文件</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">发布</span></span><br><span class="line">hexo d # 发布到github</span><br></pre></td></tr></table></figure>
+
+<p>这样，发布成功后，就可以通过 <a href="https://username.github.io来访问你的博客了;/">https://username.github.io来访问你的博客了；</a></p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>关于Hexo，还有很多可配置和拓展的地方，篇幅较长，将在以后陆续进行记录；</p>
+<ul>
+<li>主题</li>
+<li>插件</li>
+<li>一些常见操作和问题</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>blog</tag>
       </tags>
   </entry>
 </search>
