@@ -1,83 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>使用Github和Hexo快速搭建免费个人博客</title>
-    <url>/2022/09/22/%E4%BD%BF%E7%94%A8Github%E5%92%8CHexo%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BA%E5%85%8D%E8%B4%B9%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</url>
-    <content><![CDATA[<h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>主要是为了满足以下需求：</p>
-<ul>
-<li>日常文字笔记的记录和输出</li>
-<li>笔记内容需要本地和远端同步</li>
-<li>笔记可以发布，分享知识和经验</li>
-<li>快速搜索定位笔记</li>
-<li>笔记内容不能过于随意，不能和随笔混合，须是沉淀和总结类的</li>
-<li>支持Markdown编写笔记</li>
-</ul>
-<p>之前也使用过本地文档(MD)、记事本、印象、有道、也配合git仓库使用，但总是感觉没有完全到达自己想要的需求；</p>
-<h2 id="预研"><a href="#预研" class="headerlink" title="预研"></a>预研</h2><p>在了解了一些静态博客框架后，个人选择了Hexo，当然还有其他框架像Hugo，Jekyll等；发布服务器上白嫖，使用Github来进行托管发布；所以使用Hexo+Github Pages就能搭建出属于自己的个人博客网站。</p>
-<ul>
-<li>发布：Github Pages，是通过 GitHub 托管和发布的公共网页</li>
-<li>博客框架：Hexo</li>
-</ul>
-<span id="more"></span>  
-
-<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><h3 id="Node-js和npm"><a href="#Node-js和npm" class="headerlink" title="Node.js和npm"></a>Node.js和npm</h3><p>通过npm安装Hexo，所以首先得有Nodex.js的环境。</p>
-<ul>
-<li><p>安装node.js和npm</p>
-<p>可以下载包本地安装，然后配置全局变量环境中；以下操作都是针对macOS系统，通过homebrew安装，无需手动去配置环境变量；如果有其他系统安装配置，请<a href="https://www.liaoxuefeng.com/wiki/1022910821149312/1023025597810528">参考</a>；</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">请确保已安装homebrew</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装node</span></span><br><span class="line">brew install node</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看node版本</span></span><br><span class="line">node -v</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看npm版本</span></span><br><span class="line">npm -v</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h3 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h3><ul>
-<li><p>安装Hexo</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">全局安装</span></span><br><span class="line">npm install hexo-cli -g</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>hexo博客目录</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">blog为自己创建的文件夹，执行init后，blog文件夹中将会生成hexo工程</span></span><br><span class="line">hexo init blog</span><br><span class="line">cd blog</span><br><span class="line">npm install</span><br></pre></td></tr></table></figure>
-
-<p>工程结构如下：</p>
-<p><img src="/../../imgs/image-20220922184941527.png" alt="image-20220922184941527"></p>
-</li>
-<li><p>hexo博客搭建和启动本地服务</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install</span><br><span class="line">hexo server</span><br></pre></td></tr></table></figure>
-
-<p>这时在浏览器输入localhost:4000,你将看到hexo博客的最初版本。</p>
-</li>
-</ul>
-<p>这样一个Hexo博客框架就构建好了，但只是局限于本地。</p>
-<p>那如何将个人博客发布到互联网上让别人访问；这时就需要一个托管服务器，这里选择使用Github Pages。</p>
-<h3 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h3><p>使用Github最好本地安装了Git，Git的介绍和安装就不详细介绍了，请自行<a href="(https://www.liaoxuefeng.com/wiki/896043488029600)">搜索</a>；</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">确保git安装且配置到环境中</span></span><br><span class="line">git --version</span><br></pre></td></tr></table></figure>
-
-<h3 id="Github-Pages"><a href="#Github-Pages" class="headerlink" title="Github Pages"></a>Github Pages</h3><ul>
-<li>个人Github Pages申请</li>
-</ul>
-<p>1.首先注册一个<a href="https://github.com/">Github</a>账号</p>
-<p>2.新建一个仓库(Repository),仓库名(Repository name)为<strong>username.github.io</strong>;其中username为自己的<strong>github账号</strong>，仓库权限设置为<strong>Public</strong></p>
-<p>3.这时可以在浏览器输入<a href="https://username.github.io/">https://username.github.io</a> ，这个就是你的个人博客的访问地址。</p>
-<h2 id="发布文章"><a href="#发布文章" class="headerlink" title="发布文章"></a>发布文章</h2><p>最新版本的Hexo已经将集成，构建，发布等操作做得相当优秀了，通过一系列的配置即可快速完成以上需求</p>
-<h3 id="关联Github"><a href="#关联Github" class="headerlink" title="关联Github"></a>关联Github</h3><p>通过修改_config.yml文件配置_</p>
-<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span> <span class="comment"># 发布类型</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">git@github.com:username/username.github.io.git</span> <span class="comment">#你的github仓库地址</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">main</span> <span class="comment">#分支名称</span></span><br></pre></td></tr></table></figure>
-
-<p>配置成功，执行发布命令后，hexo会自动将工程public文件夹下的文件(即博客网址静态资源)推倒github上去</p>
-<h3 id="新建、构建和发布"><a href="#新建、构建和发布" class="headerlink" title="新建、构建和发布"></a>新建、构建和发布</h3><p>hexo提供了方便的指令执行来编写文章，构建博客资源，并快速发布等一系列操作流程，无需用户手动执行</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">新建,</span></span><br><span class="line">hexo n title # 笔记文件,会在source/_post文件夹下会生成title.md文件；可以通过markdown来编写笔记</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">构建</span></span><br><span class="line">hexo clean # 清除</span><br><span class="line">hexo g # 生成静态文件</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">发布</span></span><br><span class="line">hexo d # 发布到github</span><br></pre></td></tr></table></figure>
-
-<p>这样，发布成功后，就可以通过 <a href="https://username.github.io来访问你的博客了;/">https://username.github.io来访问你的博客了；</a></p>
-<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>关于Hexo，还有很多可配置和拓展的地方，篇幅较长，将在以后陆续进行记录；</p>
-<ul>
-<li>主题</li>
-<li>插件</li>
-<li>一些常见操作和问题</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Hexo</category>
-      </categories>
-      <tags>
-        <tag>Hexo</tag>
-        <tag>blog</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>传感器_方位水平测量</title>
     <url>/2022/09/21/%E4%BC%A0%E6%84%9F%E5%99%A8_%E6%96%B9%E4%BD%8D%E6%B0%B4%E5%B9%B3%E6%B5%8B%E9%87%8F/</url>
     <content><![CDATA[<h2 id="需求及场景"><a href="#需求及场景" class="headerlink" title="需求及场景"></a>需求及场景</h2><ul>
@@ -248,60 +171,80 @@
       </tags>
   </entry>
   <entry>
-    <title>git自动配置仓库用户信息</title>
-    <url>/2023/08/10/git%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E4%BB%93%E5%BA%93%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<h1 id="git自动配置仓库用户信息"><a href="#git自动配置仓库用户信息" class="headerlink" title="git自动配置仓库用户信息"></a>git自动配置仓库用户信息</h1><p>进行git提交时，发现commit记录中的Author(用户名和邮箱)与当前仓库的账户名和邮箱不匹配。特别是在操作不同项目仓库(<strong>公司仓库和私人仓库</strong>)或者多用户(<strong>Github账号，Gitee账号，公司git账号等</strong>)。这种情况是因为未配置当前仓库的用户信息，而默认使用全局配置信息导致的。</p>
-<p>如何解决，方案如下：</p>
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><h3 id="查看用户信息-可选"><a href="#查看用户信息-可选" class="headerlink" title="查看用户信息(可选)"></a>查看用户信息(可选)</h3><p>确认全局用户信息</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git config --global --list</span><br><span class="line">#或者</span><br><span class="line">git config -l</span><br></pre></td></tr></table></figure>
-<p>提交结果：</p>
-<p><img src="/../../imgs/image-20230810201441355.png" alt="image-20230810201441355"></p>
-<h3 id="方案1-手动配置"><a href="#方案1-手动配置" class="headerlink" title="方案1 手动配置"></a>方案1 手动配置</h3><p>这个针对较少的项目仓库操作。</p>
-<p>1.进入指定仓库路径下</p>
-<p>2.手动修改<strong>当前仓库</strong>配置</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#（可选）查看确认当前仓库的配置信息</span><br><span class="line">git config --local --list</span><br><span class="line">git config user.name localuser</span><br><span class="line">git config user.email local@email.com</span><br></pre></td></tr></table></figure>
-
-<p>提交结果：</p>
-<p><img src="/../../imgs/image-20230810201508279.png" alt="image-20230810201508279"></p>
-<h3 id="方案2-自动配置"><a href="#方案2-自动配置" class="headerlink" title="方案2 自动配置"></a>方案2 自动配置</h3><p>针对较多的仓库或用户使用，通过在全局<code>.gitconfig</code>配置文件中使用<strong>includeIf</strong>条件来自动加载不同的用户配置。</p>
-<p>1、首先，创建对应仓库的配置文件</p>
-<p>假设你有两个不同的 Git 用户，一个用于工作项目(work)，另一个用于个人项目(personal)，那就创建2个对应文件，比如.gitconfig_personal和.gitconfig_work</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi .gitconfig_personal</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[user]</span><br><span class="line">    name = Your Personal Name</span><br><span class="line">    email = personal@example.com</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi .gitconfig_work</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[user]</span><br><span class="line">    name = Your Work Name</span><br><span class="line">    email = work@example.com</span><br></pre></td></tr></table></figure>
-
-<p>2、最后，配置第一步中的文件</p>
-<p>在全局配置文件<code>~.gitconfig</code>中，使用 <code>includeIf</code> 来根据不同的条件(比如:仓库路径)加载上面的配置文件,这样就会根据不同项目或工作场景，针对<code>gitdir</code>指定的路径去加载对应path的配置文件，从而使用不同的 Git 用户配置，而不是默认的全局配置Git用户。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[includeIf &quot;gitdir:~/work/&quot;]</span><br><span class="line">    path = ~/.gitconfig_work</span><br><span class="line"></span><br><span class="line">[includeIf &quot;gitdir:~/personal/&quot;]</span><br><span class="line">    path = ~/.gitconfig_personal</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>注意:</p>
-<p>1.git仓库路径末尾需要带上&#x2F;，不然可能无法识别到</p>
-<p>2.如果一个目录下的所有仓库都对应相同的user，可以使用目录路径来替换</p>
-</blockquote>
-<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><ul>
-<li>Git用户名 vs git仓库账户</li>
-</ul>
-<p>Git用户名(本地)：在终端上使用Git，需要配置用户信息(用户名和email)，表示是”谁”在操作Git，来提交代码等等一系列操作。</p>
-<p>Git仓库账户(远端):如果需要使用代码托管的git服务，比如Github，Gitee等，就需要账号信息(账号名和email)来进行注册或登录。一般使用https操作仓库时，会将账号信息配置到仓库的config中；但使用ssh操作时，并不会。</p>
+    <title>使用Github和Hexo快速搭建免费个人博客</title>
+    <url>/2022/09/22/%E4%BD%BF%E7%94%A8Github%E5%92%8CHexo%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BA%E5%85%8D%E8%B4%B9%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</url>
+    <content><![CDATA[<h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>主要是为了满足以下需求：</p>
 <ul>
-<li><p>includeIf</p>
-<p>gitconfig 中的 includeIf 是 Git 2.13 版本引入的一个功能，它允许你在一个用户主配置文件中为特定的条件包含其他配置文件。这对于多用户管理以及在不同的项目或环境中使用不同的 Git 配置非常有用。通过 includeIf，你可以基于一些条件来加载特定的配置。</p>
+<li>日常文字笔记的记录和输出</li>
+<li>笔记内容需要本地和远端同步</li>
+<li>笔记可以发布，分享知识和经验</li>
+<li>快速搜索定位笔记</li>
+<li>笔记内容不能过于随意，不能和随笔混合，须是沉淀和总结类的</li>
+<li>支持Markdown编写笔记</li>
+</ul>
+<p>之前也使用过本地文档(MD)、记事本、印象、有道、也配合git仓库使用，但总是感觉没有完全到达自己想要的需求；</p>
+<h2 id="预研"><a href="#预研" class="headerlink" title="预研"></a>预研</h2><p>在了解了一些静态博客框架后，个人选择了Hexo，当然还有其他框架像Hugo，Jekyll等；发布服务器上白嫖，使用Github来进行托管发布；所以使用Hexo+Github Pages就能搭建出属于自己的个人博客网站。</p>
+<ul>
+<li>发布：Github Pages，是通过 GitHub 托管和发布的公共网页</li>
+<li>博客框架：Hexo</li>
+</ul>
+<span id="more"></span>  
+
+<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><h3 id="Node-js和npm"><a href="#Node-js和npm" class="headerlink" title="Node.js和npm"></a>Node.js和npm</h3><p>通过npm安装Hexo，所以首先得有Nodex.js的环境。</p>
+<ul>
+<li><p>安装node.js和npm</p>
+<p>可以下载包本地安装，然后配置全局变量环境中；以下操作都是针对macOS系统，通过homebrew安装，无需手动去配置环境变量；如果有其他系统安装配置，请<a href="https://www.liaoxuefeng.com/wiki/1022910821149312/1023025597810528">参考</a>；</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">请确保已安装homebrew</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装node</span></span><br><span class="line">brew install node</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看node版本</span></span><br><span class="line">node -v</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看npm版本</span></span><br><span class="line">npm -v</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h3><ul>
+<li><p>安装Hexo</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">全局安装</span></span><br><span class="line">npm install hexo-cli -g</span><br></pre></td></tr></table></figure>
 </li>
+<li><p>hexo博客目录</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">blog为自己创建的文件夹，执行init后，blog文件夹中将会生成hexo工程</span></span><br><span class="line">hexo init blog</span><br><span class="line">cd blog</span><br><span class="line">npm install</span><br></pre></td></tr></table></figure>
+
+<p>工程结构如下：</p>
+<p><img src="/../../imgs/image-20220922184941527.png" alt="image-20220922184941527"></p>
+</li>
+<li><p>hexo博客搭建和启动本地服务</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install</span><br><span class="line">hexo server</span><br></pre></td></tr></table></figure>
+
+<p>这时在浏览器输入localhost:4000,你将看到hexo博客的最初版本。</p>
+</li>
+</ul>
+<p>这样一个Hexo博客框架就构建好了，但只是局限于本地。</p>
+<p>那如何将个人博客发布到互联网上让别人访问；这时就需要一个托管服务器，这里选择使用Github Pages。</p>
+<h3 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h3><p>使用Github最好本地安装了Git，Git的介绍和安装就不详细介绍了，请自行<a href="(https://www.liaoxuefeng.com/wiki/896043488029600)">搜索</a>；</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">确保git安装且配置到环境中</span></span><br><span class="line">git --version</span><br></pre></td></tr></table></figure>
+
+<h3 id="Github-Pages"><a href="#Github-Pages" class="headerlink" title="Github Pages"></a>Github Pages</h3><ul>
+<li>个人Github Pages申请</li>
+</ul>
+<p>1.首先注册一个<a href="https://github.com/">Github</a>账号</p>
+<p>2.新建一个仓库(Repository),仓库名(Repository name)为<strong>username.github.io</strong>;其中username为自己的<strong>github账号</strong>，仓库权限设置为<strong>Public</strong></p>
+<p>3.这时可以在浏览器输入<a href="https://username.github.io/">https://username.github.io</a> ，这个就是你的个人博客的访问地址。</p>
+<h2 id="发布文章"><a href="#发布文章" class="headerlink" title="发布文章"></a>发布文章</h2><p>最新版本的Hexo已经将集成，构建，发布等操作做得相当优秀了，通过一系列的配置即可快速完成以上需求</p>
+<h3 id="关联Github"><a href="#关联Github" class="headerlink" title="关联Github"></a>关联Github</h3><p>通过修改_config.yml文件配置_</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span> <span class="comment"># 发布类型</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">git@github.com:username/username.github.io.git</span> <span class="comment">#你的github仓库地址</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">main</span> <span class="comment">#分支名称</span></span><br></pre></td></tr></table></figure>
+
+<p>配置成功，执行发布命令后，hexo会自动将工程public文件夹下的文件(即博客网址静态资源)推倒github上去</p>
+<h3 id="新建、构建和发布"><a href="#新建、构建和发布" class="headerlink" title="新建、构建和发布"></a>新建、构建和发布</h3><p>hexo提供了方便的指令执行来编写文章，构建博客资源，并快速发布等一系列操作流程，无需用户手动执行</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">新建,</span></span><br><span class="line">hexo n title # 笔记文件,会在source/_post文件夹下会生成title.md文件；可以通过markdown来编写笔记</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">构建</span></span><br><span class="line">hexo clean # 清除</span><br><span class="line">hexo g # 生成静态文件</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">发布</span></span><br><span class="line">hexo d # 发布到github</span><br></pre></td></tr></table></figure>
+
+<p>这样，发布成功后，就可以通过 <a href="https://username.github.io来访问你的博客了;/">https://username.github.io来访问你的博客了；</a></p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>关于Hexo，还有很多可配置和拓展的地方，篇幅较长，将在以后陆续进行记录；</p>
+<ul>
+<li>主题</li>
+<li>插件</li>
+<li>一些常见操作和问题</li>
 </ul>
 ]]></content>
       <categories>
-        <category>git</category>
+        <category>Hexo</category>
       </categories>
       <tags>
-        <tag>git</tag>
-        <tag>技巧</tag>
-        <tag>github</tag>
+        <tag>Hexo</tag>
+        <tag>blog</tag>
       </tags>
   </entry>
   <entry>
@@ -392,77 +335,6 @@
       </tags>
   </entry>
   <entry>
-    <title>解决pip安装后，找不到依赖包的问题</title>
-    <url>/2023/04/07/%E8%A7%A3%E5%86%B3pip%E5%AE%89%E8%A3%85%E5%90%8E%E4%BE%9D%E8%B5%96%E5%8C%85%E4%B8%8D%E7%94%9F%E6%95%88%E7%9A%84%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<h1 id="解决pip安装后，找不到依赖包的问题"><a href="#解决pip安装后，找不到依赖包的问题" class="headerlink" title="解决pip安装后，找不到依赖包的问题"></a>解决pip安装后，找不到依赖包的问题</h1><p>最近接触Python、conda，在使用过程中碰到了一个奇怪的问题，参照文档conda激活环境，pip install安装依赖包后，但是工程中却始终各种找不到各种依赖包的错误，先将原因、定位过程、解决方法以及一些思考记录下来；如果文字中有错误或者不合适的描述，请指正。</p>
-<h2 id="原因："><a href="#原因：" class="headerlink" title="原因："></a>原因：</h2><p>表象：按照文档教程pip install安装之后，仍然提示工程环境中没有安装对应的依赖包，这有点类似java和android工程中，通过maven或gradle配置后，在编译中仍然无法找到对应的依赖模块包或类的错误。</p>
-<p>解决：针对本人遇到的情况，<strong>屏蔽之前的python和pip的全局环境变量，默认使用conda环境配置</strong>，按照文档教程操作，即可将安装包下载到指定的环境路径下，工程就找到安装的依赖包。</p>
-<p>原因：对conda、python环境配置的不熟悉，用户全局环境的配置以及pip安装依赖包的操作不了解。</p>
-<span id="more"></span>
-
-<h2 id="定位过程"><a href="#定位过程" class="headerlink" title="定位过程"></a>定位过程</h2><p>1.开始对着教程，进行了包安装，如下</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pip install torch==version</span><br><span class="line">jupyter notebook</span><br></pre></td></tr></table></figure>
-<p>结果工程里报错，torch、sensor各种包都找不到；但之前使用conda activate已激活环境。</p>
-<p>2.再次重新安装pip install<br>还是找不到，用vscode中打开也找不到(其实和IDE工具无关)<br>3.网上搜索答案<br>一顿尝试，无果；没有解决问题；其实这时已经怀疑是不是和pip的全局配置有关了，但对python环境的不熟，没有去深度思考。</p>
-<p>4.自我尝试解决-更新内核或环境？<br>在notebook更换一下内核，还是有问题；<br>在vscode将环境切换到base中，依赖包问题解决，这时基本确定是安装包是没有安装到指定的环境中，而是安装到默认的base环境路径下；</p>
-<p>再次尝试pip安装，发现包安装路径是在默认的python全局环境路径下面；</p>
-<p>进入到指定环境路径下，使用.&#x2F;env&#x2F;bin&#x2F;pip 安装，这次发现安装包正确地下载到指定环境下，工程导入依赖包问题也解决。</p>
-<p>5.继续深入<br>发现只要直接使用pip就会下载到全局路径，<strong>这是因为之前安装python时，在系统环境配置中配置指定了pip的路径</strong>，所以使用pip会直接下载到全局的路径下去，如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#Python</span><br><span class="line">export PYTHON_HOME=/opt/homebrew/Cellar/python@3.9/3.9.10</span><br><span class="line">alias python=$&#123;PYTHON_HOME&#125;&quot;/bin/python3.9&quot;</span><br><span class="line">alias python3=$&#123;PYTHON_HOME&#125;&quot;/bin/python3&quot;</span><br><span class="line">alias pip3=$&#123;PYTHON_HOME&#125;&quot;/bin/pip3&quot;</span><br><span class="line">alias pip=$&#123;PYTHON_HOME&#125;&quot;/bin/pip3&quot;</span><br><span class="line">export PATH=$&#123;PATH&#125;:...$&#123;PYTHON_HOME&#125;/bin:</span><br></pre></td></tr></table></figure>
-<p>直接运行pip 命令，都会走用户环境里的pip命令即alias指定的那个路径，python指令也是，会覆盖conda的配置；</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">which pip</span><br><span class="line">#输出：pip: aliased to /opt/homebrew/Cellar/python@3.9/3.9.10/bin/pip3</span><br><span class="line">pip -V</span><br><span class="line">#输出：pip 23.0.1 from /opt/homebrew/lib/python3.9/site-packages/pip (python 3.9)</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">which python</span><br><span class="line">#输出：python: aliased to /opt/homebrew/Cellar/python@3.9/3.9.10/bin/python3.9</span><br><span class="line">python --version</span><br><span class="line">#输出：Python 3.9.10</span><br></pre></td></tr></table></figure>
-<p>所以安装conda后，可以将python配置的环境屏蔽掉：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">which pip</span><br><span class="line"># 输出:/opt/anaconda3/bin/pip</span><br><span class="line">pip -V</span><br><span class="line"># 输出：pip 21.2.4 from /opt/anaconda3/lib/python3.9/site-packages/pip (python 3.9)</span><br><span class="line">which python</span><br><span class="line"># 输出：/opt/anaconda3/bin/python</span><br><span class="line">python --version</span><br><span class="line"># 输出：Python 3.9.7</span><br></pre></td></tr></table></figure>
-<p>查看当前python的环境，*代表当前环境</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">conda info -e</span><br><span class="line">输出：</span><br><span class="line"># conda environments:</span><br><span class="line">#</span><br><span class="line">base                  *  /opt/anaconda3</span><br><span class="line">d2l                      /opt/anaconda3/envs/d2l</span><br><span class="line">my_env                   /opt/anaconda3/envs/my_env</span><br></pre></td></tr></table></figure>
-<p>切换到指定环境</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">conda activate d2l</span><br><span class="line">conda info -e</span><br><span class="line">输出：</span><br><span class="line"># conda environments:</span><br><span class="line">#</span><br><span class="line">base                    /opt/anaconda3</span><br><span class="line">d2l                  *  /opt/anaconda3/envs/d2l</span><br></pre></td></tr></table></figure>
-
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>1.使用指定环境下的pip:在虚拟环境下xxx的bin目录下，执行pip，即可将安装包模块下载到虚拟环境中,如：.&#x2F;envs&#x2F;xxx&#x2F;bin&#x2F;pip install<br>虚拟环境的安装包路径.&#x2F;envs&#x2F;xxx&#x2F;lib&#x2F;<a href="mailto:&#x70;&#x79;&#x74;&#x68;&#111;&#110;&#64;&#x33;&#46;&#x39;">&#x70;&#x79;&#x74;&#x68;&#111;&#110;&#64;&#x33;&#46;&#x39;</a>&#x2F;site-packages&#x2F;</p>
-<p>2.屏蔽pip的全局环境配置，使用conda</p>
-<p>3.使用–target选项：pip install --tartget&#x3D;.&#x2F;envs&#x2F;xxx&#x2F;lib&#x2F;<a href="mailto:&#x70;&#x79;&#x74;&#x68;&#x6f;&#x6e;&#64;&#51;&#46;&#57;">&#x70;&#x79;&#x74;&#x68;&#x6f;&#x6e;&#64;&#51;&#46;&#57;</a>&#x2F;site-packages&#x2F;</p>
-<h2 id="回顾"><a href="#回顾" class="headerlink" title="回顾"></a>回顾</h2><p>1.现象：依赖包的找不到-&gt;为什么找不到-&gt;没有安装-&gt;为什么没有安装？明明已经安装-&gt;涉及到python、conda环境的问题！</p>
-<p>2.中途某段时间被牵引到Homebrew disutils这个工具的问题上去了,以为是这个问题导致安装失败！这个误导过程仍然是对问题的本质没有深入理解，定位问题没有逻辑性和线索；然后对Python工程的依赖、安装、虚拟环境等知识点的不熟悉；</p>
-<p>DEPRECATION: Configuring installation scheme with distutils config files is deprecated and will no longer work in the near future. If you are using a Homebrew or Linuxbrew Python, please see discussion at <a href="https://github.com/Homebrew/homebrew-core/issues/76621">https://github.com/Homebrew/homebrew-core/issues/76621</a></p>
-<p>3.Python在安装依赖包这一点上和Maven、Gradle构建工程有不同，不同点在于maven或gradle配置工程的依赖包都是在统一的路径下，根据groupid&#x2F;artifactid&#x2F;version来区分，但Python工程不一样，它基于自己的工程的环境，相同的包可能在不同的环境下出现多次；</p>
-<p>4.重新理清归纳问题才能正确的解决问题:”pip install 安装包下载到全局环境路径中，而不是虚拟环境下”；对问题的清晰认知和准确定位，是真正解决问题的前提，如果对问题没有清晰准确的认识，那如同盲人摸象、瞎子过河，只知其一，浪费很多时间，最后问题也得不到解决。</p>
-<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>对新事物的尝试和探索，会碰到各种问题，掌握正确解决问题的思维方式和方案，加上对底层基础和背后逻辑的掌握，然后对事物原理的追根溯源，就能真正意义上地解决问题和把握新事物。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://www.cnblogs.com/bigtreei/p/15094293.html">https://www.cnblogs.com/bigtreei/p/15094293.html</a></p>
-<p><a href="https://zhuanlan.zhihu.com/p/522468985">https://zhuanlan.zhihu.com/p/522468985</a></p>
-<p><a href="https://pythonguidecn.readthedocs.io/zh/latest/dev/virtualenvs.html">Pipenv &amp; 虚拟环境</a></p>
-<h1 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h1><ul>
-<li>conda：</li>
-</ul>
-<p>Conda是一个开源的包管理器和环境管理系统，用于管理和部署不同版本的软件包和依赖项。Conda可以同时管理多个环境，每个环境可以包含不同版本的Python解释器以及其他库和依赖项。在本质上，Conda是一个跨平台的软件包管理系统，可用于管理Python软件包，以及其他一些编程语言的软件包。</p>
-<p>下面是Conda的一些主要特点和使用原理：</p>
-<ol>
-<li>包管理器：Conda作为一个包管理器，可以轻松地安装、升级、删除软件包，以及查看已安装的包列表。Conda还可以处理软件包之间的依赖关系，以确保在安装新软件包时不会出现依赖冲突。</li>
-<li>环境管理器：Conda还可以管理多个环境，每个环境可以包含不同版本的Python解释器和其他库和依赖项。这使得用户可以轻松地创建和维护不同的开发环境，以及为不同的项目配置不同的环境。</li>
-<li>跨平台：Conda可以在多种操作系统上运行，包括Windows、macOS和Linux等。</li>
-<li>渠道：Conda的包管理系统是基于渠道的，可以从不同的渠道安装软件包，包括Anaconda官方渠道、conda-forge、PyPI等。用户可以在不同的渠道之间切换，并管理自己的私有渠道。</li>
-<li>兼容性：Conda可以管理多个版本的Python解释器和不同的软件包版本，以确保不同版本的软件包可以兼容。</li>
-</ol>
-<p>总之，Conda提供了一种方便、灵活和可扩展的方式来管理Python软件包和环境，使得用户可以更好地管理自己的开发环境，以及更方便地分享和部署自己的Python应用程序。</p>
-<ul>
-<li><a href="https://github.com/conda/conda.git">conda源码</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>bug</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>pip</tag>
-        <tag>conda</tag>
-        <tag>虚拟环境</tag>
-        <tag>用户环境变量</tag>
-        <tag>site-packages</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>LightWebviewBridge-原理篇</title>
     <url>/2023/09/02/LightWebviewBridge-%E5%8E%9F%E7%90%86%E7%AF%87/</url>
     <content><![CDATA[<p>[TOC]</p>
@@ -544,6 +416,63 @@
         <tag>框架</tag>
         <tag>解决方案</tag>
         <tag>LightWebviewBridge</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>git自动配置仓库用户信息</title>
+    <url>/2023/08/10/git%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E4%BB%93%E5%BA%93%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h1 id="git自动配置仓库用户信息"><a href="#git自动配置仓库用户信息" class="headerlink" title="git自动配置仓库用户信息"></a>git自动配置仓库用户信息</h1><p>进行git提交时，发现commit记录中的Author(用户名和邮箱)与当前仓库的账户名和邮箱不匹配。特别是在操作不同项目仓库(<strong>公司仓库和私人仓库</strong>)或者多用户(<strong>Github账号，Gitee账号，公司git账号等</strong>)。这种情况是因为未配置当前仓库的用户信息，而默认使用全局配置信息导致的。</p>
+<p>如何解决，方案如下：</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><h3 id="查看用户信息-可选"><a href="#查看用户信息-可选" class="headerlink" title="查看用户信息(可选)"></a>查看用户信息(可选)</h3><p>确认全局用户信息</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git config --global --list</span><br><span class="line">#或者</span><br><span class="line">git config -l</span><br></pre></td></tr></table></figure>
+<p>提交结果：</p>
+<p><img src="/../../imgs/image-20230810201441355.png" alt="image-20230810201441355"></p>
+<h3 id="方案1-手动配置"><a href="#方案1-手动配置" class="headerlink" title="方案1 手动配置"></a>方案1 手动配置</h3><p>这个针对较少的项目仓库操作。</p>
+<p>1.进入指定仓库路径下</p>
+<p>2.手动修改<strong>当前仓库</strong>配置</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#（可选）查看确认当前仓库的配置信息</span><br><span class="line">git config --local --list</span><br><span class="line">git config user.name localuser</span><br><span class="line">git config user.email local@email.com</span><br></pre></td></tr></table></figure>
+
+<p>提交结果：</p>
+<p><img src="/../../imgs/image-20230810201508279.png" alt="image-20230810201508279"></p>
+<h3 id="方案2-自动配置"><a href="#方案2-自动配置" class="headerlink" title="方案2 自动配置"></a>方案2 自动配置</h3><p>针对较多的仓库或用户使用，通过在全局<code>.gitconfig</code>配置文件中使用<strong>includeIf</strong>条件来自动加载不同的用户配置。</p>
+<p>1、首先，创建对应仓库的配置文件</p>
+<p>假设你有两个不同的 Git 用户，一个用于工作项目(work)，另一个用于个人项目(personal)，那就创建2个对应文件，比如.gitconfig_personal和.gitconfig_work</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi .gitconfig_personal</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[user]</span><br><span class="line">    name = Your Personal Name</span><br><span class="line">    email = personal@example.com</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi .gitconfig_work</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[user]</span><br><span class="line">    name = Your Work Name</span><br><span class="line">    email = work@example.com</span><br></pre></td></tr></table></figure>
+
+<p>2、最后，配置第一步中的文件</p>
+<p>在全局配置文件<code>~.gitconfig</code>中，使用 <code>includeIf</code> 来根据不同的条件(比如:仓库路径)加载上面的配置文件,这样就会根据不同项目或工作场景，针对<code>gitdir</code>指定的路径去加载对应path的配置文件，从而使用不同的 Git 用户配置，而不是默认的全局配置Git用户。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[includeIf &quot;gitdir:~/work/&quot;]</span><br><span class="line">    path = ~/.gitconfig_work</span><br><span class="line"></span><br><span class="line">[includeIf &quot;gitdir:~/personal/&quot;]</span><br><span class="line">    path = ~/.gitconfig_personal</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意:</p>
+<p>1.git仓库路径末尾需要带上&#x2F;，不然可能无法识别到</p>
+<p>2.如果一个目录下的所有仓库都对应相同的user，可以使用目录路径来替换</p>
+</blockquote>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><ul>
+<li>Git用户名 vs git仓库账户</li>
+</ul>
+<p>Git用户名(本地)：在终端上使用Git，需要配置用户信息(用户名和email)，表示是”谁”在操作Git，来提交代码等等一系列操作。</p>
+<p>Git仓库账户(远端):如果需要使用代码托管的git服务，比如Github，Gitee等，就需要账号信息(账号名和email)来进行注册或登录。一般使用https操作仓库时，会将账号信息配置到仓库的config中；但使用ssh操作时，并不会。</p>
+<ul>
+<li><p>includeIf</p>
+<p>gitconfig 中的 includeIf 是 Git 2.13 版本引入的一个功能，它允许你在一个用户主配置文件中为特定的条件包含其他配置文件。这对于多用户管理以及在不同的项目或环境中使用不同的 Git 配置非常有用。通过 includeIf，你可以基于一些条件来加载特定的配置。</p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>git</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+        <tag>技巧</tag>
+        <tag>github</tag>
       </tags>
   </entry>
   <entry>
@@ -653,6 +582,318 @@
         <tag>systemd</tag>
         <tag>proxy</tag>
         <tag>网络代理</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>创建SSL自签名证书</title>
+    <url>/2023/09/15/%E5%88%9B%E5%BB%BASSL%E8%87%AA%E7%AD%BE%E5%90%8D%E8%AF%81%E4%B9%A6/</url>
+    <content><![CDATA[<p>[toc]</p>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>记录一下创建SSL自签名的过程，因为本地测试，需要将WEB应用HTTP切换到HTTPS，这需要证书。</p>
+<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><p>openssl安装，这个不麻烦，可以去问GPT或者自行搜索，不同系统环境操作不一样。</p>
+<p>在我的mac上使用Homebrew安装的：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">brew install openssl</span><br></pre></td></tr></table></figure>
+
+<h2 id="密钥"><a href="#密钥" class="headerlink" title="密钥"></a>密钥</h2><p>需要先生成一个rsa密钥</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//生成一个rsa私钥，des3算法，1024位</span><br><span class="line">openssl genrsa -des3 -out mykey.key 1024</span><br></pre></td></tr></table></figure>
+
+<h2 id="证书签名请求"><a href="#证书签名请求" class="headerlink" title="证书签名请求"></a>证书签名请求</h2><p>生成CSR(证书签名请求)</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">openssl req -new -key mykey.key -out mycsr.csr</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="签名证书"><a href="#签名证书" class="headerlink" title="签名证书"></a>签名证书</h2><p>利用上面👆🏻2个文件生成crt签名证书文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//-in 证书签名请求 -signkey 密钥文件 -out 输出证书文件 -days 证书有效期(天)</span><br><span class="line">openssl x509 -req -in mycsr.csr -signkey mykey.key -out mycrt.crt -days 3650</span><br></pre></td></tr></table></figure>
+
+<p>-outform 证书格式，默认是PEM,如果需要DER格式，可以生命**–outform der**。</p>
+<p>另外，自签名证书，对浏览器来说，颁发机构是为知的，需要被认可的机构颁发证书。</p>
+<p>如果需要，可以在腾讯云或阿里云上去申请。</p>
+<h2 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h2><blockquote>
+<p>SSL与SSH</p>
+</blockquote>
+<p>都是用于加密通信的协议</p>
+<p>相同点：</p>
+<ul>
+<li><p>加密通信：保护数据在传输过程中的机密性和完整性，通过加密通信来防止第三方未经授权的访问或数据篡改。</p>
+</li>
+<li><p>密钥交换：都使用密钥交换协议来建立安全连接。SSH通常使用Diffie-Hellman协议，而SSL使用TLS握手过程。</p>
+</li>
+<li><p>双向认证：都支持双向认证，这意味着客户端和服务器都可以验证对方的身份，确保连接的安全性。</p>
+</li>
+</ul>
+<p>区别：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>SSH</th>
+<th>SSL&#x2F;TLS</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>作用</td>
+<td>用于安全远程连接另一台机器以发送命令，提供一个加密终端会话</td>
+<td>用于在双方之间安全传输数据，通常是网站访问者和网站服务器的在应用层的安全通信，比如HTTPS,WSS,SMTPS,FTPS…</td>
+</tr>
+<tr>
+<td>默认端口</td>
+<td>22</td>
+<td>443（HTTPS）&amp;465（SMTPS）</td>
+</tr>
+<tr>
+<td>层次</td>
+<td>应用层协议</td>
+<td>传输层协议</td>
+</tr>
+<tr>
+<td>身份验证</td>
+<td>要求客户端用户名&amp;密码或加密密钥</td>
+<td>只需服务端认证(客户端不需要)</td>
+</tr>
+<tr>
+<td>交互性</td>
+<td>基于网路隧道</td>
+<td>基于数字证书(SSL证书)，不提供终端或交互性</td>
+</tr>
+<tr>
+<td>定义</td>
+<td>加密网络协议</td>
+<td>安全协议</td>
+</tr>
+<tr>
+<td>概念</td>
+<td>Secure Shell</td>
+<td>Secure Sockets Layer</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>openssl</p>
+</blockquote>
+<p>OpenSSL（Open Secure Socket Layer）是一个开源的密码库，提供了一组用于处理安全通信的加密和解密功能，以及用于生成和管理数字证书的工具。它是一个广泛使用的库，用于加密和安全通信的许多应用程序和协议。</p>
+<p>主要功能及作用：</p>
+<ol>
+<li><strong>加密和解密支持：</strong> OpenSSL 提供了多种加密和解密算法，包括对称加密（如AES、DES）、非对称加密（如RSA、DSA）、散列函数（如SHA-1、SHA-256）和消息认证码（MAC）等。这些功能使得 OpenSSL 能够保护数据的机密性和完整性。</li>
+<li><strong>SSL&#x2F;TLS 实现：</strong> OpenSSL 提供了 SSL（Secure Sockets Layer）和 TLS（Transport Layer Security）协议的实现，用于建立安全的网络通信。这使得 OpenSSL 能够支持安全的 Web 通信（HTTPS）以及其他网络协议的安全版本，如SMTPS、FTPS等。</li>
+<li><strong>数字证书和公钥基础设施（PKI）：</strong> OpenSSL 包括工具和库，用于生成和管理数字证书、私钥和公钥。这对于创建自签名证书、为服务器配置 SSL&#x2F;TLS 和进行身份验证非常有用。</li>
+<li><strong>密码学功能：</strong> OpenSSL 提供了丰富的密码学功能，包括随机数生成、伪随机数生成、大数运算和数字签名等。这些功能为安全通信提供了基础支持。</li>
+<li><strong>跨平台：</strong> OpenSSL 是一个跨平台的库，可在多种操作系统上运行，包括Linux、Unix、Windows等。这使得它适用于各种不同的应用程序和环境。</li>
+<li><strong>开源：</strong> OpenSSL 是一个开源项目，使用 OpenSSL 的源代码可以在 OpenSSL 许可证（类似于双重许可证）下自由使用和分发。</li>
+<li><strong>广泛使用：</strong> OpenSSL 在互联网上广泛使用，包括在 Web 服务器、电子邮件服务器、VPN（虚拟私人网络）软件、网络设备等中，用于加密和保护通信。许多知名的互联网服务和应用程序都依赖于 OpenSSL 来确保数据的安全性。</li>
+</ol>
+<p>尽管 OpenSSL 在安全通信领域具有广泛的应用，但它也因其复杂性而容易引发安全漏洞。因此，用户和开发人员应定期更新 OpenSSL，并遵循最佳的安全实践来保护其应用程序和系统。</p>
+<blockquote>
+<p>PEM和DER</p>
+</blockquote>
+<p>PEM（Privacy-Enhanced Mail）和DER（Distinguished Encoding Rules）都是用于表示和编码数据的格式标准，它们通常与加密和安全领域有关。</p>
+<p>PEM 是一种基于文本的编码格式，通常用于表示各种数据，包括数字证书、私钥、公钥、证书请求和其他加密相关的数据。PEM 格式使用 Base64 编码将二进制数据转换为文本，同时包含头部和尾部标记，以标识数据类型。PEM 文件通常使用扩展名 <code>.pem</code>，<code>.crt</code> 或 <code>.key</code>。PEM 格式是人类可读的，容易查看和编辑，因此在许多场景下广泛使用，如证书文件、密钥文件和配置文件。文件实例：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-----BEGIN CERTIFICATE-----</span><br><span class="line">MIICyzCCAbOgAwIBAgIJAMWf3MfqN6/0MA0GCSqGSIb3DQEBCwUAMBMxETAPBgNV</span><br><span class="line">...</span><br><span class="line">-----END CERTIFICATE-----</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>DER 是一种二进制编码格式，通常用于表示复杂的数据结构，如数字证书和证书撤销列表（CRL）。DER 使用一组规则来编码数据，以确保数据在不同系统上的一致性。DER 格式不包含可读的文本标记，因此不像 PEM 格式那样容易查看。DER 格式的数据通常更紧凑，因为它没有 Base64 编码所需的额外字符。示例 DER 编码数据（十六进制表示）：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">30820122300D06092A864886F70D01010105000382010F003082010A02820101...</span><br></pre></td></tr></table></figure>
+
+<p>通常，当您从网络上下载数字证书时，它们将以DER格式提供。浏览器和操作系统可以理解DER格式的证书，因为它是一种标准格式。</p>
+<p>将PEM格式转为DER格式</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">openssl x509 -outform der -in certificate.pem -out certificate.der</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>SSH生成公私钥</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//rsa密钥类型，-b 长度为2048 -f 密钥路径</span><br><span class="line">ssh-keygen -t rsa -b 2048 -f ~/.ssh/id_rsa</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>当命令执行时，您将被提示输入一个密码来保护您的私钥。这个密码是可选的，如果您希望私钥受到额外的保护，可以设置密码。否则，您可以直接按回车键留空。</li>
+<li>密钥对生成完成后，私钥存储在 <code>~/.ssh/id_rsa</code>，而公钥存储在 <code>~/.ssh/id_rsa.pub</code>。私钥是私有的，绝对不应该共享，而公钥可以在需要的地方共享，如远程服务器。</li>
+</ol>
+]]></content>
+      <categories>
+        <category>ssl</category>
+        <category>ssh</category>
+        <category>openssl</category>
+        <category>证书</category>
+        <category>公私钥</category>
+        <category>加解密</category>
+      </categories>
+      <tags>
+        <tag>安全</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>有关git rebase的一点记录</title>
+    <url>/2023/09/04/%E6%9C%89%E5%85%B3%E6%9C%80%E8%BF%91git%20rebase%E7%9A%84%E4%B8%80%E7%82%B9%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>最近有几个场景需求都牵涉到rebase这个操作，所以有必要对rebas做一个总结和进一步学习。</p>
+<h2 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h2><p>1.修改提交记录</p>
+<p>2.合并提交记录</p>
+<p>3.合并分支</p>
+<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>rebase:变基</p>
+<p>merge:合并</p>
+<p>commit:提交</p>
+<p>fast-forward merge:快进合并</p>
+<p>branch:分支</p>
+<p>Head:这个翻译是头部；我的理解是当前活动状态的游标或指针；可以是当前分支的头部，也可以是某一个提交的指向…</p>
+<p>topicbranch：目标分支</p>
+<p>basebranch：基础分支</p>
+<p>其中，需要理解一个概念<strong>快进合并()</strong></p>
+<blockquote>
+<p>什么是变基？</p>
+</blockquote>
+<p>要理解变基，先理解一个更常见的概念”合并(Merge)”。</p>
+<p>合并很好理解，就是直接将2个分支合并到一个分支上，其实变基的最终目的也是一样。但2者不同之处是合并会产生一个新的提交，而变基不会，从提交图解上来看，它的提交记录更像是一个串行的，而合并更像是2条河流有一个merge节点。</p>
+<p>我很希望文档中的一段描述：**变基就好些<code>重新播放</code>一样，将提交到某一分支(topicbranch)上的所有修改都移到另一分支上(basebranch)**。重放这个词很准确地说出了rebase变基所做的事情。</p>
+<h2 id="文档分析"><a href="#文档分析" class="headerlink" title="文档分析"></a>文档分析</h2><ul>
+<li>git rebase basebranch</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git checkout experiment</span><br><span class="line">git rebase master</span><br><span class="line">//这时experiment分支其实已经是基于master分支构建了</span><br></pre></td></tr></table></figure>
+
+<p>变基时，会找到2个分支（topicbranch experiment和基底分支basebranch master)的共同祖先C2，然后对比当前分支(experiment)的历次提交，提取相应的修改并存为临时文件，然后将当前分支指向目标基底C3，最后以此将之前另存为临时文件的修改依序应用。以上是官方解释，有点饶，简单点说，就是把<strong>自动提交差异放到共同祖先提交节点后</strong>，当然如果和基底分支提交有冲突confilt。是需要手工处理的。</p>
+<p><img src="https://git-scm.com/book/en/v2/images/basic-rebase-3.png"></p>
+<p>然后对master分支<strong>快进合并</strong>**</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git checkout mater</span><br><span class="line">git merge experiment</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://git-scm.com/book/en/v2/images/basic-rebase-4.png"></p>
+<p>再放一张直接Merge的图式：</p>
+<p><img src="https://git-scm.com/book/en/v2/images/basic-rebase-2.png" alt="image-20230904112928395"></p>
+<p>看看C5节点，就是自动生成的新的快照。</p>
+<ul>
+<li>git rebase onto</li>
+</ul>
+<p>取出另外分支的提交，简单说，就是将非直接checkout的分支的提交合并。</p>
+<p>如从master上分出server分支，再从server分支分出client分支。</p>
+<p><img src="/../../imgs/image-20230904114325678.png" alt="image-20230904114325678"></p>
+<p>如果master只需要C8,C9，而不想合并C3，那么如何操作？</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git rebase --onto master server client</span><br></pre></td></tr></table></figure>
+
+<p>以上命令的意思是：“取出 <code>client</code> 分支，找出它从 <code>server</code> 分支分歧之后的补丁， 然后把这些补丁在 <code>master</code> 分支上重放一遍，让 <code>client</code> 看起来像直接基于 <code>master</code> 修改一样”。这理解起来有一点复杂，不过效果非常酷。</p>
+<p>这需要对自己的每次提交的内容得非常清楚！</p>
+<ul>
+<li>注意！！！</li>
+</ul>
+<p><strong>如果提交存在于你的仓库之外，而别人可能基于这些提交进行开发，那么不要执行变基</strong></p>
+<p>通俗点讲：尽量避免对已到远端的提交(origin)进行变基，一般对自己本地分支(local)使用。</p>
+<p>因为，远端仓库，别人也可能基于这些提交进行开发，如果你执行的变基，同时强推倒远端仓库，别人pull之后，他的提交线就会混乱，同时他在push，你再pull，就会导致你的提交线会混乱。是不是很绕，有点难理解。下面结合图示将描述简单化；</p>
+<p>场景流程如下：</p>
+<p>1.当前状态：我通过pull远端，将teamone的提交合并，当前我在C7上。git.team1.com是远端库</p>
+<p><img src="/../../imgs/perils-of-rebasing-2.png"></p>
+<p>2.如果teamone不想merge，不想记录C6的merge，他采用的rebase变基，然后强推push –force，这时远端及本地的状态及提交记录如下图；</p>
+<p>远端的C4,C6消失，多了一个C4&#96;.</p>
+<p>本地不变。</p>
+<p><img src="/../../imgs/perils-of-rebasing-3.png"></p>
+<p>3.这时你执行pull，将会合并2个提交历史的内容，生成一个新的合并提交。最终仓库会如图：</p>
+<p>因为C4&#96;是新的，而本地C4,C6并未消失(本地未执行rebase，只有teamone执行)，所以会有一个C8.</p>
+<p><img src="/../../imgs/perils-of-rebasing-4.png"></p>
+<p>这样会导致提交异常混乱，你会发现C4和C4&#96;的相同的提交在你的仓库里重复出现了2次。如果你再push，又会将C4,C6重新推送到服务器上去。这回就会让teamone困惑了。因为他之前rebase的操作就是要将C4和C6丢弃。</p>
+<blockquote>
+<p>那么如何解决？</p>
+</blockquote>
+<p>用变基解决变基(推荐)</p>
+<p>如果团队中的某人强制推送并覆盖了一些你所基于的提交，你需要做的就是检查你做了哪些修改，以及他们覆盖了哪些修改。</p>
+<p><strong>Git 除了对整个提交计算 SHA-1 校验和以外，也对本次提交所引入的修改计算了校验和——即 “patch-id”。</strong></p>
+<p>使用git rebase，git会自动检查自己和对方的差异，再进行合并。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git rebase remote/maser</span><br></pre></td></tr></table></figure>
+
+<p>推荐使用 <strong>git pull –rebase</strong>而不是git pull</p>
+<p>git pull –rebase 等于git fetch | git rebase remote&#x2F;mater</p>
+<p>同时，可以设置git config –global pull.rebase true.这样你再使用git pull时，是默认使用选项–rebase的。</p>
+<ul>
+<li>变基 vs 合并</li>
+</ul>
+<p>​	无所谓那种更好，关键看针对的场景和开发者的使用理念。有人认为提交历史就是记录发生什么，有人认为是项目中发发生的事，无需记录不必要的记录。</p>
+<p>总的原则是，只对尚未推送或分享给别人的本地修改执行变基操作清理历史， 从不对已推送至别处的提交执行变基操作，像我的习惯是，针对功能性分支基本采用rebase，对于主线记录版本的分支比如main使用merge。</p>
+<h2 id="rebase-commitID"><a href="#rebase-commitID" class="headerlink" title="rebase commitID"></a>rebase commitID</h2><p>rebase 除了可以对branch分支进行操作，还可以指定commitID来进行各种操作场景：</p>
+<p>1.合并提交</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//前开后闭</span><br><span class="line">git rebase commitID1 commitID2</span><br><span class="line">//对Head之后的第2个提交进行变基</span><br><span class="line">git rebase HEAD~2</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>2.修改提交</p>
+<p>选项：</p>
+<p>p :对commit执行选择，选择提交</p>
+<p>r：选择提交，但是修改提交信息</p>
+<p>e :针对提交做修订</p>
+<p>s :选择提交，并合并到上一个提交中</p>
+<p>f:选择提交，但只保留上一个提交的日志</p>
+<p>其实rebase commitID从字面可以理解，也是重新变基，只是这是基于commitId为基础，所以rebase后会新建临时分支出来。</p>
+<p>在每一个选择提交操作上，可以执行</p>
+<p>git rebase –continue:继续变基，调到下一个commit</p>
+<p>git rebase –abort:放弃变基</p>
+<p>git rebase –edit-todo：继续变基，进行变基代办事项</p>
+<p>git commit –amend : 修改提交信息</p>
+<h2 id="备注"><a href="#备注" class="headerlink" title="备注"></a>备注</h2><p>主要内容和图<a href="https://git-scm.com/book/zh/v2/Git-%E5%88%86%E6%94%AF-%E5%8F%98%E5%9F%BA">依据</a></p>
+]]></content>
+      <categories>
+        <category>git</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+        <tag>技巧</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>解决pip安装后，找不到依赖包的问题</title>
+    <url>/2023/04/07/%E8%A7%A3%E5%86%B3pip%E5%AE%89%E8%A3%85%E5%90%8E%E4%BE%9D%E8%B5%96%E5%8C%85%E4%B8%8D%E7%94%9F%E6%95%88%E7%9A%84%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h1 id="解决pip安装后，找不到依赖包的问题"><a href="#解决pip安装后，找不到依赖包的问题" class="headerlink" title="解决pip安装后，找不到依赖包的问题"></a>解决pip安装后，找不到依赖包的问题</h1><p>最近接触Python、conda，在使用过程中碰到了一个奇怪的问题，参照文档conda激活环境，pip install安装依赖包后，但是工程中却始终各种找不到各种依赖包的错误，先将原因、定位过程、解决方法以及一些思考记录下来；如果文字中有错误或者不合适的描述，请指正。</p>
+<h2 id="原因："><a href="#原因：" class="headerlink" title="原因："></a>原因：</h2><p>表象：按照文档教程pip install安装之后，仍然提示工程环境中没有安装对应的依赖包，这有点类似java和android工程中，通过maven或gradle配置后，在编译中仍然无法找到对应的依赖模块包或类的错误。</p>
+<p>解决：针对本人遇到的情况，<strong>屏蔽之前的python和pip的全局环境变量，默认使用conda环境配置</strong>，按照文档教程操作，即可将安装包下载到指定的环境路径下，工程就找到安装的依赖包。</p>
+<p>原因：对conda、python环境配置的不熟悉，用户全局环境的配置以及pip安装依赖包的操作不了解。</p>
+<span id="more"></span>
+
+<h2 id="定位过程"><a href="#定位过程" class="headerlink" title="定位过程"></a>定位过程</h2><p>1.开始对着教程，进行了包安装，如下</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pip install torch==version</span><br><span class="line">jupyter notebook</span><br></pre></td></tr></table></figure>
+<p>结果工程里报错，torch、sensor各种包都找不到；但之前使用conda activate已激活环境。</p>
+<p>2.再次重新安装pip install<br>还是找不到，用vscode中打开也找不到(其实和IDE工具无关)<br>3.网上搜索答案<br>一顿尝试，无果；没有解决问题；其实这时已经怀疑是不是和pip的全局配置有关了，但对python环境的不熟，没有去深度思考。</p>
+<p>4.自我尝试解决-更新内核或环境？<br>在notebook更换一下内核，还是有问题；<br>在vscode将环境切换到base中，依赖包问题解决，这时基本确定是安装包是没有安装到指定的环境中，而是安装到默认的base环境路径下；</p>
+<p>再次尝试pip安装，发现包安装路径是在默认的python全局环境路径下面；</p>
+<p>进入到指定环境路径下，使用.&#x2F;env&#x2F;bin&#x2F;pip 安装，这次发现安装包正确地下载到指定环境下，工程导入依赖包问题也解决。</p>
+<p>5.继续深入<br>发现只要直接使用pip就会下载到全局路径，<strong>这是因为之前安装python时，在系统环境配置中配置指定了pip的路径</strong>，所以使用pip会直接下载到全局的路径下去，如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#Python</span><br><span class="line">export PYTHON_HOME=/opt/homebrew/Cellar/python@3.9/3.9.10</span><br><span class="line">alias python=$&#123;PYTHON_HOME&#125;&quot;/bin/python3.9&quot;</span><br><span class="line">alias python3=$&#123;PYTHON_HOME&#125;&quot;/bin/python3&quot;</span><br><span class="line">alias pip3=$&#123;PYTHON_HOME&#125;&quot;/bin/pip3&quot;</span><br><span class="line">alias pip=$&#123;PYTHON_HOME&#125;&quot;/bin/pip3&quot;</span><br><span class="line">export PATH=$&#123;PATH&#125;:...$&#123;PYTHON_HOME&#125;/bin:</span><br></pre></td></tr></table></figure>
+<p>直接运行pip 命令，都会走用户环境里的pip命令即alias指定的那个路径，python指令也是，会覆盖conda的配置；</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">which pip</span><br><span class="line">#输出：pip: aliased to /opt/homebrew/Cellar/python@3.9/3.9.10/bin/pip3</span><br><span class="line">pip -V</span><br><span class="line">#输出：pip 23.0.1 from /opt/homebrew/lib/python3.9/site-packages/pip (python 3.9)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">which python</span><br><span class="line">#输出：python: aliased to /opt/homebrew/Cellar/python@3.9/3.9.10/bin/python3.9</span><br><span class="line">python --version</span><br><span class="line">#输出：Python 3.9.10</span><br></pre></td></tr></table></figure>
+<p>所以安装conda后，可以将python配置的环境屏蔽掉：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">which pip</span><br><span class="line"># 输出:/opt/anaconda3/bin/pip</span><br><span class="line">pip -V</span><br><span class="line"># 输出：pip 21.2.4 from /opt/anaconda3/lib/python3.9/site-packages/pip (python 3.9)</span><br><span class="line">which python</span><br><span class="line"># 输出：/opt/anaconda3/bin/python</span><br><span class="line">python --version</span><br><span class="line"># 输出：Python 3.9.7</span><br></pre></td></tr></table></figure>
+<p>查看当前python的环境，*代表当前环境</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">conda info -e</span><br><span class="line">输出：</span><br><span class="line"># conda environments:</span><br><span class="line">#</span><br><span class="line">base                  *  /opt/anaconda3</span><br><span class="line">d2l                      /opt/anaconda3/envs/d2l</span><br><span class="line">my_env                   /opt/anaconda3/envs/my_env</span><br></pre></td></tr></table></figure>
+<p>切换到指定环境</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">conda activate d2l</span><br><span class="line">conda info -e</span><br><span class="line">输出：</span><br><span class="line"># conda environments:</span><br><span class="line">#</span><br><span class="line">base                    /opt/anaconda3</span><br><span class="line">d2l                  *  /opt/anaconda3/envs/d2l</span><br></pre></td></tr></table></figure>
+
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>1.使用指定环境下的pip:在虚拟环境下xxx的bin目录下，执行pip，即可将安装包模块下载到虚拟环境中,如：.&#x2F;envs&#x2F;xxx&#x2F;bin&#x2F;pip install<br>虚拟环境的安装包路径.&#x2F;envs&#x2F;xxx&#x2F;lib&#x2F;<a href="mailto:&#x70;&#121;&#x74;&#x68;&#x6f;&#x6e;&#x40;&#x33;&#46;&#57;">&#x70;&#121;&#x74;&#x68;&#x6f;&#x6e;&#x40;&#x33;&#46;&#57;</a>&#x2F;site-packages&#x2F;</p>
+<p>2.屏蔽pip的全局环境配置，使用conda</p>
+<p>3.使用–target选项：pip install --tartget&#x3D;.&#x2F;envs&#x2F;xxx&#x2F;lib&#x2F;<a href="mailto:&#x70;&#x79;&#116;&#x68;&#x6f;&#x6e;&#x40;&#51;&#46;&#x39;">&#x70;&#x79;&#116;&#x68;&#x6f;&#x6e;&#x40;&#51;&#46;&#x39;</a>&#x2F;site-packages&#x2F;</p>
+<h2 id="回顾"><a href="#回顾" class="headerlink" title="回顾"></a>回顾</h2><p>1.现象：依赖包的找不到-&gt;为什么找不到-&gt;没有安装-&gt;为什么没有安装？明明已经安装-&gt;涉及到python、conda环境的问题！</p>
+<p>2.中途某段时间被牵引到Homebrew disutils这个工具的问题上去了,以为是这个问题导致安装失败！这个误导过程仍然是对问题的本质没有深入理解，定位问题没有逻辑性和线索；然后对Python工程的依赖、安装、虚拟环境等知识点的不熟悉；</p>
+<p>DEPRECATION: Configuring installation scheme with distutils config files is deprecated and will no longer work in the near future. If you are using a Homebrew or Linuxbrew Python, please see discussion at <a href="https://github.com/Homebrew/homebrew-core/issues/76621">https://github.com/Homebrew/homebrew-core/issues/76621</a></p>
+<p>3.Python在安装依赖包这一点上和Maven、Gradle构建工程有不同，不同点在于maven或gradle配置工程的依赖包都是在统一的路径下，根据groupid&#x2F;artifactid&#x2F;version来区分，但Python工程不一样，它基于自己的工程的环境，相同的包可能在不同的环境下出现多次；</p>
+<p>4.重新理清归纳问题才能正确的解决问题:”pip install 安装包下载到全局环境路径中，而不是虚拟环境下”；对问题的清晰认知和准确定位，是真正解决问题的前提，如果对问题没有清晰准确的认识，那如同盲人摸象、瞎子过河，只知其一，浪费很多时间，最后问题也得不到解决。</p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>对新事物的尝试和探索，会碰到各种问题，掌握正确解决问题的思维方式和方案，加上对底层基础和背后逻辑的掌握，然后对事物原理的追根溯源，就能真正意义上地解决问题和把握新事物。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://www.cnblogs.com/bigtreei/p/15094293.html">https://www.cnblogs.com/bigtreei/p/15094293.html</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/522468985">https://zhuanlan.zhihu.com/p/522468985</a></p>
+<p><a href="https://pythonguidecn.readthedocs.io/zh/latest/dev/virtualenvs.html">Pipenv &amp; 虚拟环境</a></p>
+<h1 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h1><ul>
+<li>conda：</li>
+</ul>
+<p>Conda是一个开源的包管理器和环境管理系统，用于管理和部署不同版本的软件包和依赖项。Conda可以同时管理多个环境，每个环境可以包含不同版本的Python解释器以及其他库和依赖项。在本质上，Conda是一个跨平台的软件包管理系统，可用于管理Python软件包，以及其他一些编程语言的软件包。</p>
+<p>下面是Conda的一些主要特点和使用原理：</p>
+<ol>
+<li>包管理器：Conda作为一个包管理器，可以轻松地安装、升级、删除软件包，以及查看已安装的包列表。Conda还可以处理软件包之间的依赖关系，以确保在安装新软件包时不会出现依赖冲突。</li>
+<li>环境管理器：Conda还可以管理多个环境，每个环境可以包含不同版本的Python解释器和其他库和依赖项。这使得用户可以轻松地创建和维护不同的开发环境，以及为不同的项目配置不同的环境。</li>
+<li>跨平台：Conda可以在多种操作系统上运行，包括Windows、macOS和Linux等。</li>
+<li>渠道：Conda的包管理系统是基于渠道的，可以从不同的渠道安装软件包，包括Anaconda官方渠道、conda-forge、PyPI等。用户可以在不同的渠道之间切换，并管理自己的私有渠道。</li>
+<li>兼容性：Conda可以管理多个版本的Python解释器和不同的软件包版本，以确保不同版本的软件包可以兼容。</li>
+</ol>
+<p>总之，Conda提供了一种方便、灵活和可扩展的方式来管理Python软件包和环境，使得用户可以更好地管理自己的开发环境，以及更方便地分享和部署自己的Python应用程序。</p>
+<ul>
+<li><a href="https://github.com/conda/conda.git">conda源码</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>bug</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>pip</tag>
+        <tag>conda</tag>
+        <tag>虚拟环境</tag>
+        <tag>用户环境变量</tag>
+        <tag>site-packages</tag>
       </tags>
   </entry>
 </search>

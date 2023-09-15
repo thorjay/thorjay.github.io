@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"thorjay.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.13.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"utterances","storage":true,"lazyload":false,"nav":null,"activeClass":"utterances"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="[TOC] 介绍最近有几个场景需求都牵涉到rebase这个操作，所以有必要对rebas做一个总结和进一步学习。 场景1.修改提交记录 2.合并提交记录 3.合并分支 概念rebase:变基 merge:合并 commit:提交 fast-forward merge:快进合并 branch:分支 Head:这个翻译是头部；我的理解是当前活动状态的游标或指针；可以是当前分支的头部，也可以是某一个提交的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="有关git rebase的一点记录">
+<meta property="og:url" content="https://thorjay.github.io/2023/09/04/%E6%9C%89%E5%85%B3%E6%9C%80%E8%BF%91git%20rebase%E7%9A%84%E4%B8%80%E7%82%B9%E8%AE%B0%E5%BD%95/index.html">
+<meta property="og:site_name" content="jay&#39;lab">
+<meta property="og:description" content="[TOC] 介绍最近有几个场景需求都牵涉到rebase这个操作，所以有必要对rebas做一个总结和进一步学习。 场景1.修改提交记录 2.合并提交记录 3.合并分支 概念rebase:变基 merge:合并 commit:提交 fast-forward merge:快进合并 branch:分支 Head:这个翻译是头部；我的理解是当前活动状态的游标或指针；可以是当前分支的头部，也可以是某一个提交的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://git-scm.com/book/en/v2/images/basic-rebase-3.png">
+<meta property="og:image" content="https://git-scm.com/book/en/v2/images/basic-rebase-4.png">
+<meta property="og:image" content="https://git-scm.com/book/en/v2/images/basic-rebase-2.png">
+<meta property="og:image" content="https://thorjay.github.io/imgs/image-20230904114325678.png">
+<meta property="og:image" content="https://thorjay.github.io/imgs/perils-of-rebasing-2.png">
+<meta property="og:image" content="https://thorjay.github.io/imgs/perils-of-rebasing-3.png">
+<meta property="og:image" content="https://thorjay.github.io/imgs/perils-of-rebasing-4.png">
+<meta property="article:published_time" content="2023-09-04T02:07:59.148Z">
+<meta property="article:modified_time" content="2023-09-15T13:46:29.945Z">
+<meta property="article:author" content="小森">
+<meta property="article:tag" content="git">
+<meta property="article:tag" content="技巧">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://git-scm.com/book/en/v2/images/basic-rebase-3.png">
+
+
+<link rel="canonical" href="https://thorjay.github.io/2023/09/04/%E6%9C%89%E5%85%B3%E6%9C%80%E8%BF%91git%20rebase%E7%9A%84%E4%B8%80%E7%82%B9%E8%AE%B0%E5%BD%95/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://thorjay.github.io/2023/09/04/%E6%9C%89%E5%85%B3%E6%9C%80%E8%BF%91git%20rebase%E7%9A%84%E4%B8%80%E7%82%B9%E8%AE%B0%E5%BD%95/","path":"2023/09/04/有关最近git rebase的一点记录/","title":"有关git rebase的一点记录"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>有关git rebase的一点记录 | jay'lab</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-241326189-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-241326189-1","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?400fd385e18402b73b66ca73741494c1"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">jay'lab</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%BA%E6%99%AF"><span class="nav-number">1.1.</span> <span class="nav-text">场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5"><span class="nav-number">1.2.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E6%A1%A3%E5%88%86%E6%9E%90"><span class="nav-number">1.3.</span> <span class="nav-text">文档分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rebase-commitID"><span class="nav-number">1.4.</span> <span class="nav-text">rebase commitID</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%87%E6%B3%A8"><span class="nav-number">1.5.</span> <span class="nav-text">备注</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">小森</p>
+  <div class="site-description" itemprop="description">小森夜行,手可摘星辰</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://thorjay.github.io/2023/09/04/%E6%9C%89%E5%85%B3%E6%9C%80%E8%BF%91git%20rebase%E7%9A%84%E4%B8%80%E7%82%B9%E8%AE%B0%E5%BD%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="小森">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jay'lab">
+      <meta itemprop="description" content="小森夜行,手可摘星辰">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="有关git rebase的一点记录 | jay'lab">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          有关git rebase的一点记录
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-09-04 10:07:59" itemprop="dateCreated datePublished" datetime="2023-09-04T10:07:59+08:00">2023-09-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/git/" itemprop="url" rel="index"><span itemprop="name">git</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>[TOC]</p>
+<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>最近有几个场景需求都牵涉到rebase这个操作，所以有必要对rebas做一个总结和进一步学习。</p>
+<h2 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h2><p>1.修改提交记录</p>
+<p>2.合并提交记录</p>
+<p>3.合并分支</p>
+<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>rebase:变基</p>
+<p>merge:合并</p>
+<p>commit:提交</p>
+<p>fast-forward merge:快进合并</p>
+<p>branch:分支</p>
+<p>Head:这个翻译是头部；我的理解是当前活动状态的游标或指针；可以是当前分支的头部，也可以是某一个提交的指向…</p>
+<p>topicbranch：目标分支</p>
+<p>basebranch：基础分支</p>
+<p>其中，需要理解一个概念<strong>快进合并()</strong></p>
+<blockquote>
+<p>什么是变基？</p>
+</blockquote>
+<p>要理解变基，先理解一个更常见的概念”合并(Merge)”。</p>
+<p>合并很好理解，就是直接将2个分支合并到一个分支上，其实变基的最终目的也是一样。但2者不同之处是合并会产生一个新的提交，而变基不会，从提交图解上来看，它的提交记录更像是一个串行的，而合并更像是2条河流有一个merge节点。</p>
+<p>我很希望文档中的一段描述：**变基就好些<code>重新播放</code>一样，将提交到某一分支(topicbranch)上的所有修改都移到另一分支上(basebranch)**。重放这个词很准确地说出了rebase变基所做的事情。</p>
+<h2 id="文档分析"><a href="#文档分析" class="headerlink" title="文档分析"></a>文档分析</h2><ul>
+<li>git rebase basebranch</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git checkout experiment</span><br><span class="line">git rebase master</span><br><span class="line">//这时experiment分支其实已经是基于master分支构建了</span><br></pre></td></tr></table></figure>
+
+<p>变基时，会找到2个分支（topicbranch experiment和基底分支basebranch master)的共同祖先C2，然后对比当前分支(experiment)的历次提交，提取相应的修改并存为临时文件，然后将当前分支指向目标基底C3，最后以此将之前另存为临时文件的修改依序应用。以上是官方解释，有点饶，简单点说，就是把<strong>自动提交差异放到共同祖先提交节点后</strong>，当然如果和基底分支提交有冲突confilt。是需要手工处理的。</p>
+<p><img src="https://git-scm.com/book/en/v2/images/basic-rebase-3.png"></p>
+<p>然后对master分支<strong>快进合并</strong>**</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git checkout mater</span><br><span class="line">git merge experiment</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://git-scm.com/book/en/v2/images/basic-rebase-4.png"></p>
+<p>再放一张直接Merge的图式：</p>
+<p><img src="https://git-scm.com/book/en/v2/images/basic-rebase-2.png" alt="image-20230904112928395"></p>
+<p>看看C5节点，就是自动生成的新的快照。</p>
+<ul>
+<li>git rebase onto</li>
+</ul>
+<p>取出另外分支的提交，简单说，就是将非直接checkout的分支的提交合并。</p>
+<p>如从master上分出server分支，再从server分支分出client分支。</p>
+<p><img src="/../../imgs/image-20230904114325678.png" alt="image-20230904114325678"></p>
+<p>如果master只需要C8,C9，而不想合并C3，那么如何操作？</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git rebase --onto master server client</span><br></pre></td></tr></table></figure>
+
+<p>以上命令的意思是：“取出 <code>client</code> 分支，找出它从 <code>server</code> 分支分歧之后的补丁， 然后把这些补丁在 <code>master</code> 分支上重放一遍，让 <code>client</code> 看起来像直接基于 <code>master</code> 修改一样”。这理解起来有一点复杂，不过效果非常酷。</p>
+<p>这需要对自己的每次提交的内容得非常清楚！</p>
+<ul>
+<li>注意！！！</li>
+</ul>
+<p><strong>如果提交存在于你的仓库之外，而别人可能基于这些提交进行开发，那么不要执行变基</strong></p>
+<p>通俗点讲：尽量避免对已到远端的提交(origin)进行变基，一般对自己本地分支(local)使用。</p>
+<p>因为，远端仓库，别人也可能基于这些提交进行开发，如果你执行的变基，同时强推倒远端仓库，别人pull之后，他的提交线就会混乱，同时他在push，你再pull，就会导致你的提交线会混乱。是不是很绕，有点难理解。下面结合图示将描述简单化；</p>
+<p>场景流程如下：</p>
+<p>1.当前状态：我通过pull远端，将teamone的提交合并，当前我在C7上。git.team1.com是远端库</p>
+<p><img src="/../../imgs/perils-of-rebasing-2.png"></p>
+<p>2.如果teamone不想merge，不想记录C6的merge，他采用的rebase变基，然后强推push –force，这时远端及本地的状态及提交记录如下图；</p>
+<p>远端的C4,C6消失，多了一个C4&#96;.</p>
+<p>本地不变。</p>
+<p><img src="/../../imgs/perils-of-rebasing-3.png"></p>
+<p>3.这时你执行pull，将会合并2个提交历史的内容，生成一个新的合并提交。最终仓库会如图：</p>
+<p>因为C4&#96;是新的，而本地C4,C6并未消失(本地未执行rebase，只有teamone执行)，所以会有一个C8.</p>
+<p><img src="/../../imgs/perils-of-rebasing-4.png"></p>
+<p>这样会导致提交异常混乱，你会发现C4和C4&#96;的相同的提交在你的仓库里重复出现了2次。如果你再push，又会将C4,C6重新推送到服务器上去。这回就会让teamone困惑了。因为他之前rebase的操作就是要将C4和C6丢弃。</p>
+<blockquote>
+<p>那么如何解决？</p>
+</blockquote>
+<p>用变基解决变基(推荐)</p>
+<p>如果团队中的某人强制推送并覆盖了一些你所基于的提交，你需要做的就是检查你做了哪些修改，以及他们覆盖了哪些修改。</p>
+<p><strong>Git 除了对整个提交计算 SHA-1 校验和以外，也对本次提交所引入的修改计算了校验和——即 “patch-id”。</strong></p>
+<p>使用git rebase，git会自动检查自己和对方的差异，再进行合并。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git rebase remote/maser</span><br></pre></td></tr></table></figure>
+
+<p>推荐使用 <strong>git pull –rebase</strong>而不是git pull</p>
+<p>git pull –rebase 等于git fetch | git rebase remote&#x2F;mater</p>
+<p>同时，可以设置git config –global pull.rebase true.这样你再使用git pull时，是默认使用选项–rebase的。</p>
+<ul>
+<li>变基 vs 合并</li>
+</ul>
+<p>​	无所谓那种更好，关键看针对的场景和开发者的使用理念。有人认为提交历史就是记录发生什么，有人认为是项目中发发生的事，无需记录不必要的记录。</p>
+<p>总的原则是，只对尚未推送或分享给别人的本地修改执行变基操作清理历史， 从不对已推送至别处的提交执行变基操作，像我的习惯是，针对功能性分支基本采用rebase，对于主线记录版本的分支比如main使用merge。</p>
+<h2 id="rebase-commitID"><a href="#rebase-commitID" class="headerlink" title="rebase commitID"></a>rebase commitID</h2><p>rebase 除了可以对branch分支进行操作，还可以指定commitID来进行各种操作场景：</p>
+<p>1.合并提交</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//前开后闭</span><br><span class="line">git rebase commitID1 commitID2</span><br><span class="line">//对Head之后的第2个提交进行变基</span><br><span class="line">git rebase HEAD~2</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>2.修改提交</p>
+<p>选项：</p>
+<p>p :对commit执行选择，选择提交</p>
+<p>r：选择提交，但是修改提交信息</p>
+<p>e :针对提交做修订</p>
+<p>s :选择提交，并合并到上一个提交中</p>
+<p>f:选择提交，但只保留上一个提交的日志</p>
+<p>其实rebase commitID从字面可以理解，也是重新变基，只是这是基于commitId为基础，所以rebase后会新建临时分支出来。</p>
+<p>在每一个选择提交操作上，可以执行</p>
+<p>git rebase –continue:继续变基，调到下一个commit</p>
+<p>git rebase –abort:放弃变基</p>
+<p>git rebase –edit-todo：继续变基，进行变基代办事项</p>
+<p>git commit –amend : 修改提交信息</p>
+<h2 id="备注"><a href="#备注" class="headerlink" title="备注"></a>备注</h2><p>主要内容和图<a target="_blank" rel="noopener" href="https://git-scm.com/book/zh/v2/Git-%E5%88%86%E6%94%AF-%E5%8F%98%E5%9F%BA">依据</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/git/" rel="tag"># git</a>
+              <a href="/tags/%E6%8A%80%E5%B7%A7/" rel="tag"># 技巧</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/09/02/LightWebviewBridge-%E5%8E%9F%E7%90%86%E7%AF%87/" rel="prev" title="LightWebviewBridge-原理篇">
+                  <i class="fa fa-chevron-left"></i> LightWebviewBridge-原理篇
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/09/15/%E5%88%9B%E5%BB%BASSL%E8%87%AA%E7%AD%BE%E5%90%8D%E8%AF%81%E4%B9%A6/" rel="next" title="创建SSL自签名证书">
+                  创建SSL自签名证书 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小森</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"thorjay/thorjay.github.io","issue_term":"pathname","theme":"github-light"}</script>
+<script src="/js/third-party/comments/utterances.js"></script>
+
+</body>
+</html>
