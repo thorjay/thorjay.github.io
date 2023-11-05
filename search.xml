@@ -1,52 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>传感器_方位水平测量</title>
-    <url>/2022/09/21/%E4%BC%A0%E6%84%9F%E5%99%A8_%E6%96%B9%E4%BD%8D%E6%B0%B4%E5%B9%B3%E6%B5%8B%E9%87%8F/</url>
-    <content><![CDATA[<h2 id="需求及场景"><a href="#需求及场景" class="headerlink" title="需求及场景"></a>需求及场景</h2><ul>
-<li>角度测量</li>
-</ul>
-<p>将手机变成一个指南针或者一个水平仪的数据；要实现这种效果，就得通过上一篇文章<a href="/2022/09/20/Android%E4%BC%A0%E6%84%9F%E5%99%A8%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8/" title="Android传感器介绍及使用.md">Android传感器介绍及使用</a>中介绍的传感器来获取相应的数据。</p>
-<ul>
-<li>坐标系</li>
-</ul>
-<p>方位水平测量是以世界坐标系为基准的，详情见上一篇文章<a href="/2022/09/20/Android%E4%BC%A0%E6%84%9F%E5%99%A8%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8/" title="Android传感器介绍及使用.md">Android传感器介绍及使用</a>中的传感器事件数据章节。</p>
-<ul>
-<li>传感器</li>
-</ul>
-<p>使用两种传感器来：</p>
-<ul>
-<li>地磁场传感器</li>
-<li>加速度计传感器</li>
-</ul>
-<span id="more"></span>  
+    <title>LightWebviewBridge-使用篇</title>
+    <url>/2023/09/01/LightWebviewBridge-%E4%BD%BF%E7%94%A8%E7%AF%87/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h1 id="LightWebviewBridge-使用篇"><a href="#LightWebviewBridge-使用篇" class="headerlink" title="LightWebviewBridge-使用篇"></a>LightWebviewBridge-使用篇</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p><code>LightWebviewBridge</code>定位为一个轻量级、小而美的Hybrid混合APP解决方案工具，帮助开发者快速实现H5APP或内嵌H5界面功能，只聚焦于业务功能开发，而不用关注H5和Native的通信实现，便可快速实现相应业务功能，达到类似<code>小程序、公众号</code>的效果；</p>
+<p><a href="https://github.com/thorjay/LightWebviewBridge">链接地址</a></p>
+<h3 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h3><p><img src="/../../imgs/demo.gif" alt="demo"></p>
+<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>目前市面上平台APP中的H5应用(如小程序、快应用、流应用…)，这类程序或应用的概念的实现大都是围绕WebView而开展，实现H5与Native的通信能力，可能各自的具体细节和标准不同。</p>
+<p>如果只需要实现H5调用原生能力，比如小程序的秒开、扫码获取信息、分享链接获取应用等众多场景，目前主流的方案要么过大，得深度集成；要么只是一个实现介绍，具体得自己从头实现，而与业务侧深度绑定；</p>
+<p>有没有一个即能快速集成，又将H5-Native通信的能力封装完成，而让开发者只轻松地关注业务实现，同时将公用能力模块化，<code>LightWebviewBridge</code>正是出于这个目的而诞生。</p>
+<h2 id="使用详解-基础场景"><a href="#使用详解-基础场景" class="headerlink" title="使用详解-基础场景"></a>使用详解-基础场景</h2><p>文字介绍得比较详细，尽量让闭环流程中的每个细节都解释到位，实际开发中代码比较少。</p>
+<blockquote>
+<p>初始化</p>
+</blockquote>
+<p>将框架上下文对象BridgeContext和webview(案列中是BaseWebView)绑定。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">WebViewBridge.initJsInterface(bridgeContext,mWebview)</span><br></pre></td></tr></table></figure>
 
-<h2 id="关键代码"><a href="#关键代码" class="headerlink" title="关键代码"></a>关键代码</h2><ul>
-<li>获取地磁场和加速度计传感器 &amp;&amp; 注册监听事件</li>
-</ul>
-<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line">sensorMgr.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)?.also &#123;</span><br><span class="line">        accSensor -&gt; sensorMgr.registerListener(sensorEventListener,accSensor,SensorManager.SENSOR_DELAY_NORMAL,SensorManager.SENSOR_DELAY_UI)</span><br><span class="line">&#125;</span><br><span class="line">sensorMgr.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)?.also &#123;</span><br><span class="line">        magSensor -&gt; sensorMgr.registerListener(sensorEventListener,magSensor,SensorManager.SENSOR_DELAY_NORMAL,SensorManager.SENSOR_DELAY_UI)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>场景-创建二维码</p>
+</blockquote>
+<p>这是一个典型且常用的业务场景，实现如何从H5输入数据，通过原生实现，再返回H5执行的过程。</p>
+<p>1.Native端：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">class Qr : NativeFunc&#123;    </span><br><span class="line">    fun createQr(data : String)&#123;</span><br><span class="line">        val bitmap = CodeUtils.createQRCode(data,600)</span><br><span class="line">        val bytes = ConvertUtils.bitmap2Bytes(bitmap)</span><br><span class="line">        val base64 = EncodeUtils.base64Encode2String(bytes)</span><br><span class="line">        callbackToJS(base64)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;    </span><br><span class="line">   </span><br></pre></td></tr></table></figure>
 
 <ul>
-<li>传感器数据处理</li>
+<li><p>类：Qr；继承NativeFunc。</p>
+</li>
+<li><p>方法：createQr；与类一起配置到bridgeConfig.json。</p>
+</li>
+<li><p>方法参数：data : String；从H5端的API中传入，数据格式根据业务功能约定。</p>
+</li>
+<li><p>回调方法：callbackToJS；固定API，实现从Native端将数据返回给H5。</p>
+</li>
+<li><p>回调方法参数：base64：String；从Native端返回，数据格式根据业务功能约定。</p>
+</li>
 </ul>
-<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line">event?.sensor?.type.let &#123;</span><br><span class="line">    <span class="keyword">when</span>(it)&#123;</span><br><span class="line">        <span class="comment">//加速度(带重力)</span></span><br><span class="line">        Sensor.TYPE_ACCELEROMETER -&gt; System.arraycopy(event?.values,<span class="number">0</span>,accelerometerReading,<span class="number">0</span>,accelerometerReading.size)</span><br><span class="line">        <span class="comment">//磁力</span></span><br><span class="line">        Sensor.TYPE_MAGNETIC_FIELD -&gt; System.arraycopy(event?.values,<span class="number">0</span>,magnetometerReading,<span class="number">0</span>,magnetometerReading.size)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">val</span> cal = DegreeDataCal(accelerometerReading,magnetometerReading)</span><br><span class="line">    cal.cal().let &#123;</span><br><span class="line">        result -&gt; viewModel.updateAngel(result = AngelData(result[<span class="number">0</span>], result[<span class="number">1</span>], result[<span class="number">2</span>]))</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2.配置</p>
+<p>文件<strong>bridgeConfig.json</strong>，位于assets目录下</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;functions&quot;: &#123;</span><br><span class="line">  	...</span><br><span class="line">    &quot;createQr&quot;: &#123;</span><br><span class="line">      &quot;methodName&quot;: &quot;createQr&quot;,</span><br><span class="line">      &quot;className&quot;: &quot;com.rj.lightwebviewbridge.functions.Qr&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    ...</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <ul>
-<li>角度计算</li>
+<li>“createQr”:调用原生能力的唯一ID</li>
+<li>“methodName”：方法名</li>
+<li>“className”：类名(包路径)</li>
 </ul>
-<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="comment">//旋转矩阵</span></span><br><span class="line"><span class="keyword">val</span> rotationMatrix = FloatArray(<span class="number">9</span>)</span><br><span class="line"><span class="comment">//计算旋转矩阵数据</span></span><br><span class="line">SensorManager.getRotationMatrix(rotationMatrix,<span class="literal">null</span>,accArray,magArray)</span><br><span class="line"><span class="comment">//手机屏幕分别沿着x,y,z的旋转数据</span></span><br><span class="line"><span class="keyword">val</span> orientationAngles = FloatArray(<span class="number">3</span>)</span><br><span class="line">rotationMatrix.forEach &#123;</span><br><span class="line">    it.let &#123; Timber.i(it.toString()) &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//计算屏幕方向数据</span></span><br><span class="line">SensorManager.getOrientation(rotationMatrix,orientationAngles)</span><br></pre></td></tr></table></figure>
+<p>3.H5调用</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">function createQr()&#123;</span><br><span class="line">    let data = document.getElementById(&quot;qrData&quot;).value</span><br><span class="line">    callToNative(&quot;createQr&quot;,data,function (response) &#123;</span><br><span class="line">        document.getElementById(&quot;qrImg&quot;).src = &quot;data:image/jpeg;base64,&quot; + response</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h2 id="案列"><a href="#案列" class="headerlink" title="案列"></a>案列</h2><p><a href="https://github.com/thorjay/sensor_orientation">代码仓库</a></p>
-<h2 id="TODO"><a href="#TODO" class="headerlink" title="TODO"></a>TODO</h2><ul>
-<li><input disabled="" type="checkbox"> 界面显示</li>
+<ul>
+<li>callToNative：API，调用原生能力，与Native通信；三个参数，即请求体(Request)3元素。</li>
+<li>“createQr”(必填)：3元素之一，原生能力的唯一ID，与bridgeConfig.json中配置对应。</li>
+<li>data(可选)：3元素之二，传给Native端的数据，与Native中的*<em>方法参数</em>data对应。</li>
+<li>function(可选) ：3元素之三，JS回调函数，接收Native端的回调数据再执行。</li>
+<li>response：Native端的返回的业务数据，对应Native中的回调方法参数base64。</li>
 </ul>
+<h2 id="使用-进阶"><a href="#使用-进阶" class="headerlink" title="使用-进阶"></a>使用-进阶</h2><blockquote>
+<p>场景-扫码</p>
+</blockquote>
+<p>借助相机扫码二维码、条形码等，然后将数据返回给H5再处理。其中相机能力H5端是无法实现的。</p>
+<p>流程过程与创建二维码是一样的，在调用Native、config配置、回调函数、数据传输等环节在框架里完全相同。唯一不同点是扫码调用了另外的原生界面，如果新增一个步骤。</p>
+<ul>
+<li>需要通过ActivityStarter+LifecycleObserver，将唤起能力放入scanQR方法中，代码如下：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">fun scanQR()&#123;</span><br><span class="line">toScan()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">private fun toScan()&#123;</span><br><span class="line">        val intent = Intent(context.getContext(),FullScreenQRCodeScanActivity::class.java)</span><br><span class="line">        scanStarter = context.getActivityStarter(&quot;scanQr&quot;)!!</span><br><span class="line">        scanStarter.startActivity(intent)&#123;</span><br><span class="line">                result: ActivityResult -&gt;</span><br><span class="line">            if (result.resultCode == Activity.RESULT_OK) &#123;</span><br><span class="line">                val intent = result.data</span><br><span class="line">                val result = intent!!.getStringExtra(CameraScan.SCAN_RESULT)</span><br><span class="line">                callbackToJS(result)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在加载WebView的上下文对象(Activity|Fragment)中初始化添加</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">bridgeContext = BridgeContext(this.requireActivity())</span><br><span class="line"></span><br><span class="line">val scanObserver = ScanObserver(this.requireActivity().activityResultRegistry)</span><br><span class="line">lifecycle.addObserver(scanObserver)</span><br><span class="line">bridgeContext.addActivityStarter(&quot;scanQr&quot;,scanObserver)</span><br></pre></td></tr></table></figure>
+
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>H5的资源可以放在本地，也可以部署到服务器；本地的效果就类似小程序，秒开；远端的效果是类似公众号，需要加载。</p>
+<p>如果大家觉得有用，请关注<a href="https://github.com/thorjay/LightWebviewBridge">GitHub</a>或<a href="https://gitee.com/larry_jay/LightWebviewBridge">码云</a>，欢迎大家留言，谢谢！</p>
 ]]></content>
       <categories>
-        <category>Android</category>
+        <category>框架</category>
       </categories>
       <tags>
-        <tag>Android</tag>
-        <tag>传感器</tag>
+        <tag>hybrid</tag>
+        <tag>app</tag>
+        <tag>h5</tag>
+        <tag>jsbridge</tag>
+        <tag>小程序</tag>
+        <tag>框架</tag>
+        <tag>解决方案</tag>
+        <tag>LightWebviewBridge</tag>
       </tags>
   </entry>
   <entry>
@@ -248,90 +286,109 @@
       </tags>
   </entry>
   <entry>
-    <title>LightWebviewBridge-使用篇</title>
-    <url>/2023/09/01/LightWebviewBridge-%E4%BD%BF%E7%94%A8%E7%AF%87/</url>
+    <title>git自动配置仓库用户信息</title>
+    <url>/2023/08/10/git%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E4%BB%93%E5%BA%93%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF/</url>
     <content><![CDATA[<p>[TOC]</p>
-<h1 id="LightWebviewBridge-使用篇"><a href="#LightWebviewBridge-使用篇" class="headerlink" title="LightWebviewBridge-使用篇"></a>LightWebviewBridge-使用篇</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p><code>LightWebviewBridge</code>定位为一个轻量级、小而美的Hybrid混合APP解决方案工具，帮助开发者快速实现H5APP或内嵌H5界面功能，只聚焦于业务功能开发，而不用关注H5和Native的通信实现，便可快速实现相应业务功能，达到类似<code>小程序、公众号</code>的效果；</p>
-<p><a href="https://github.com/thorjay/LightWebviewBridge">链接地址</a></p>
-<h3 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h3><p><img src="/../../imgs/demo.gif" alt="demo"></p>
-<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>目前市面上平台APP中的H5应用(如小程序、快应用、流应用…)，这类程序或应用的概念的实现大都是围绕WebView而开展，实现H5与Native的通信能力，可能各自的具体细节和标准不同。</p>
-<p>如果只需要实现H5调用原生能力，比如小程序的秒开、扫码获取信息、分享链接获取应用等众多场景，目前主流的方案要么过大，得深度集成；要么只是一个实现介绍，具体得自己从头实现，而与业务侧深度绑定；</p>
-<p>有没有一个即能快速集成，又将H5-Native通信的能力封装完成，而让开发者只轻松地关注业务实现，同时将公用能力模块化，<code>LightWebviewBridge</code>正是出于这个目的而诞生。</p>
-<h2 id="使用详解-基础场景"><a href="#使用详解-基础场景" class="headerlink" title="使用详解-基础场景"></a>使用详解-基础场景</h2><p>文字介绍得比较详细，尽量让闭环流程中的每个细节都解释到位，实际开发中代码比较少。</p>
-<blockquote>
-<p>初始化</p>
-</blockquote>
-<p>将框架上下文对象BridgeContext和webview(案列中是BaseWebView)绑定。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">WebViewBridge.initJsInterface(bridgeContext,mWebview)</span><br></pre></td></tr></table></figure>
+<h1 id="git自动配置仓库用户信息"><a href="#git自动配置仓库用户信息" class="headerlink" title="git自动配置仓库用户信息"></a>git自动配置仓库用户信息</h1><p>进行git提交时，发现commit记录中的Author(用户名和邮箱)与当前仓库的账户名和邮箱不匹配。特别是在操作不同项目仓库(<strong>公司仓库和私人仓库</strong>)或者多用户(<strong>Github账号，Gitee账号，公司git账号等</strong>)。这种情况是因为未配置当前仓库的用户信息，而默认使用全局配置信息导致的。</p>
+<p>如何解决，方案如下：</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><h3 id="查看用户信息-可选"><a href="#查看用户信息-可选" class="headerlink" title="查看用户信息(可选)"></a>查看用户信息(可选)</h3><p>确认全局用户信息</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git config --global --list</span><br><span class="line">#或者</span><br><span class="line">git config -l</span><br></pre></td></tr></table></figure>
+<p>提交结果：</p>
+<p><img src="/../../imgs/image-20230810201441355.png" alt="image-20230810201441355"></p>
+<h3 id="方案1-手动配置"><a href="#方案1-手动配置" class="headerlink" title="方案1 手动配置"></a>方案1 手动配置</h3><p>这个针对较少的项目仓库操作。</p>
+<p>1.进入指定仓库路径下</p>
+<p>2.手动修改<strong>当前仓库</strong>配置</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#（可选）查看确认当前仓库的配置信息</span><br><span class="line">git config --local --list</span><br><span class="line">git config user.name localuser</span><br><span class="line">git config user.email local@email.com</span><br></pre></td></tr></table></figure>
+
+<p>提交结果：</p>
+<p><img src="/../../imgs/image-20230810201508279.png" alt="image-20230810201508279"></p>
+<h3 id="方案2-自动配置"><a href="#方案2-自动配置" class="headerlink" title="方案2 自动配置"></a>方案2 自动配置</h3><p>针对较多的仓库或用户使用，通过在全局<code>.gitconfig</code>配置文件中使用<strong>includeIf</strong>条件来自动加载不同的用户配置。</p>
+<p>1、首先，创建对应仓库的配置文件</p>
+<p>假设你有两个不同的 Git 用户，一个用于工作项目(work)，另一个用于个人项目(personal)，那就创建2个对应文件，比如.gitconfig_personal和.gitconfig_work</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi .gitconfig_personal</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[user]</span><br><span class="line">    name = Your Personal Name</span><br><span class="line">    email = personal@example.com</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi .gitconfig_work</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[user]</span><br><span class="line">    name = Your Work Name</span><br><span class="line">    email = work@example.com</span><br></pre></td></tr></table></figure>
+
+<p>2、最后，配置第一步中的文件</p>
+<p>在全局配置文件<code>~.gitconfig</code>中，使用 <code>includeIf</code> 来根据不同的条件(比如:仓库路径)加载上面的配置文件,这样就会根据不同项目或工作场景，针对<code>gitdir</code>指定的路径去加载对应path的配置文件，从而使用不同的 Git 用户配置，而不是默认的全局配置Git用户。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[includeIf &quot;gitdir:~/work/&quot;]</span><br><span class="line">    path = ~/.gitconfig_work</span><br><span class="line"></span><br><span class="line">[includeIf &quot;gitdir:~/personal/&quot;]</span><br><span class="line">    path = ~/.gitconfig_personal</span><br></pre></td></tr></table></figure>
 
 <blockquote>
-<p>场景-创建二维码</p>
+<p>注意:</p>
+<p>1.git仓库路径末尾需要带上&#x2F;，不然可能无法识别到</p>
+<p>2.如果一个目录下的所有仓库都对应相同的user，可以使用目录路径来替换</p>
 </blockquote>
-<p>这是一个典型且常用的业务场景，实现如何从H5输入数据，通过原生实现，再返回H5执行的过程。</p>
-<p>1.Native端：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">class Qr : NativeFunc&#123;    </span><br><span class="line">    fun createQr(data : String)&#123;</span><br><span class="line">        val bitmap = CodeUtils.createQRCode(data,600)</span><br><span class="line">        val bytes = ConvertUtils.bitmap2Bytes(bitmap)</span><br><span class="line">        val base64 = EncodeUtils.base64Encode2String(bytes)</span><br><span class="line">        callbackToJS(base64)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;    </span><br><span class="line">   </span><br></pre></td></tr></table></figure>
-
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><ul>
+<li>Git用户名 vs git仓库账户</li>
+</ul>
+<p>Git用户名(本地)：在终端上使用Git，需要配置用户信息(用户名和email)，表示是”谁”在操作Git，来提交代码等等一系列操作。</p>
+<p>Git仓库账户(远端):如果需要使用代码托管的git服务，比如Github，Gitee等，就需要账号信息(账号名和email)来进行注册或登录。一般使用https操作仓库时，会将账号信息配置到仓库的config中；但使用ssh操作时，并不会。</p>
 <ul>
-<li><p>类：Qr；继承NativeFunc。</p>
-</li>
-<li><p>方法：createQr；与类一起配置到bridgeConfig.json。</p>
-</li>
-<li><p>方法参数：data : String；从H5端的API中传入，数据格式根据业务功能约定。</p>
-</li>
-<li><p>回调方法：callbackToJS；固定API，实现从Native端将数据返回给H5。</p>
-</li>
-<li><p>回调方法参数：base64：String；从Native端返回，数据格式根据业务功能约定。</p>
+<li><p>includeIf</p>
+<p>gitconfig 中的 includeIf 是 Git 2.13 版本引入的一个功能，它允许你在一个用户主配置文件中为特定的条件包含其他配置文件。这对于多用户管理以及在不同的项目或环境中使用不同的 Git 配置非常有用。通过 includeIf，你可以基于一些条件来加载特定的配置。</p>
 </li>
 </ul>
-<p>2.配置</p>
-<p>文件<strong>bridgeConfig.json</strong>，位于assets目录下</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;functions&quot;: &#123;</span><br><span class="line">  	...</span><br><span class="line">    &quot;createQr&quot;: &#123;</span><br><span class="line">      &quot;methodName&quot;: &quot;createQr&quot;,</span><br><span class="line">      &quot;className&quot;: &quot;com.rj.lightwebviewbridge.functions.Qr&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    ...</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>“createQr”:调用原生能力的唯一ID</li>
-<li>“methodName”：方法名</li>
-<li>“className”：类名(包路径)</li>
-</ul>
-<p>3.H5调用</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">function createQr()&#123;</span><br><span class="line">    let data = document.getElementById(&quot;qrData&quot;).value</span><br><span class="line">    callToNative(&quot;createQr&quot;,data,function (response) &#123;</span><br><span class="line">        document.getElementById(&quot;qrImg&quot;).src = &quot;data:image/jpeg;base64,&quot; + response</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>callToNative：API，调用原生能力，与Native通信；三个参数，即请求体(Request)3元素。</li>
-<li>“createQr”(必填)：3元素之一，原生能力的唯一ID，与bridgeConfig.json中配置对应。</li>
-<li>data(可选)：3元素之二，传给Native端的数据，与Native中的*<em>方法参数</em>data对应。</li>
-<li>function(可选) ：3元素之三，JS回调函数，接收Native端的回调数据再执行。</li>
-<li>response：Native端的返回的业务数据，对应Native中的回调方法参数base64。</li>
-</ul>
-<h2 id="使用-进阶"><a href="#使用-进阶" class="headerlink" title="使用-进阶"></a>使用-进阶</h2><blockquote>
-<p>场景-扫码</p>
-</blockquote>
-<p>借助相机扫码二维码、条形码等，然后将数据返回给H5再处理。其中相机能力H5端是无法实现的。</p>
-<p>流程过程与创建二维码是一样的，在调用Native、config配置、回调函数、数据传输等环节在框架里完全相同。唯一不同点是扫码调用了另外的原生界面，如果新增一个步骤。</p>
-<ul>
-<li>需要通过ActivityStarter+LifecycleObserver，将唤起能力放入scanQR方法中，代码如下：</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">fun scanQR()&#123;</span><br><span class="line">toScan()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">private fun toScan()&#123;</span><br><span class="line">        val intent = Intent(context.getContext(),FullScreenQRCodeScanActivity::class.java)</span><br><span class="line">        scanStarter = context.getActivityStarter(&quot;scanQr&quot;)!!</span><br><span class="line">        scanStarter.startActivity(intent)&#123;</span><br><span class="line">                result: ActivityResult -&gt;</span><br><span class="line">            if (result.resultCode == Activity.RESULT_OK) &#123;</span><br><span class="line">                val intent = result.data</span><br><span class="line">                val result = intent!!.getStringExtra(CameraScan.SCAN_RESULT)</span><br><span class="line">                callbackToJS(result)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>在加载WebView的上下文对象(Activity|Fragment)中初始化添加</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">bridgeContext = BridgeContext(this.requireActivity())</span><br><span class="line"></span><br><span class="line">val scanObserver = ScanObserver(this.requireActivity().activityResultRegistry)</span><br><span class="line">lifecycle.addObserver(scanObserver)</span><br><span class="line">bridgeContext.addActivityStarter(&quot;scanQr&quot;,scanObserver)</span><br></pre></td></tr></table></figure>
-
-<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>H5的资源可以放在本地，也可以部署到服务器；本地的效果就类似小程序，秒开；远端的效果是类似公众号，需要加载。</p>
-<p>如果大家觉得有用，请关注<a href="https://github.com/thorjay/LightWebviewBridge">GitHub</a>或<a href="https://gitee.com/larry_jay/LightWebviewBridge">码云</a>，欢迎大家留言，谢谢！</p>
 ]]></content>
       <categories>
-        <category>框架</category>
+        <category>git</category>
       </categories>
       <tags>
-        <tag>hybrid</tag>
-        <tag>app</tag>
-        <tag>h5</tag>
-        <tag>jsbridge</tag>
-        <tag>小程序</tag>
-        <tag>框架</tag>
-        <tag>解决方案</tag>
-        <tag>LightWebviewBridge</tag>
+        <tag>git</tag>
+        <tag>技巧</tag>
+        <tag>github</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>传感器_方位水平测量</title>
+    <url>/2022/09/21/%E4%BC%A0%E6%84%9F%E5%99%A8_%E6%96%B9%E4%BD%8D%E6%B0%B4%E5%B9%B3%E6%B5%8B%E9%87%8F/</url>
+    <content><![CDATA[<h2 id="需求及场景"><a href="#需求及场景" class="headerlink" title="需求及场景"></a>需求及场景</h2><ul>
+<li>角度测量</li>
+</ul>
+<p>将手机变成一个指南针或者一个水平仪的数据；要实现这种效果，就得通过上一篇文章<a href="/2022/09/20/Android%E4%BC%A0%E6%84%9F%E5%99%A8%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8/" title="Android传感器介绍及使用.md">Android传感器介绍及使用</a>中介绍的传感器来获取相应的数据。</p>
+<ul>
+<li>坐标系</li>
+</ul>
+<p>方位水平测量是以世界坐标系为基准的，详情见上一篇文章<a href="/2022/09/20/Android%E4%BC%A0%E6%84%9F%E5%99%A8%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8/" title="Android传感器介绍及使用.md">Android传感器介绍及使用</a>中的传感器事件数据章节。</p>
+<ul>
+<li>传感器</li>
+</ul>
+<p>使用两种传感器来：</p>
+<ul>
+<li>地磁场传感器</li>
+<li>加速度计传感器</li>
+</ul>
+<span id="more"></span>  
+
+<h2 id="关键代码"><a href="#关键代码" class="headerlink" title="关键代码"></a>关键代码</h2><ul>
+<li>获取地磁场和加速度计传感器 &amp;&amp; 注册监听事件</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line">sensorMgr.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)?.also &#123;</span><br><span class="line">        accSensor -&gt; sensorMgr.registerListener(sensorEventListener,accSensor,SensorManager.SENSOR_DELAY_NORMAL,SensorManager.SENSOR_DELAY_UI)</span><br><span class="line">&#125;</span><br><span class="line">sensorMgr.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)?.also &#123;</span><br><span class="line">        magSensor -&gt; sensorMgr.registerListener(sensorEventListener,magSensor,SensorManager.SENSOR_DELAY_NORMAL,SensorManager.SENSOR_DELAY_UI)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>传感器数据处理</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line">event?.sensor?.type.let &#123;</span><br><span class="line">    <span class="keyword">when</span>(it)&#123;</span><br><span class="line">        <span class="comment">//加速度(带重力)</span></span><br><span class="line">        Sensor.TYPE_ACCELEROMETER -&gt; System.arraycopy(event?.values,<span class="number">0</span>,accelerometerReading,<span class="number">0</span>,accelerometerReading.size)</span><br><span class="line">        <span class="comment">//磁力</span></span><br><span class="line">        Sensor.TYPE_MAGNETIC_FIELD -&gt; System.arraycopy(event?.values,<span class="number">0</span>,magnetometerReading,<span class="number">0</span>,magnetometerReading.size)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">val</span> cal = DegreeDataCal(accelerometerReading,magnetometerReading)</span><br><span class="line">    cal.cal().let &#123;</span><br><span class="line">        result -&gt; viewModel.updateAngel(result = AngelData(result[<span class="number">0</span>], result[<span class="number">1</span>], result[<span class="number">2</span>]))</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>角度计算</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="comment">//旋转矩阵</span></span><br><span class="line"><span class="keyword">val</span> rotationMatrix = FloatArray(<span class="number">9</span>)</span><br><span class="line"><span class="comment">//计算旋转矩阵数据</span></span><br><span class="line">SensorManager.getRotationMatrix(rotationMatrix,<span class="literal">null</span>,accArray,magArray)</span><br><span class="line"><span class="comment">//手机屏幕分别沿着x,y,z的旋转数据</span></span><br><span class="line"><span class="keyword">val</span> orientationAngles = FloatArray(<span class="number">3</span>)</span><br><span class="line">rotationMatrix.forEach &#123;</span><br><span class="line">    it.let &#123; Timber.i(it.toString()) &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//计算屏幕方向数据</span></span><br><span class="line">SensorManager.getOrientation(rotationMatrix,orientationAngles)</span><br></pre></td></tr></table></figure>
+
+<h2 id="案列"><a href="#案列" class="headerlink" title="案列"></a>案列</h2><p><a href="https://github.com/thorjay/sensor_orientation">代码仓库</a></p>
+<h2 id="TODO"><a href="#TODO" class="headerlink" title="TODO"></a>TODO</h2><ul>
+<li><input disabled="" type="checkbox"> 界面显示</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Android</category>
+      </categories>
+      <tags>
+        <tag>Android</tag>
+        <tag>传感器</tag>
       </tags>
   </entry>
   <entry>
@@ -416,281 +473,6 @@
         <tag>框架</tag>
         <tag>解决方案</tag>
         <tag>LightWebviewBridge</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>git自动配置仓库用户信息</title>
-    <url>/2023/08/10/git%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E4%BB%93%E5%BA%93%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<h1 id="git自动配置仓库用户信息"><a href="#git自动配置仓库用户信息" class="headerlink" title="git自动配置仓库用户信息"></a>git自动配置仓库用户信息</h1><p>进行git提交时，发现commit记录中的Author(用户名和邮箱)与当前仓库的账户名和邮箱不匹配。特别是在操作不同项目仓库(<strong>公司仓库和私人仓库</strong>)或者多用户(<strong>Github账号，Gitee账号，公司git账号等</strong>)。这种情况是因为未配置当前仓库的用户信息，而默认使用全局配置信息导致的。</p>
-<p>如何解决，方案如下：</p>
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><h3 id="查看用户信息-可选"><a href="#查看用户信息-可选" class="headerlink" title="查看用户信息(可选)"></a>查看用户信息(可选)</h3><p>确认全局用户信息</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git config --global --list</span><br><span class="line">#或者</span><br><span class="line">git config -l</span><br></pre></td></tr></table></figure>
-<p>提交结果：</p>
-<p><img src="/../../imgs/image-20230810201441355.png" alt="image-20230810201441355"></p>
-<h3 id="方案1-手动配置"><a href="#方案1-手动配置" class="headerlink" title="方案1 手动配置"></a>方案1 手动配置</h3><p>这个针对较少的项目仓库操作。</p>
-<p>1.进入指定仓库路径下</p>
-<p>2.手动修改<strong>当前仓库</strong>配置</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#（可选）查看确认当前仓库的配置信息</span><br><span class="line">git config --local --list</span><br><span class="line">git config user.name localuser</span><br><span class="line">git config user.email local@email.com</span><br></pre></td></tr></table></figure>
-
-<p>提交结果：</p>
-<p><img src="/../../imgs/image-20230810201508279.png" alt="image-20230810201508279"></p>
-<h3 id="方案2-自动配置"><a href="#方案2-自动配置" class="headerlink" title="方案2 自动配置"></a>方案2 自动配置</h3><p>针对较多的仓库或用户使用，通过在全局<code>.gitconfig</code>配置文件中使用<strong>includeIf</strong>条件来自动加载不同的用户配置。</p>
-<p>1、首先，创建对应仓库的配置文件</p>
-<p>假设你有两个不同的 Git 用户，一个用于工作项目(work)，另一个用于个人项目(personal)，那就创建2个对应文件，比如.gitconfig_personal和.gitconfig_work</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi .gitconfig_personal</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[user]</span><br><span class="line">    name = Your Personal Name</span><br><span class="line">    email = personal@example.com</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi .gitconfig_work</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[user]</span><br><span class="line">    name = Your Work Name</span><br><span class="line">    email = work@example.com</span><br></pre></td></tr></table></figure>
-
-<p>2、最后，配置第一步中的文件</p>
-<p>在全局配置文件<code>~.gitconfig</code>中，使用 <code>includeIf</code> 来根据不同的条件(比如:仓库路径)加载上面的配置文件,这样就会根据不同项目或工作场景，针对<code>gitdir</code>指定的路径去加载对应path的配置文件，从而使用不同的 Git 用户配置，而不是默认的全局配置Git用户。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[includeIf &quot;gitdir:~/work/&quot;]</span><br><span class="line">    path = ~/.gitconfig_work</span><br><span class="line"></span><br><span class="line">[includeIf &quot;gitdir:~/personal/&quot;]</span><br><span class="line">    path = ~/.gitconfig_personal</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>注意:</p>
-<p>1.git仓库路径末尾需要带上&#x2F;，不然可能无法识别到</p>
-<p>2.如果一个目录下的所有仓库都对应相同的user，可以使用目录路径来替换</p>
-</blockquote>
-<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><ul>
-<li>Git用户名 vs git仓库账户</li>
-</ul>
-<p>Git用户名(本地)：在终端上使用Git，需要配置用户信息(用户名和email)，表示是”谁”在操作Git，来提交代码等等一系列操作。</p>
-<p>Git仓库账户(远端):如果需要使用代码托管的git服务，比如Github，Gitee等，就需要账号信息(账号名和email)来进行注册或登录。一般使用https操作仓库时，会将账号信息配置到仓库的config中；但使用ssh操作时，并不会。</p>
-<ul>
-<li><p>includeIf</p>
-<p>gitconfig 中的 includeIf 是 Git 2.13 版本引入的一个功能，它允许你在一个用户主配置文件中为特定的条件包含其他配置文件。这对于多用户管理以及在不同的项目或环境中使用不同的 Git 配置非常有用。通过 includeIf，你可以基于一些条件来加载特定的配置。</p>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>git</category>
-      </categories>
-      <tags>
-        <tag>git</tag>
-        <tag>技巧</tag>
-        <tag>github</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>对接GPT第一步-clash的安装</title>
-    <url>/2023/04/08/linux%E5%AF%B9clash%E7%9A%84%E5%AE%89%E8%A3%85%E3%80%81%E9%85%8D%E7%BD%AE%E3%80%81%E4%BD%BF%E7%94%A8/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>需求：目前想体验GPT服务的能力，都得通过一个网络代理；比如实现一个对接GPT接口的api的服务，就得需要代理去访问，所以选择通过Clash实现。</p>
-<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><ul>
-<li>Clash：<br>Clash是一个开源的跨平台网络代理工具，使用Golang语言编写，支持多种代理协议和代理模式。<br>Clash的特点包括：<br>多协议支持：Clash支持Shadowsocks、V2Ray、Trojan等多种协议，用户可以根据需要自由切换。<br>多代理模式支持：Clash支持全局代理、PAC代理、域名代理等多种代理模式，用户可以根据需要选择不同的代理方式。<br>智能规则引擎：Clash内置强大的规则引擎，可以自动根据用户的需求选择最佳的代理节点。<br>支持多平台：Clash支持Windows、MacOS、Linux等多种操作系统，用户可以在不同的平台上使用Clash。<br>总的来说，Clash是一款功能强大的网络代理工具，可以帮助用户实现科学上网，访问被封锁的网站和服务。同时，Clash也是一个开源项目，用户可以自由地查看和修改Clash的源代码。<br><a href="https://github.com/Dreamacro/clash">开源地址</a></li>
-</ul>
-<span id="more"></span>
-
-<ul>
-<li>ClashX：<br>一款基于Clash核心开发的免费、开源的网络代理工具，支持多种协议和代理模式，可以在Mac电脑上实现科学上网。<br>ClashX的特点包括：<br>多协议支持：ClashX支持Shadowsocks、V2Ray、Trojan等多种协议，用户可以根据需要自由切换。<br>多代理模式支持：ClashX支持全局代理、PAC代理、域名代理等多种代理模式，用户可以根据需要选择不同的代理方式。<br>智能规则引擎：ClashX内置强大的规则引擎，可以自动根据用户的需求选择最佳的代理节点。<br>界面友好：ClashX的界面简洁、易用，用户可以轻松设置和管理代理配置。</li>
-<li>GPT：<br>人工智能多模式大模型。</li>
-<li>GPT SDK(chatgpt-java)：<br>ChatGPT Java 版本，OpenAI ChatGPT 的逆向工程 SDK，可扩展用于聊天机器人等。<br><a href="https://github.com/PlexPt/chatgpt-java">chatgpt-java</a><br><a href="https://icspec.com/news/article-details/2133492?type=prefecture">简介</a></li>
-<li>gpt-server：<br>基于GPT-SDK拓展的javaWeb服务工程Demo。</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//默认是8080端口</span><br><span class="line">java -jar gpt-server.jar</span><br></pre></td></tr></table></figure>
-<h2 id="安装配置步骤："><a href="#安装配置步骤：" class="headerlink" title="安装配置步骤："></a>安装配置步骤：</h2><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>去<a href="https://github.com/Dreamacro/clash/releases">资源包地址</a>下载安装包,选择对应操作系统的资源；</p>
-<img src="../../imgs/image-20230408093022471.png" alt="image-20230408093022471" style="zoom:33%;" />
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 以linux x64为例</span><br><span class="line">cd ~/software</span><br><span class="line">curl https://github.com/Dreamacro/clash/releases/download/v1.14.0/clash-linux-amd64-v3-v1.14.0.gz</span><br><span class="line">gunzip clash-linux-amd64-v3-v1.14.0.gz</span><br></pre></td></tr></table></figure>
-
-<p>建议在当前用户的.config文件夹下，新建一个clash文件夹，所有与clash相关的文件配置都放在其中</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cd ~/.config</span><br><span class="line">mkdir clash &amp;&amp; cd clash</span><br></pre></td></tr></table></figure>
-
-<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><h4 id="订阅模式"><a href="#订阅模式" class="headerlink" title="订阅模式"></a>订阅模式</h4><p>将自己的配置文件放入clash文件夹路径下：~&#x2F;.config&#x2F;clash</p>
-<ul>
-<li><p>config.yaml<br>clash代理的配置文件</p>
-</li>
-<li><p>Country.mmdb<br>文件利用 GeoIP2 服务能识别互联网用户的地点位置，以供规则分流时使用；一般的网络服务提供了 Clash 订阅链接，可以直接下载链接指向的文件内容，保存到 config.yaml 中。或者使用订阅转换服务，将其它订阅转换为 Clash 订阅。<br>这里推荐使用订阅转换服务，转换后的配置文件已添加更为强大的分流规则。就可以将 Clash 一直保持后台运行，自动分流，且会自动选择最优节点。</p>
-</li>
-<li><p>软连接(可选)；如果不使用这个，开启clash就得使用文件的绝对路径。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 这里新建了一个clash文件，将启动脚本/root/software/clash-linux-amd64-v1.14.0链接到此文件，就不</span><br><span class="line"># 用每次定位到软件启动脚本那里；ln -s source_file tartget_file</span><br><span class="line">ln -s /root/software/clash-linux-amd64-v1.14.0 clash</span><br></pre></td></tr></table></figure></li>
-</ul>
-<p><img src="/../../imgs/image-20230408094245416.png" alt="image-20230408094245416"></p>
-<p>注意：实际操作中发现，如果没有创建~&#x2F;.config&#x2F;clash文件夹路径，会报二进制文件无法执行的错误！</p>
-<h2 id="基础使用"><a href="#基础使用" class="headerlink" title="基础使用"></a>基础使用</h2><ul>
-<li>开启，启动后即可访问代理<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">./clash</span><br></pre></td></tr></table></figure></li>
-<li>后台开启</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nohub clash</span><br></pre></td></tr></table></figure>
-
-<h2 id="使用代理"><a href="#使用代理" class="headerlink" title="使用代理"></a>使用代理</h2><p>使用Export命令使用代理，Clash 运行后，其在后台监听某一端口。Ubuntu 下使用代理，需要 export<br> 命令。根据 config 配置文件可以查看到Clash 代理端口（订阅转换后，端口为7890），设置系统代理命令为：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890</span><br></pre></td></tr></table></figure>
-
-<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>测试一下，通过部署自己创建的gpt-server工程，，调用gpt的api接口，效果如下：</p>
-<p><img src="/../../imgs/image-20230408125300901.png" alt="image-20230408125300901"></p>
-<p><img src="/../../imgs/image-20230408125140521.png" alt="image-20230408125140521"></p>
-<h2 id="进阶使用"><a href="#进阶使用" class="headerlink" title="进阶使用"></a>进阶使用</h2><ul>
-<li><p>变为系统服务</p>
-<p>Treat Clash as a daemon,将Clash实现常驻后台运行、开机启动等。</p>
-<p>1.配置systemd服务<br>Linux系统使用systemd作为启动服务器管理机制，首先把Clash可执行文件拷贝到**&#x2F;usr&#x2F;local&#x2F;bin**目录，相关配置拷贝到&#x2F;etc&#x2F;clash目录</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo mkdir /etc/clash</span><br><span class="line">sudo cp clash /usr/local/bin</span><br><span class="line">sudo cp config.yaml /etc/clash</span><br><span class="line">sudo cp Country.mmdb /etc/clash</span><br></pre></td></tr></table></figure></li>
-</ul>
-<p>​	  2.创建systemd服务配置文件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo vi /etc/systemd/system/clash.service</span><br></pre></td></tr></table></figure>
-<p>配置内容如下：</p>
-<blockquote>
-<p>[Unit]</p>
-</blockquote>
-<blockquote>
-<p>Description&#x3D;Clash daemon, A rule-based proxy in Go.</p>
-</blockquote>
-<blockquote>
-<p>After&#x3D;network.target</p>
-</blockquote>
-<blockquote>
-<p>[Service]</p>
-</blockquote>
-<blockquote>
-<p>Type&#x3D;simple</p>
-</blockquote>
-<blockquote>
-<p>Restart&#x3D;always</p>
-</blockquote>
-<blockquote>
-<p>ExecStart&#x3D;&#x2F;usr&#x2F;local&#x2F;bin&#x2F;clash -d &#x2F;etc&#x2F;clash</p>
-</blockquote>
-<blockquote>
-<p>[Install]</p>
-</blockquote>
-<blockquote>
-<p>WantedBy&#x3D;multi-user.target<br>​		3.使用systemd</p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//Clash开机自启动</span><br><span class="line">sudo systemctl enable clash</span><br></pre></td></tr></table></figure>
-
-<p>4.开启clash</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo systemctl start clash</span><br></pre></td></tr></table></figure>
-<p>5.查看Clash日志</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo systemctl status clash</span><br><span class="line">sudo journalctl -xe</span><br></pre></td></tr></table></figure>
-<h2 id="未完成的后续功能"><a href="#未完成的后续功能" class="headerlink" title="未完成的后续功能"></a>未完成的后续功能</h2><ul>
-<li><input disabled="" type="checkbox"> clash_dashbord面板</li>
-<li><input disabled="" type="checkbox"> Docker化安装配置Clash</li>
-</ul>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://blog.iswiftai.com/posts/clash-linux/">https://blog.iswiftai.com/posts/clash-linux/</a></p>
-<p><a href="https://blog.zzsqwq.cn/posts/how-to-use-clash-on-linux/">容器化安装</a></p>
-]]></content>
-      <categories>
-        <category>环境搭建</category>
-      </categories>
-      <tags>
-        <tag>gpt</tag>
-        <tag>clash</tag>
-        <tag>linux</tag>
-        <tag>systemd</tag>
-        <tag>proxy</tag>
-        <tag>网络代理</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>有关git rebase的一点记录</title>
-    <url>/2023/09/04/%E6%9C%89%E5%85%B3%E6%9C%80%E8%BF%91git%20rebase%E7%9A%84%E4%B8%80%E7%82%B9%E8%AE%B0%E5%BD%95/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>最近有几个场景需求都牵涉到rebase这个操作，所以有必要对rebas做一个总结和进一步学习。</p>
-<h2 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h2><p>1.修改提交记录</p>
-<p>2.合并提交记录</p>
-<p>3.合并分支</p>
-<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>rebase:变基</p>
-<p>merge:合并</p>
-<p>commit:提交</p>
-<p>fast-forward merge:快进合并</p>
-<p>branch:分支</p>
-<p>Head:这个翻译是头部；我的理解是当前活动状态的游标或指针；可以是当前分支的头部，也可以是某一个提交的指向…</p>
-<p>topicbranch：目标分支</p>
-<p>basebranch：基础分支</p>
-<p>其中，需要理解一个概念<strong>快进合并()</strong></p>
-<blockquote>
-<p>什么是变基？</p>
-</blockquote>
-<p>要理解变基，先理解一个更常见的概念”合并(Merge)”。</p>
-<p>合并很好理解，就是直接将2个分支合并到一个分支上，其实变基的最终目的也是一样。但2者不同之处是合并会产生一个新的提交，而变基不会，从提交图解上来看，它的提交记录更像是一个串行的，而合并更像是2条河流有一个merge节点。</p>
-<p>我很希望文档中的一段描述：**变基就好些<code>重新播放</code>一样，将提交到某一分支(topicbranch)上的所有修改都移到另一分支上(basebranch)**。重放这个词很准确地说出了rebase变基所做的事情。</p>
-<h2 id="文档分析"><a href="#文档分析" class="headerlink" title="文档分析"></a>文档分析</h2><ul>
-<li>git rebase basebranch</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git checkout experiment</span><br><span class="line">git rebase master</span><br><span class="line">//这时experiment分支其实已经是基于master分支构建了</span><br></pre></td></tr></table></figure>
-
-<p>变基时，会找到2个分支（topicbranch experiment和基底分支basebranch master)的共同祖先C2，然后对比当前分支(experiment)的历次提交，提取相应的修改并存为临时文件，然后将当前分支指向目标基底C3，最后以此将之前另存为临时文件的修改依序应用。以上是官方解释，有点饶，简单点说，就是把<strong>自动提交差异放到共同祖先提交节点后</strong>，当然如果和基底分支提交有冲突confilt。是需要手工处理的。</p>
-<p><img src="https://git-scm.com/book/en/v2/images/basic-rebase-3.png"></p>
-<p>然后对master分支<strong>快进合并</strong>**</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git checkout mater</span><br><span class="line">git merge experiment</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://git-scm.com/book/en/v2/images/basic-rebase-4.png"></p>
-<p>再放一张直接Merge的图式：</p>
-<p><img src="https://git-scm.com/book/en/v2/images/basic-rebase-2.png" alt="image-20230904112928395"></p>
-<p>看看C5节点，就是自动生成的新的快照。</p>
-<ul>
-<li>git rebase onto</li>
-</ul>
-<p>取出另外分支的提交，简单说，就是将非直接checkout的分支的提交合并。</p>
-<p>如从master上分出server分支，再从server分支分出client分支。</p>
-<p><img src="/../../imgs/image-20230904114325678.png" alt="image-20230904114325678"></p>
-<p>如果master只需要C8,C9，而不想合并C3，那么如何操作？</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git rebase --onto master server client</span><br></pre></td></tr></table></figure>
-
-<p>以上命令的意思是：“取出 <code>client</code> 分支，找出它从 <code>server</code> 分支分歧之后的补丁， 然后把这些补丁在 <code>master</code> 分支上重放一遍，让 <code>client</code> 看起来像直接基于 <code>master</code> 修改一样”。这理解起来有一点复杂，不过效果非常酷。</p>
-<p>这需要对自己的每次提交的内容得非常清楚！</p>
-<ul>
-<li>注意！！！</li>
-</ul>
-<p><strong>如果提交存在于你的仓库之外，而别人可能基于这些提交进行开发，那么不要执行变基</strong></p>
-<p>通俗点讲：尽量避免对已到远端的提交(origin)进行变基，一般对自己本地分支(local)使用。</p>
-<p>因为，远端仓库，别人也可能基于这些提交进行开发，如果你执行的变基，同时强推倒远端仓库，别人pull之后，他的提交线就会混乱，同时他在push，你再pull，就会导致你的提交线会混乱。是不是很绕，有点难理解。下面结合图示将描述简单化；</p>
-<p>场景流程如下：</p>
-<p>1.当前状态：我通过pull远端，将teamone的提交合并，当前我在C7上。git.team1.com是远端库</p>
-<p><img src="/../../imgs/perils-of-rebasing-2.png"></p>
-<p>2.如果teamone不想merge，不想记录C6的merge，他采用的rebase变基，然后强推push –force，这时远端及本地的状态及提交记录如下图；</p>
-<p>远端的C4,C6消失，多了一个C4&#96;.</p>
-<p>本地不变。</p>
-<p><img src="/../../imgs/perils-of-rebasing-3.png"></p>
-<p>3.这时你执行pull，将会合并2个提交历史的内容，生成一个新的合并提交。最终仓库会如图：</p>
-<p>因为C4&#96;是新的，而本地C4,C6并未消失(本地未执行rebase，只有teamone执行)，所以会有一个C8.</p>
-<p><img src="/../../imgs/perils-of-rebasing-4.png"></p>
-<p>这样会导致提交异常混乱，你会发现C4和C4&#96;的相同的提交在你的仓库里重复出现了2次。如果你再push，又会将C4,C6重新推送到服务器上去。这回就会让teamone困惑了。因为他之前rebase的操作就是要将C4和C6丢弃。</p>
-<blockquote>
-<p>那么如何解决？</p>
-</blockquote>
-<p>用变基解决变基(推荐)</p>
-<p>如果团队中的某人强制推送并覆盖了一些你所基于的提交，你需要做的就是检查你做了哪些修改，以及他们覆盖了哪些修改。</p>
-<p><strong>Git 除了对整个提交计算 SHA-1 校验和以外，也对本次提交所引入的修改计算了校验和——即 “patch-id”。</strong></p>
-<p>使用git rebase，git会自动检查自己和对方的差异，再进行合并。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git rebase remote/maser</span><br></pre></td></tr></table></figure>
-
-<p>推荐使用 <strong>git pull –rebase</strong>而不是git pull</p>
-<p>git pull –rebase 等于git fetch | git rebase remote&#x2F;mater</p>
-<p>同时，可以设置git config –global pull.rebase true.这样你再使用git pull时，是默认使用选项–rebase的。</p>
-<ul>
-<li>变基 vs 合并</li>
-</ul>
-<p>​	无所谓那种更好，关键看针对的场景和开发者的使用理念。有人认为提交历史就是记录发生什么，有人认为是项目中发发生的事，无需记录不必要的记录。</p>
-<p>总的原则是，只对尚未推送或分享给别人的本地修改执行变基操作清理历史， 从不对已推送至别处的提交执行变基操作，像我的习惯是，针对功能性分支基本采用rebase，对于主线记录版本的分支比如main使用merge。</p>
-<h2 id="rebase-commitID"><a href="#rebase-commitID" class="headerlink" title="rebase commitID"></a>rebase commitID</h2><p>rebase 除了可以对branch分支进行操作，还可以指定commitID来进行各种操作场景：</p>
-<p>1.合并提交</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//前开后闭</span><br><span class="line">git rebase commitID1 commitID2</span><br><span class="line">//对Head之后的第2个提交进行变基</span><br><span class="line">git rebase HEAD~2</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>2.修改提交</p>
-<p>选项：</p>
-<p>p :对commit执行选择，选择提交</p>
-<p>r：选择提交，但是修改提交信息</p>
-<p>e :针对提交做修订</p>
-<p>s :选择提交，并合并到上一个提交中</p>
-<p>f:选择提交，但只保留上一个提交的日志</p>
-<p>其实rebase commitID从字面可以理解，也是重新变基，只是这是基于commitId为基础，所以rebase后会新建临时分支出来。</p>
-<p>在每一个选择提交操作上，可以执行</p>
-<p>git rebase –continue:继续变基，调到下一个commit</p>
-<p>git rebase –abort:放弃变基</p>
-<p>git rebase –edit-todo：继续变基，进行变基代办事项</p>
-<p>git commit –amend : 修改提交信息</p>
-<h2 id="备注"><a href="#备注" class="headerlink" title="备注"></a>备注</h2><p>主要内容和图<a href="https://git-scm.com/book/zh/v2/Git-%E5%88%86%E6%94%AF-%E5%8F%98%E5%9F%BA">依据</a></p>
-]]></content>
-      <categories>
-        <category>git</category>
-      </categories>
-      <tags>
-        <tag>git</tag>
-        <tag>技巧</tag>
       </tags>
   </entry>
   <entry>
@@ -826,6 +608,115 @@
       </tags>
   </entry>
   <entry>
+    <title>有关git rebase的一点记录</title>
+    <url>/2023/09/04/%E6%9C%89%E5%85%B3%E6%9C%80%E8%BF%91git%20rebase%E7%9A%84%E4%B8%80%E7%82%B9%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>最近有几个场景需求都牵涉到rebase这个操作，所以有必要对rebas做一个总结和进一步学习。</p>
+<h2 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h2><p>1.修改提交记录</p>
+<p>2.合并提交记录</p>
+<p>3.合并分支</p>
+<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>rebase:变基</p>
+<p>merge:合并</p>
+<p>commit:提交</p>
+<p>fast-forward merge:快进合并</p>
+<p>branch:分支</p>
+<p>Head:这个翻译是头部；我的理解是当前活动状态的游标或指针；可以是当前分支的头部，也可以是某一个提交的指向…</p>
+<p>topicbranch：目标分支</p>
+<p>basebranch：基础分支</p>
+<p>其中，需要理解一个概念<strong>快进合并()</strong></p>
+<blockquote>
+<p>什么是变基？</p>
+</blockquote>
+<p>要理解变基，先理解一个更常见的概念”合并(Merge)”。</p>
+<p>合并很好理解，就是直接将2个分支合并到一个分支上，其实变基的最终目的也是一样。但2者不同之处是合并会产生一个新的提交，而变基不会，从提交图解上来看，它的提交记录更像是一个串行的，而合并更像是2条河流有一个merge节点。</p>
+<p>我很希望文档中的一段描述：**变基就好些<code>重新播放</code>一样，将提交到某一分支(topicbranch)上的所有修改都移到另一分支上(basebranch)**。重放这个词很准确地说出了rebase变基所做的事情。</p>
+<h2 id="文档分析"><a href="#文档分析" class="headerlink" title="文档分析"></a>文档分析</h2><ul>
+<li>git rebase basebranch</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git checkout experiment</span><br><span class="line">git rebase master</span><br><span class="line">//这时experiment分支其实已经是基于master分支构建了</span><br></pre></td></tr></table></figure>
+
+<p>变基时，会找到2个分支（topicbranch experiment和基底分支basebranch master)的共同祖先C2，然后对比当前分支(experiment)的历次提交，提取相应的修改并存为临时文件，然后将当前分支指向目标基底C3，最后以此将之前另存为临时文件的修改依序应用。以上是官方解释，有点饶，简单点说，就是把<strong>自动提交差异放到共同祖先提交节点后</strong>，当然如果和基底分支提交有冲突confilt。是需要手工处理的。</p>
+<p><img src="https://git-scm.com/book/en/v2/images/basic-rebase-3.png"></p>
+<p>然后对master分支<strong>快进合并</strong>**</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git checkout mater</span><br><span class="line">git merge experiment</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://git-scm.com/book/en/v2/images/basic-rebase-4.png"></p>
+<p>再放一张直接Merge的图式：</p>
+<p><img src="https://git-scm.com/book/en/v2/images/basic-rebase-2.png" alt="image-20230904112928395"></p>
+<p>看看C5节点，就是自动生成的新的快照。</p>
+<ul>
+<li>git rebase onto</li>
+</ul>
+<p>取出另外分支的提交，简单说，就是将非直接checkout的分支的提交合并。</p>
+<p>如从master上分出server分支，再从server分支分出client分支。</p>
+<p><img src="/../../imgs/image-20230904114325678.png" alt="image-20230904114325678"></p>
+<p>如果master只需要C8,C9，而不想合并C3，那么如何操作？</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git rebase --onto master server client</span><br></pre></td></tr></table></figure>
+
+<p>以上命令的意思是：“取出 <code>client</code> 分支，找出它从 <code>server</code> 分支分歧之后的补丁， 然后把这些补丁在 <code>master</code> 分支上重放一遍，让 <code>client</code> 看起来像直接基于 <code>master</code> 修改一样”。这理解起来有一点复杂，不过效果非常酷。</p>
+<p>这需要对自己的每次提交的内容得非常清楚！</p>
+<ul>
+<li>注意！！！</li>
+</ul>
+<p><strong>如果提交存在于你的仓库之外，而别人可能基于这些提交进行开发，那么不要执行变基</strong></p>
+<p>通俗点讲：尽量避免对已到远端的提交(origin)进行变基，一般对自己本地分支(local)使用。</p>
+<p>因为，远端仓库，别人也可能基于这些提交进行开发，如果你执行的变基，同时强推倒远端仓库，别人pull之后，他的提交线就会混乱，同时他在push，你再pull，就会导致你的提交线会混乱。是不是很绕，有点难理解。下面结合图示将描述简单化；</p>
+<p>场景流程如下：</p>
+<p>1.当前状态：我通过pull远端，将teamone的提交合并，当前我在C7上。git.team1.com是远端库</p>
+<p><img src="/../../imgs/perils-of-rebasing-2.png"></p>
+<p>2.如果teamone不想merge，不想记录C6的merge，他采用的rebase变基，然后强推push –force，这时远端及本地的状态及提交记录如下图；</p>
+<p>远端的C4,C6消失，多了一个C4&#96;.</p>
+<p>本地不变。</p>
+<p><img src="/../../imgs/perils-of-rebasing-3.png"></p>
+<p>3.这时你执行pull，将会合并2个提交历史的内容，生成一个新的合并提交。最终仓库会如图：</p>
+<p>因为C4&#96;是新的，而本地C4,C6并未消失(本地未执行rebase，只有teamone执行)，所以会有一个C8.</p>
+<p><img src="/../../imgs/perils-of-rebasing-4.png"></p>
+<p>这样会导致提交异常混乱，你会发现C4和C4&#96;的相同的提交在你的仓库里重复出现了2次。如果你再push，又会将C4,C6重新推送到服务器上去。这回就会让teamone困惑了。因为他之前rebase的操作就是要将C4和C6丢弃。</p>
+<blockquote>
+<p>那么如何解决？</p>
+</blockquote>
+<p>用变基解决变基(推荐)</p>
+<p>如果团队中的某人强制推送并覆盖了一些你所基于的提交，你需要做的就是检查你做了哪些修改，以及他们覆盖了哪些修改。</p>
+<p><strong>Git 除了对整个提交计算 SHA-1 校验和以外，也对本次提交所引入的修改计算了校验和——即 “patch-id”。</strong></p>
+<p>使用git rebase，git会自动检查自己和对方的差异，再进行合并。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git rebase remote/maser</span><br></pre></td></tr></table></figure>
+
+<p>推荐使用 <strong>git pull –rebase</strong>而不是git pull</p>
+<p>git pull –rebase 等于git fetch | git rebase remote&#x2F;mater</p>
+<p>同时，可以设置git config –global pull.rebase true.这样你再使用git pull时，是默认使用选项–rebase的。</p>
+<ul>
+<li>变基 vs 合并</li>
+</ul>
+<p>​	无所谓那种更好，关键看针对的场景和开发者的使用理念。有人认为提交历史就是记录发生什么，有人认为是项目中发发生的事，无需记录不必要的记录。</p>
+<p>总的原则是，只对尚未推送或分享给别人的本地修改执行变基操作清理历史， 从不对已推送至别处的提交执行变基操作，像我的习惯是，针对功能性分支基本采用rebase，对于主线记录版本的分支比如main使用merge。</p>
+<h2 id="rebase-commitID"><a href="#rebase-commitID" class="headerlink" title="rebase commitID"></a>rebase commitID</h2><p>rebase 除了可以对branch分支进行操作，还可以指定commitID来进行各种操作场景：</p>
+<p>1.合并提交</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//前开后闭</span><br><span class="line">git rebase commitID1 commitID2</span><br><span class="line">//对Head之后的第2个提交进行变基</span><br><span class="line">git rebase HEAD~2</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>2.修改提交</p>
+<p>选项：</p>
+<p>p :对commit执行选择，选择提交</p>
+<p>r：选择提交，但是修改提交信息</p>
+<p>e :针对提交做修订</p>
+<p>s :选择提交，并合并到上一个提交中</p>
+<p>f:选择提交，但只保留上一个提交的日志</p>
+<p>其实rebase commitID从字面可以理解，也是重新变基，只是这是基于commitId为基础，所以rebase后会新建临时分支出来。</p>
+<p>在每一个选择提交操作上，可以执行</p>
+<p>git rebase –continue:继续变基，调到下一个commit</p>
+<p>git rebase –abort:放弃变基</p>
+<p>git rebase –edit-todo：继续变基，进行变基代办事项</p>
+<p>git commit –amend : 修改提交信息</p>
+<h2 id="备注"><a href="#备注" class="headerlink" title="备注"></a>备注</h2><p>主要内容和图<a href="https://git-scm.com/book/zh/v2/Git-%E5%88%86%E6%94%AF-%E5%8F%98%E5%9F%BA">依据</a></p>
+]]></content>
+      <categories>
+        <category>git</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+        <tag>技巧</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>解决pip安装后，找不到依赖包的问题</title>
     <url>/2023/04/07/%E8%A7%A3%E5%86%B3pip%E5%AE%89%E8%A3%85%E5%90%8E%E4%BE%9D%E8%B5%96%E5%8C%85%E4%B8%8D%E7%94%9F%E6%95%88%E7%9A%84%E9%97%AE%E9%A2%98/</url>
     <content><![CDATA[<p>[TOC]</p>
@@ -855,9 +746,9 @@
 <p>切换到指定环境</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">conda activate d2l</span><br><span class="line">conda info -e</span><br><span class="line">输出：</span><br><span class="line"># conda environments:</span><br><span class="line">#</span><br><span class="line">base                    /opt/anaconda3</span><br><span class="line">d2l                  *  /opt/anaconda3/envs/d2l</span><br></pre></td></tr></table></figure>
 
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>1.使用指定环境下的pip:在虚拟环境下xxx的bin目录下，执行pip，即可将安装包模块下载到虚拟环境中,如：.&#x2F;envs&#x2F;xxx&#x2F;bin&#x2F;pip install<br>虚拟环境的安装包路径.&#x2F;envs&#x2F;xxx&#x2F;lib&#x2F;<a href="mailto:&#112;&#121;&#116;&#104;&#x6f;&#x6e;&#x40;&#51;&#46;&#57;">&#112;&#121;&#116;&#104;&#x6f;&#x6e;&#x40;&#51;&#46;&#57;</a>&#x2F;site-packages&#x2F;</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>1.使用指定环境下的pip:在虚拟环境下xxx的bin目录下，执行pip，即可将安装包模块下载到虚拟环境中,如：.&#x2F;envs&#x2F;xxx&#x2F;bin&#x2F;pip install<br>虚拟环境的安装包路径.&#x2F;envs&#x2F;xxx&#x2F;lib&#x2F;<a href="mailto:&#x70;&#x79;&#116;&#104;&#111;&#x6e;&#64;&#x33;&#46;&#57;">&#x70;&#x79;&#116;&#104;&#111;&#x6e;&#64;&#x33;&#46;&#57;</a>&#x2F;site-packages&#x2F;</p>
 <p>2.屏蔽pip的全局环境配置，使用conda</p>
-<p>3.使用–target选项：pip install --tartget&#x3D;.&#x2F;envs&#x2F;xxx&#x2F;lib&#x2F;<a href="mailto:&#x70;&#121;&#x74;&#x68;&#111;&#x6e;&#64;&#51;&#x2e;&#x39;">&#x70;&#121;&#x74;&#x68;&#111;&#x6e;&#64;&#51;&#x2e;&#x39;</a>&#x2F;site-packages&#x2F;</p>
+<p>3.使用–target选项：pip install --tartget&#x3D;.&#x2F;envs&#x2F;xxx&#x2F;lib&#x2F;<a href="mailto:&#x70;&#121;&#x74;&#104;&#111;&#x6e;&#64;&#x33;&#x2e;&#x39;">&#x70;&#121;&#x74;&#104;&#111;&#x6e;&#64;&#x33;&#x2e;&#x39;</a>&#x2F;site-packages&#x2F;</p>
 <h2 id="回顾"><a href="#回顾" class="headerlink" title="回顾"></a>回顾</h2><p>1.现象：依赖包的找不到-&gt;为什么找不到-&gt;没有安装-&gt;为什么没有安装？明明已经安装-&gt;涉及到python、conda环境的问题！</p>
 <p>2.中途某段时间被牵引到Homebrew disutils这个工具的问题上去了,以为是这个问题导致安装失败！这个误导过程仍然是对问题的本质没有深入理解，定位问题没有逻辑性和线索；然后对Python工程的依赖、安装、虚拟环境等知识点的不熟悉；</p>
 <p>DEPRECATION: Configuring installation scheme with distutils config files is deprecated and will no longer work in the near future. If you are using a Homebrew or Linuxbrew Python, please see discussion at <a href="https://github.com/Homebrew/homebrew-core/issues/76621">https://github.com/Homebrew/homebrew-core/issues/76621</a></p>
@@ -894,6 +785,193 @@
         <tag>虚拟环境</tag>
         <tag>用户环境变量</tag>
         <tag>site-packages</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>对接GPT第一步-clash的安装</title>
+    <url>/2023/04/08/linux%E5%AF%B9clash%E7%9A%84%E5%AE%89%E8%A3%85%E3%80%81%E9%85%8D%E7%BD%AE%E3%80%81%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>需求：目前想体验GPT服务的能力，都得通过一个网络代理；比如实现一个对接GPT接口的api的服务，就得需要代理去访问，所以选择通过Clash实现。</p>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><ul>
+<li>Clash：<br>Clash是一个开源的跨平台网络代理工具，使用Golang语言编写，支持多种代理协议和代理模式。<br>Clash的特点包括：<br>多协议支持：Clash支持Shadowsocks、V2Ray、Trojan等多种协议，用户可以根据需要自由切换。<br>多代理模式支持：Clash支持全局代理、PAC代理、域名代理等多种代理模式，用户可以根据需要选择不同的代理方式。<br>智能规则引擎：Clash内置强大的规则引擎，可以自动根据用户的需求选择最佳的代理节点。<br>支持多平台：Clash支持Windows、MacOS、Linux等多种操作系统，用户可以在不同的平台上使用Clash。<br>总的来说，Clash是一款功能强大的网络代理工具，可以帮助用户实现科学上网，访问被封锁的网站和服务。同时，Clash也是一个开源项目，用户可以自由地查看和修改Clash的源代码。<br><a href="https://github.com/Dreamacro/clash">开源地址</a></li>
+</ul>
+<span id="more"></span>
+
+<ul>
+<li>ClashX：<br>一款基于Clash核心开发的免费、开源的网络代理工具，支持多种协议和代理模式，可以在Mac电脑上实现科学上网。<br>ClashX的特点包括：<br>多协议支持：ClashX支持Shadowsocks、V2Ray、Trojan等多种协议，用户可以根据需要自由切换。<br>多代理模式支持：ClashX支持全局代理、PAC代理、域名代理等多种代理模式，用户可以根据需要选择不同的代理方式。<br>智能规则引擎：ClashX内置强大的规则引擎，可以自动根据用户的需求选择最佳的代理节点。<br>界面友好：ClashX的界面简洁、易用，用户可以轻松设置和管理代理配置。</li>
+<li>GPT：<br>人工智能多模式大模型。</li>
+<li>GPT SDK(chatgpt-java)：<br>ChatGPT Java 版本，OpenAI ChatGPT 的逆向工程 SDK，可扩展用于聊天机器人等。<br><a href="https://github.com/PlexPt/chatgpt-java">chatgpt-java</a><br><a href="https://icspec.com/news/article-details/2133492?type=prefecture">简介</a></li>
+<li>gpt-server：<br>基于GPT-SDK拓展的javaWeb服务工程Demo。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//默认是8080端口</span><br><span class="line">java -jar gpt-server.jar</span><br></pre></td></tr></table></figure>
+<h2 id="安装配置步骤："><a href="#安装配置步骤：" class="headerlink" title="安装配置步骤："></a>安装配置步骤：</h2><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>去<a href="https://github.com/Dreamacro/clash/releases">资源包地址</a>下载安装包,选择对应操作系统的资源；</p>
+<img src="../../imgs/image-20230408093022471.png" alt="image-20230408093022471" style="zoom:33%;" />
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 以linux x64为例</span><br><span class="line">cd ~/software</span><br><span class="line">curl https://github.com/Dreamacro/clash/releases/download/v1.14.0/clash-linux-amd64-v3-v1.14.0.gz</span><br><span class="line">gunzip clash-linux-amd64-v3-v1.14.0.gz</span><br></pre></td></tr></table></figure>
+
+<p>建议在当前用户的.config文件夹下，新建一个clash文件夹，所有与clash相关的文件配置都放在其中</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cd ~/.config</span><br><span class="line">mkdir clash &amp;&amp; cd clash</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><h4 id="订阅模式"><a href="#订阅模式" class="headerlink" title="订阅模式"></a>订阅模式</h4><p>将自己的配置文件放入clash文件夹路径下：~&#x2F;.config&#x2F;clash</p>
+<ul>
+<li><p>config.yaml<br>clash代理的配置文件</p>
+</li>
+<li><p>Country.mmdb<br>文件利用 GeoIP2 服务能识别互联网用户的地点位置，以供规则分流时使用；一般的网络服务提供了 Clash 订阅链接，可以直接下载链接指向的文件内容，保存到 config.yaml 中。或者使用订阅转换服务，将其它订阅转换为 Clash 订阅。<br>这里推荐使用订阅转换服务，转换后的配置文件已添加更为强大的分流规则。就可以将 Clash 一直保持后台运行，自动分流，且会自动选择最优节点。</p>
+</li>
+<li><p>软连接(可选)；如果不使用这个，开启clash就得使用文件的绝对路径。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 这里新建了一个clash文件，将启动脚本/root/software/clash-linux-amd64-v1.14.0链接到此文件，就不</span><br><span class="line"># 用每次定位到软件启动脚本那里；ln -s source_file tartget_file</span><br><span class="line">ln -s /root/software/clash-linux-amd64-v1.14.0 clash</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><img src="/../../imgs/image-20230408094245416.png" alt="image-20230408094245416"></p>
+<p>注意：实际操作中发现，如果没有创建~&#x2F;.config&#x2F;clash文件夹路径，会报二进制文件无法执行的错误！</p>
+<h2 id="基础使用"><a href="#基础使用" class="headerlink" title="基础使用"></a>基础使用</h2><ul>
+<li>开启，启动后即可访问代理<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">./clash</span><br></pre></td></tr></table></figure></li>
+<li>后台开启</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nohub clash</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用代理"><a href="#使用代理" class="headerlink" title="使用代理"></a>使用代理</h2><p>使用Export命令使用代理，Clash 运行后，其在后台监听某一端口。Ubuntu 下使用代理，需要 export<br> 命令。根据 config 配置文件可以查看到Clash 代理端口（订阅转换后，端口为7890），设置系统代理命令为：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890</span><br></pre></td></tr></table></figure>
+
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>测试一下，通过部署自己创建的gpt-server工程，，调用gpt的api接口，效果如下：</p>
+<p><img src="/../../imgs/image-20230408125300901.png" alt="image-20230408125300901"></p>
+<p><img src="/../../imgs/image-20230408125140521.png" alt="image-20230408125140521"></p>
+<h2 id="进阶使用"><a href="#进阶使用" class="headerlink" title="进阶使用"></a>进阶使用</h2><ul>
+<li><p>变为系统服务</p>
+<p>Treat Clash as a daemon,将Clash实现常驻后台运行、开机启动等。</p>
+<p>1.配置systemd服务<br>Linux系统使用systemd作为启动服务器管理机制，首先把Clash可执行文件拷贝到**&#x2F;usr&#x2F;local&#x2F;bin**目录，相关配置拷贝到&#x2F;etc&#x2F;clash目录</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo mkdir /etc/clash</span><br><span class="line">sudo cp clash /usr/local/bin</span><br><span class="line">sudo cp config.yaml /etc/clash</span><br><span class="line">sudo cp Country.mmdb /etc/clash</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>​	  2.创建systemd服务配置文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo vi /etc/systemd/system/clash.service</span><br></pre></td></tr></table></figure>
+<p>配置内容如下：</p>
+<blockquote>
+<p>[Unit]</p>
+</blockquote>
+<blockquote>
+<p>Description&#x3D;Clash daemon, A rule-based proxy in Go.</p>
+</blockquote>
+<blockquote>
+<p>After&#x3D;network.target</p>
+</blockquote>
+<blockquote>
+<p>[Service]</p>
+</blockquote>
+<blockquote>
+<p>Type&#x3D;simple</p>
+</blockquote>
+<blockquote>
+<p>Restart&#x3D;always</p>
+</blockquote>
+<blockquote>
+<p>ExecStart&#x3D;&#x2F;usr&#x2F;local&#x2F;bin&#x2F;clash -d &#x2F;etc&#x2F;clash</p>
+</blockquote>
+<blockquote>
+<p>[Install]</p>
+</blockquote>
+<blockquote>
+<p>WantedBy&#x3D;multi-user.target<br>​		3.使用systemd</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//Clash开机自启动</span><br><span class="line">sudo systemctl enable clash</span><br></pre></td></tr></table></figure>
+
+<p>4.开启clash</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo systemctl start clash</span><br></pre></td></tr></table></figure>
+<p>5.查看Clash日志</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo systemctl status clash</span><br><span class="line">sudo journalctl -xe</span><br></pre></td></tr></table></figure>
+<h2 id="未完成的后续功能"><a href="#未完成的后续功能" class="headerlink" title="未完成的后续功能"></a>未完成的后续功能</h2><ul>
+<li><input disabled="" type="checkbox"> clash_dashbord面板</li>
+<li><input disabled="" type="checkbox"> Docker化安装配置Clash</li>
+</ul>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://blog.iswiftai.com/posts/clash-linux/">https://blog.iswiftai.com/posts/clash-linux/</a></p>
+<p><a href="https://blog.zzsqwq.cn/posts/how-to-use-clash-on-linux/">容器化安装</a></p>
+]]></content>
+      <categories>
+        <category>环境搭建</category>
+      </categories>
+      <tags>
+        <tag>gpt</tag>
+        <tag>clash</tag>
+        <tag>linux</tag>
+        <tag>systemd</tag>
+        <tag>proxy</tag>
+        <tag>网络代理</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>设计模式-枚举工厂模式</title>
+    <url>/2023/11/05/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E6%9E%9A%E4%B8%BE%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><h3 id="GOF"><a href="#GOF" class="headerlink" title="GOF"></a>GOF</h3><p>在 1994 年，由 Erich Gamma、Richard Helm、Ralph Johnson 和 John Vlissides 四人合著出版了一本名为 <strong>Design Patterns - Elements of Reusable Object-Oriented Software（中文译名：设计模式 - 可复用的面向对象软件元素）</strong> 的书，该书首次提到了软件开发中设计模式的概念。</p>
+<p>四位作者合称 <strong>GOF（全拼 Gang of Four）</strong>。他们所提出的设计模式主要是基于以下的面向对象设计原则。</p>
+<ul>
+<li>对接口编程而不是对实现编程。</li>
+<li>优先使用对象组合而不是继承。</li>
+</ul>
+<h2 id="设计模式"><a href="#设计模式" class="headerlink" title="设计模式"></a>设计模式</h2><ul>
+<li>创建型模式</li>
+<li>结构型模式</li>
+<li>行为型模式</li>
+</ul>
+<p>本篇介绍的<strong>工厂模式</strong>属于设计模式中的<strong>构造者模式</strong>。</p>
+<h3 id="工厂模式"><a href="#工厂模式" class="headerlink" title="工厂模式"></a>工厂模式</h3><p>工厂模式提供了一种将<strong>对象的实例化过程</strong>封装在工厂类中的方式。通过使用工厂模式，可以将对象的<strong>创建与使用代码</strong>分离解耦，提供一种<strong>统一的接口</strong>来创建不同类型的对象。</p>
+<p>在工厂模式中，我们在创建对象时不会对客户端使用时暴露创建逻辑，并且是通过使用一个共同的接口来指向新创建的对象。</p>
+<h2 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h2><p>我目前面对一个业务功能场景，需要基于Netty，使用WebSocket+Stomp协议来处理消息。其中对消息帧的解析处理，需要根据不同消息数据帧(StompFrame)的类型采取不同的处理方式。这些类型有：建立连接(Connect)、断开连接(DisConnect)、发送(Send)、订阅(Subcribe)、取消订阅(Unsubcribe)等，但是消息通道是同一个，这个场景就是典型的创建和使用需要分离，使用统一的接口来处理不同类型的消息。</p>
+<p>在编写代码实现功能过程中，有多种解决方案。如下：</p>
+<ul>
+<li>方案1：判断选择if-else</li>
+</ul>
+<p>一般情况，最直观会去采用类型标记+if-else或switch条件判断来，伪码如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">if(commnd.equal(StompCommand.CONNECT))&#123;</span><br><span class="line">	processor = new ConnectProcesser();</span><br><span class="line">&#125;else if(commnd.equal(StompCommand.DISCONNECT))&#123;</span><br><span class="line">	processor = new DisConnectProcesser();</span><br><span class="line">&#125;else if()&#123;</span><br><span class="line">	...	</span><br><span class="line">&#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>方案2：工厂模式</li>
+</ul>
+<p>定义一个接口IStompProcessor，抽象消息处理方法process(ctx,frame),然后使用一个映射表Map，将类型与实际处理对象建立映射。伪码如下：</p>
+<p>1.抽象接口：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public interface IStompProcesser&#123; void process(ctx,frame)&#125;</span><br></pre></td></tr></table></figure>
+
+<p>2.每个具体实现：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public ConnectProcesser extends IStompProcesser&#123;</span><br><span class="line">	void process(ctx,frame)&#123;</span><br><span class="line">		...connect的具体实现..</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public SendProcesser extends IStompProcesser&#123;</span><br><span class="line">	void process(ctx,frame)&#123;</span><br><span class="line">		...send的具体实现..</span><br><span class="line">	&#125;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>3.工厂类：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public StompProcesserManager&#123;</span><br><span class="line">    Map&lt;StompCommand, IStompProcesser&gt; map = new 	HashMap&lt;StompCommand, IStompProcesser&gt;(7);</span><br><span class="line">    map.put(StompCommand.CONNECT, new ConnectProcesser());</span><br><span class="line">    map.put(StompCommand.SEND, new SendProcesser());</span><br><span class="line">    map.put(StompCommand.SUBSCRIBE, new SubscribeProcesser());</span><br><span class="line">    map.put(StompCommand.UNSUBSCRIBE, new UnsubscribeProcesser());</span><br><span class="line">    map.put(StompCommand.ERROR, new ErrorProcesser());</span><br><span class="line">    map.put(StompCommand.DISCONNECT, new DisconnectProcesser());</span><br><span class="line">    processers = Collections.unmodifiableMap(map);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>4.具体调用：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//IStompProcesser为抽象接口。通过StompProcesserManager将map的处理消息对象取出来</span><br><span class="line">IStompProcesser stompProcesser = StompProcesserManager将.getProcesser(frame.command());</span><br><span class="line">StompFrame returnFrame = stompProcesser.process(ctx, frame);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>方案3：枚举工厂模式(抽象工厂模式)</li>
+</ul>
+<p>这个比方案2更加清晰、易读，区别是<strong>将每一个类型标记与处理器对象通过枚举类进行封装，而不是通过map数据结构</strong>。</p>
+<p>与方法2工厂模式相比，第1，2步定义抽象接口和具体实现类都是一样的。</p>
+<p>在设计工厂类时，通过枚举封装。实现类的插入和调用都通过枚举类来实现。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/**定义泛型工厂类*/</span><br><span class="line">    public enum Type&#123;</span><br><span class="line">        CONNECT(1, StompCommand.CONNECT, ConnectProcessor::new),</span><br><span class="line">        SEND(2, StompCommand.SEND, SendProcessor::new),</span><br><span class="line">        ...</span><br><span class="line"></span><br><span class="line">        public final int index;</span><br><span class="line"></span><br><span class="line">        public final StompCommand command;</span><br><span class="line"></span><br><span class="line">        public final StompProcessorFunction factory;</span><br><span class="line"></span><br><span class="line">        Type(int index, StompCommand command, StompProcessorFunction factory) &#123;</span><br><span class="line">            this.index = index;</span><br><span class="line">            this.command = command;</span><br><span class="line">            this.factory = factory;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public int getIndex() &#123;</span><br><span class="line">            return this.index;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public  StompCommand getCommand() &#123;</span><br><span class="line">            return this.command;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public static final Type[] MAPPING = new Type[]&#123;</span><br><span class="line">          CONNECT</span><br><span class="line">        &#125;;</span><br><span class="line">//通过类型标记command获取枚举</span><br><span class="line">        public static Type fromCommand(StompCommand command) throws IllegalArgumentException&#123;</span><br><span class="line">            switch (command)&#123;</span><br><span class="line">                case CONNECT:</span><br><span class="line">                    return CONNECT;</span><br><span class="line">                case SEND:</span><br><span class="line">                    return SEND;</span><br><span class="line">                case SUBSCRIBE:</span><br><span class="line">                    return SUBSCRIBE;</span><br><span class="line">                case UNSUBSCRIBE:</span><br><span class="line">                    return UNSUBSCRIBE;</span><br><span class="line">                case DISCONNECT:</span><br><span class="line">                    return DISCONNECT;</span><br><span class="line">            &#125;</span><br><span class="line">            throw new IllegalArgumentException(&quot;Unknown command: &quot; + command);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>4.定义一个枚举工厂类创建方法。通过采用Java8之后的函数方法，来具体实现类的构造。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/**</span><br><span class="line"> * @desc 处理器工厂方法</span><br><span class="line">*/</span><br><span class="line">@FunctionalInterface</span><br><span class="line">public interface StompProcessorFunction &#123;</span><br><span class="line">    IStompProcessor create();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>6.调用</p>
+<p>通过传入类型标记msg.command()，获取需要的枚举类型Type，通过Type得到具体工程类factory，通过factory得到具体的实现类IStompProcessorImpl。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">IStompProcessor iStompProcessor = IStompProcessor.Type.fromCommand(msg.command()).factory.create();</span><br><span class="line">        iStompProcessor.process(ctx,msg);</span><br></pre></td></tr></table></figure>
+
+<h2 id="类图"><a href="#类图" class="headerlink" title="类图"></a>类图</h2><p><img src="/../../imgs/%E6%9E%9A%E4%B8%BE%E5%B7%A5%E5%8E%82%E7%B1%BB%E5%85%B3%E7%B3%BB%E5%9B%BE.png" alt="枚举工厂类关系图"></p>
+<p>1.接口及实现类</p>
+<p>IStomProcessor：接口</p>
+<p>ConnectProcessor:接口实现类</p>
+<p>2.枚举工厂</p>
+<p>Type:每个具体实现类的容器。可以通过枚举或者Map来映射。将类型Command和IStompProcessorFunction或者IStomProcessor建立映射。</p>
+<p>3.函数方法</p>
+<p>StompProcessorFunction:每个具体实现类的构造函数类。输出返回IStomProcessor</p>
+<p>4.调用实现</p>
+<p>通过类型command和工厂类Type，构建具体实现类。</p>
+<h1 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h1><p><a href="https://www.runoob.com/design-pattern/design-pattern-intro.html">https://www.runoob.com/design-pattern/design-pattern-intro.html</a></p>
+]]></content>
+      <categories>
+        <category>设计模式</category>
+      </categories>
+      <tags>
+        <tag>枚举工厂</tag>
+        <tag>函数式接口</tag>
+        <tag>FunctionalInterface</tag>
+        <tag>Lambda表达式</tag>
       </tags>
   </entry>
 </search>
