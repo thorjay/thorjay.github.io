@@ -1,55 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>传感器_方位水平测量</title>
-    <url>/2022/09/21/%E4%BC%A0%E6%84%9F%E5%99%A8_%E6%96%B9%E4%BD%8D%E6%B0%B4%E5%B9%B3%E6%B5%8B%E9%87%8F/</url>
-    <content><![CDATA[<h2 id="需求及场景"><a href="#需求及场景" class="headerlink" title="需求及场景"></a>需求及场景</h2><ul>
-<li>角度测量</li>
-</ul>
-<p>将手机变成一个指南针或者一个水平仪的数据；要实现这种效果，就得通过上一篇文章<a href="/2022/09/20/Android%E4%BC%A0%E6%84%9F%E5%99%A8%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8/" title="Android传感器介绍及使用.md">Android传感器介绍及使用</a>中介绍的传感器来获取相应的数据。</p>
-<ul>
-<li>坐标系</li>
-</ul>
-<p>方位水平测量是以世界坐标系为基准的，详情见上一篇文章<a href="/2022/09/20/Android%E4%BC%A0%E6%84%9F%E5%99%A8%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8/" title="Android传感器介绍及使用.md">Android传感器介绍及使用</a>中的传感器事件数据章节。</p>
-<ul>
-<li>传感器</li>
-</ul>
-<p>使用两种传感器来：</p>
-<ul>
-<li>地磁场传感器</li>
-<li>加速度计传感器</li>
-</ul>
-<span id="more"></span>  
-
-<h2 id="关键代码"><a href="#关键代码" class="headerlink" title="关键代码"></a>关键代码</h2><ul>
-<li>获取地磁场和加速度计传感器 &amp;&amp; 注册监听事件</li>
-</ul>
-<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line">sensorMgr.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)?.also &#123;</span><br><span class="line">        accSensor -&gt; sensorMgr.registerListener(sensorEventListener,accSensor,SensorManager.SENSOR_DELAY_NORMAL,SensorManager.SENSOR_DELAY_UI)</span><br><span class="line">&#125;</span><br><span class="line">sensorMgr.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)?.also &#123;</span><br><span class="line">        magSensor -&gt; sensorMgr.registerListener(sensorEventListener,magSensor,SensorManager.SENSOR_DELAY_NORMAL,SensorManager.SENSOR_DELAY_UI)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>传感器数据处理</li>
-</ul>
-<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line">event?.sensor?.type.let &#123;</span><br><span class="line">    <span class="keyword">when</span>(it)&#123;</span><br><span class="line">        <span class="comment">//加速度(带重力)</span></span><br><span class="line">        Sensor.TYPE_ACCELEROMETER -&gt; System.arraycopy(event?.values,<span class="number">0</span>,accelerometerReading,<span class="number">0</span>,accelerometerReading.size)</span><br><span class="line">        <span class="comment">//磁力</span></span><br><span class="line">        Sensor.TYPE_MAGNETIC_FIELD -&gt; System.arraycopy(event?.values,<span class="number">0</span>,magnetometerReading,<span class="number">0</span>,magnetometerReading.size)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">val</span> cal = DegreeDataCal(accelerometerReading,magnetometerReading)</span><br><span class="line">    cal.cal().let &#123;</span><br><span class="line">        result -&gt; viewModel.updateAngel(result = AngelData(result[<span class="number">0</span>], result[<span class="number">1</span>], result[<span class="number">2</span>]))</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>角度计算</li>
-</ul>
-<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="comment">//旋转矩阵</span></span><br><span class="line"><span class="keyword">val</span> rotationMatrix = FloatArray(<span class="number">9</span>)</span><br><span class="line"><span class="comment">//计算旋转矩阵数据</span></span><br><span class="line">SensorManager.getRotationMatrix(rotationMatrix,<span class="literal">null</span>,accArray,magArray)</span><br><span class="line"><span class="comment">//手机屏幕分别沿着x,y,z的旋转数据</span></span><br><span class="line"><span class="keyword">val</span> orientationAngles = FloatArray(<span class="number">3</span>)</span><br><span class="line">rotationMatrix.forEach &#123;</span><br><span class="line">    it.let &#123; Timber.i(it.toString()) &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//计算屏幕方向数据</span></span><br><span class="line">SensorManager.getOrientation(rotationMatrix,orientationAngles)</span><br></pre></td></tr></table></figure>
-
-<h2 id="案列"><a href="#案列" class="headerlink" title="案列"></a>案列</h2><p><a href="https://github.com/thorjay/sensor_orientation">代码仓库</a></p>
-<h2 id="TODO"><a href="#TODO" class="headerlink" title="TODO"></a>TODO</h2><ul>
-<li><input disabled="" type="checkbox"> 界面显示</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Android</category>
-      </categories>
-      <tags>
-        <tag>Android</tag>
-        <tag>传感器</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Android传感器介绍及使用.md</title>
     <url>/2022/09/20/Android%E4%BC%A0%E6%84%9F%E5%99%A8%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8/</url>
     <content><![CDATA[<h1 id="传感器"><a href="#传感器" class="headerlink" title="传感器"></a>传感器</h1><h2 id="传感器简介"><a href="#传感器简介" class="headerlink" title="传感器简介"></a>传感器简介</h2><p>设备上的传感器能为我们的应用添加丰富的位置和运动功能，包括 GPS 或网络位置以及加速度计、陀螺仪、温度、气压计等。设备传感器能用来测量运动、屏幕方向和各种环境条件，可以提供高度精确的原始数据。</p>
@@ -165,6 +116,55 @@
   unregister=>end: 注销
   
   sensorManager->sensor->sensorEventListener->register->unregister</textarea><textarea id="flowchart-0-options" style="display: none">{"scale":1,"line-width":2,"line-length":50,"text-margin":10,"font-size":12}</textarea><script>  var code = document.getElementById("flowchart-0-code").value;  var options = JSON.parse(decodeURIComponent(document.getElementById("flowchart-0-options").value));  var diagram = flowchart.parse(code);  diagram.drawSVG("flowchart-0", options);</script>]]></content>
+      <tags>
+        <tag>Android</tag>
+        <tag>传感器</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>传感器_方位水平测量</title>
+    <url>/2022/09/21/%E4%BC%A0%E6%84%9F%E5%99%A8_%E6%96%B9%E4%BD%8D%E6%B0%B4%E5%B9%B3%E6%B5%8B%E9%87%8F/</url>
+    <content><![CDATA[<h2 id="需求及场景"><a href="#需求及场景" class="headerlink" title="需求及场景"></a>需求及场景</h2><ul>
+<li>角度测量</li>
+</ul>
+<p>将手机变成一个指南针或者一个水平仪的数据；要实现这种效果，就得通过上一篇文章<a href="/2022/09/20/Android%E4%BC%A0%E6%84%9F%E5%99%A8%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8/" title="Android传感器介绍及使用.md">Android传感器介绍及使用</a>中介绍的传感器来获取相应的数据。</p>
+<ul>
+<li>坐标系</li>
+</ul>
+<p>方位水平测量是以世界坐标系为基准的，详情见上一篇文章<a href="/2022/09/20/Android%E4%BC%A0%E6%84%9F%E5%99%A8%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8/" title="Android传感器介绍及使用.md">Android传感器介绍及使用</a>中的传感器事件数据章节。</p>
+<ul>
+<li>传感器</li>
+</ul>
+<p>使用两种传感器来：</p>
+<ul>
+<li>地磁场传感器</li>
+<li>加速度计传感器</li>
+</ul>
+<span id="more"></span>  
+
+<h2 id="关键代码"><a href="#关键代码" class="headerlink" title="关键代码"></a>关键代码</h2><ul>
+<li>获取地磁场和加速度计传感器 &amp;&amp; 注册监听事件</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line">sensorMgr.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)?.also &#123;</span><br><span class="line">        accSensor -&gt; sensorMgr.registerListener(sensorEventListener,accSensor,SensorManager.SENSOR_DELAY_NORMAL,SensorManager.SENSOR_DELAY_UI)</span><br><span class="line">&#125;</span><br><span class="line">sensorMgr.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)?.also &#123;</span><br><span class="line">        magSensor -&gt; sensorMgr.registerListener(sensorEventListener,magSensor,SensorManager.SENSOR_DELAY_NORMAL,SensorManager.SENSOR_DELAY_UI)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>传感器数据处理</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line">event?.sensor?.type.let &#123;</span><br><span class="line">    <span class="keyword">when</span>(it)&#123;</span><br><span class="line">        <span class="comment">//加速度(带重力)</span></span><br><span class="line">        Sensor.TYPE_ACCELEROMETER -&gt; System.arraycopy(event?.values,<span class="number">0</span>,accelerometerReading,<span class="number">0</span>,accelerometerReading.size)</span><br><span class="line">        <span class="comment">//磁力</span></span><br><span class="line">        Sensor.TYPE_MAGNETIC_FIELD -&gt; System.arraycopy(event?.values,<span class="number">0</span>,magnetometerReading,<span class="number">0</span>,magnetometerReading.size)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">val</span> cal = DegreeDataCal(accelerometerReading,magnetometerReading)</span><br><span class="line">    cal.cal().let &#123;</span><br><span class="line">        result -&gt; viewModel.updateAngel(result = AngelData(result[<span class="number">0</span>], result[<span class="number">1</span>], result[<span class="number">2</span>]))</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>角度计算</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="comment">//旋转矩阵</span></span><br><span class="line"><span class="keyword">val</span> rotationMatrix = FloatArray(<span class="number">9</span>)</span><br><span class="line"><span class="comment">//计算旋转矩阵数据</span></span><br><span class="line">SensorManager.getRotationMatrix(rotationMatrix,<span class="literal">null</span>,accArray,magArray)</span><br><span class="line"><span class="comment">//手机屏幕分别沿着x,y,z的旋转数据</span></span><br><span class="line"><span class="keyword">val</span> orientationAngles = FloatArray(<span class="number">3</span>)</span><br><span class="line">rotationMatrix.forEach &#123;</span><br><span class="line">    it.let &#123; Timber.i(it.toString()) &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//计算屏幕方向数据</span></span><br><span class="line">SensorManager.getOrientation(rotationMatrix,orientationAngles)</span><br></pre></td></tr></table></figure>
+
+<h2 id="案列"><a href="#案列" class="headerlink" title="案列"></a>案列</h2><p><a href="https://github.com/thorjay/sensor_orientation">代码仓库</a></p>
+<h2 id="TODO"><a href="#TODO" class="headerlink" title="TODO"></a>TODO</h2><ul>
+<li><input disabled="" type="checkbox"> 界面显示</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Android</category>
+      </categories>
       <tags>
         <tag>Android</tag>
         <tag>传感器</tag>
@@ -335,6 +335,115 @@
       </tags>
   </entry>
   <entry>
+    <title>对接GPT第一步-clash的安装</title>
+    <url>/2023/04/08/linux%E5%AF%B9clash%E7%9A%84%E5%AE%89%E8%A3%85%E3%80%81%E9%85%8D%E7%BD%AE%E3%80%81%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>需求：目前想体验GPT服务的能力，都得通过一个网络代理；比如实现一个对接GPT接口的api的服务，就得需要代理去访问，所以选择通过Clash实现。</p>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><ul>
+<li>Clash：<br>Clash是一个开源的跨平台网络代理工具，使用Golang语言编写，支持多种代理协议和代理模式。<br>Clash的特点包括：<br>多协议支持：Clash支持Shadowsocks、V2Ray、Trojan等多种协议，用户可以根据需要自由切换。<br>多代理模式支持：Clash支持全局代理、PAC代理、域名代理等多种代理模式，用户可以根据需要选择不同的代理方式。<br>智能规则引擎：Clash内置强大的规则引擎，可以自动根据用户的需求选择最佳的代理节点。<br>支持多平台：Clash支持Windows、MacOS、Linux等多种操作系统，用户可以在不同的平台上使用Clash。<br>总的来说，Clash是一款功能强大的网络代理工具，可以帮助用户实现科学上网，访问被封锁的网站和服务。同时，Clash也是一个开源项目，用户可以自由地查看和修改Clash的源代码。<br><a href="https://github.com/Dreamacro/clash">开源地址</a></li>
+</ul>
+<span id="more"></span>
+
+<ul>
+<li>ClashX：<br>一款基于Clash核心开发的免费、开源的网络代理工具，支持多种协议和代理模式，可以在Mac电脑上实现科学上网。<br>ClashX的特点包括：<br>多协议支持：ClashX支持Shadowsocks、V2Ray、Trojan等多种协议，用户可以根据需要自由切换。<br>多代理模式支持：ClashX支持全局代理、PAC代理、域名代理等多种代理模式，用户可以根据需要选择不同的代理方式。<br>智能规则引擎：ClashX内置强大的规则引擎，可以自动根据用户的需求选择最佳的代理节点。<br>界面友好：ClashX的界面简洁、易用，用户可以轻松设置和管理代理配置。</li>
+<li>GPT：<br>人工智能多模式大模型。</li>
+<li>GPT SDK(chatgpt-java)：<br>ChatGPT Java 版本，OpenAI ChatGPT 的逆向工程 SDK，可扩展用于聊天机器人等。<br><a href="https://github.com/PlexPt/chatgpt-java">chatgpt-java</a><br><a href="https://icspec.com/news/article-details/2133492?type=prefecture">简介</a></li>
+<li>gpt-server：<br>基于GPT-SDK拓展的javaWeb服务工程Demo。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//默认是8080端口</span><br><span class="line">java -jar gpt-server.jar</span><br></pre></td></tr></table></figure>
+<h2 id="安装配置步骤："><a href="#安装配置步骤：" class="headerlink" title="安装配置步骤："></a>安装配置步骤：</h2><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>去<a href="https://github.com/Dreamacro/clash/releases">资源包地址</a>下载安装包,选择对应操作系统的资源；</p>
+<img src="../../imgs/image-20230408093022471.png" alt="image-20230408093022471" style="zoom:33%;" />
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 以linux x64为例</span><br><span class="line">cd ~/software</span><br><span class="line">curl https://github.com/Dreamacro/clash/releases/download/v1.14.0/clash-linux-amd64-v3-v1.14.0.gz</span><br><span class="line">gunzip clash-linux-amd64-v3-v1.14.0.gz</span><br></pre></td></tr></table></figure>
+
+<p>建议在当前用户的.config文件夹下，新建一个clash文件夹，所有与clash相关的文件配置都放在其中</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cd ~/.config</span><br><span class="line">mkdir clash &amp;&amp; cd clash</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><h4 id="订阅模式"><a href="#订阅模式" class="headerlink" title="订阅模式"></a>订阅模式</h4><p>将自己的配置文件放入clash文件夹路径下：~&#x2F;.config&#x2F;clash</p>
+<ul>
+<li><p>config.yaml<br>clash代理的配置文件</p>
+</li>
+<li><p>Country.mmdb<br>文件利用 GeoIP2 服务能识别互联网用户的地点位置，以供规则分流时使用；一般的网络服务提供了 Clash 订阅链接，可以直接下载链接指向的文件内容，保存到 config.yaml 中。或者使用订阅转换服务，将其它订阅转换为 Clash 订阅。<br>这里推荐使用订阅转换服务，转换后的配置文件已添加更为强大的分流规则。就可以将 Clash 一直保持后台运行，自动分流，且会自动选择最优节点。</p>
+</li>
+<li><p>软连接(可选)；如果不使用这个，开启clash就得使用文件的绝对路径。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 这里新建了一个clash文件，将启动脚本/root/software/clash-linux-amd64-v1.14.0链接到此文件，就不</span><br><span class="line"># 用每次定位到软件启动脚本那里；ln -s source_file tartget_file</span><br><span class="line">ln -s /root/software/clash-linux-amd64-v1.14.0 clash</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><img src="/../../imgs/image-20230408094245416.png" alt="image-20230408094245416"></p>
+<p>注意：实际操作中发现，如果没有创建~&#x2F;.config&#x2F;clash文件夹路径，会报二进制文件无法执行的错误！</p>
+<h2 id="基础使用"><a href="#基础使用" class="headerlink" title="基础使用"></a>基础使用</h2><ul>
+<li>开启，启动后即可访问代理<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">./clash</span><br></pre></td></tr></table></figure></li>
+<li>后台开启</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nohub clash</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用代理"><a href="#使用代理" class="headerlink" title="使用代理"></a>使用代理</h2><p>使用Export命令使用代理，Clash 运行后，其在后台监听某一端口。Ubuntu 下使用代理，需要 export<br> 命令。根据 config 配置文件可以查看到Clash 代理端口（订阅转换后，端口为7890），设置系统代理命令为：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890</span><br></pre></td></tr></table></figure>
+
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>测试一下，通过部署自己创建的gpt-server工程，，调用gpt的api接口，效果如下：</p>
+<p><img src="/../../imgs/image-20230408125300901.png" alt="image-20230408125300901"></p>
+<p><img src="/../../imgs/image-20230408125140521.png" alt="image-20230408125140521"></p>
+<h2 id="进阶使用"><a href="#进阶使用" class="headerlink" title="进阶使用"></a>进阶使用</h2><ul>
+<li><p>变为系统服务</p>
+<p>Treat Clash as a daemon,将Clash实现常驻后台运行、开机启动等。</p>
+<p>1.配置systemd服务<br>Linux系统使用systemd作为启动服务器管理机制，首先把Clash可执行文件拷贝到**&#x2F;usr&#x2F;local&#x2F;bin**目录，相关配置拷贝到&#x2F;etc&#x2F;clash目录</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo mkdir /etc/clash</span><br><span class="line">sudo cp clash /usr/local/bin</span><br><span class="line">sudo cp config.yaml /etc/clash</span><br><span class="line">sudo cp Country.mmdb /etc/clash</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>​	  2.创建systemd服务配置文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo vi /etc/systemd/system/clash.service</span><br></pre></td></tr></table></figure>
+<p>配置内容如下：</p>
+<blockquote>
+<p>[Unit]</p>
+</blockquote>
+<blockquote>
+<p>Description&#x3D;Clash daemon, A rule-based proxy in Go.</p>
+</blockquote>
+<blockquote>
+<p>After&#x3D;network.target</p>
+</blockquote>
+<blockquote>
+<p>[Service]</p>
+</blockquote>
+<blockquote>
+<p>Type&#x3D;simple</p>
+</blockquote>
+<blockquote>
+<p>Restart&#x3D;always</p>
+</blockquote>
+<blockquote>
+<p>ExecStart&#x3D;&#x2F;usr&#x2F;local&#x2F;bin&#x2F;clash -d &#x2F;etc&#x2F;clash</p>
+</blockquote>
+<blockquote>
+<p>[Install]</p>
+</blockquote>
+<blockquote>
+<p>WantedBy&#x3D;multi-user.target<br>​		3.使用systemd</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//Clash开机自启动</span><br><span class="line">sudo systemctl enable clash</span><br></pre></td></tr></table></figure>
+
+<p>4.开启clash</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo systemctl start clash</span><br></pre></td></tr></table></figure>
+<p>5.查看Clash日志</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo systemctl status clash</span><br><span class="line">sudo journalctl -xe</span><br></pre></td></tr></table></figure>
+<h2 id="未完成的后续功能"><a href="#未完成的后续功能" class="headerlink" title="未完成的后续功能"></a>未完成的后续功能</h2><ul>
+<li><input disabled="" type="checkbox"> clash_dashbord面板</li>
+<li><input disabled="" type="checkbox"> Docker化安装配置Clash</li>
+</ul>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://blog.iswiftai.com/posts/clash-linux/">https://blog.iswiftai.com/posts/clash-linux/</a></p>
+<p><a href="https://blog.zzsqwq.cn/posts/how-to-use-clash-on-linux/">容器化安装</a></p>
+]]></content>
+      <categories>
+        <category>环境搭建</category>
+      </categories>
+      <tags>
+        <tag>gpt</tag>
+        <tag>clash</tag>
+        <tag>linux</tag>
+        <tag>systemd</tag>
+        <tag>proxy</tag>
+        <tag>网络代理</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>LightWebviewBridge-原理篇</title>
     <url>/2023/09/02/LightWebviewBridge-%E5%8E%9F%E7%90%86%E7%AF%87/</url>
     <content><![CDATA[<p>[TOC]</p>
@@ -476,112 +585,183 @@
       </tags>
   </entry>
   <entry>
-    <title>对接GPT第一步-clash的安装</title>
-    <url>/2023/04/08/linux%E5%AF%B9clash%E7%9A%84%E5%AE%89%E8%A3%85%E3%80%81%E9%85%8D%E7%BD%AE%E3%80%81%E4%BD%BF%E7%94%A8/</url>
+    <title>解决pip安装后，找不到依赖包的问题</title>
+    <url>/2023/04/07/%E8%A7%A3%E5%86%B3pip%E5%AE%89%E8%A3%85%E5%90%8E%E4%BE%9D%E8%B5%96%E5%8C%85%E4%B8%8D%E7%94%9F%E6%95%88%E7%9A%84%E9%97%AE%E9%A2%98/</url>
     <content><![CDATA[<p>[TOC]</p>
-<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>需求：目前想体验GPT服务的能力，都得通过一个网络代理；比如实现一个对接GPT接口的api的服务，就得需要代理去访问，所以选择通过Clash实现。</p>
-<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><ul>
-<li>Clash：<br>Clash是一个开源的跨平台网络代理工具，使用Golang语言编写，支持多种代理协议和代理模式。<br>Clash的特点包括：<br>多协议支持：Clash支持Shadowsocks、V2Ray、Trojan等多种协议，用户可以根据需要自由切换。<br>多代理模式支持：Clash支持全局代理、PAC代理、域名代理等多种代理模式，用户可以根据需要选择不同的代理方式。<br>智能规则引擎：Clash内置强大的规则引擎，可以自动根据用户的需求选择最佳的代理节点。<br>支持多平台：Clash支持Windows、MacOS、Linux等多种操作系统，用户可以在不同的平台上使用Clash。<br>总的来说，Clash是一款功能强大的网络代理工具，可以帮助用户实现科学上网，访问被封锁的网站和服务。同时，Clash也是一个开源项目，用户可以自由地查看和修改Clash的源代码。<br><a href="https://github.com/Dreamacro/clash">开源地址</a></li>
-</ul>
+<h1 id="解决pip安装后，找不到依赖包的问题"><a href="#解决pip安装后，找不到依赖包的问题" class="headerlink" title="解决pip安装后，找不到依赖包的问题"></a>解决pip安装后，找不到依赖包的问题</h1><p>最近接触Python、conda，在使用过程中碰到了一个奇怪的问题，参照文档conda激活环境，pip install安装依赖包后，但是工程中却始终各种找不到各种依赖包的错误，先将原因、定位过程、解决方法以及一些思考记录下来；如果文字中有错误或者不合适的描述，请指正。</p>
+<h2 id="原因："><a href="#原因：" class="headerlink" title="原因："></a>原因：</h2><p>表象：按照文档教程pip install安装之后，仍然提示工程环境中没有安装对应的依赖包，这有点类似java和android工程中，通过maven或gradle配置后，在编译中仍然无法找到对应的依赖模块包或类的错误。</p>
+<p>解决：针对本人遇到的情况，<strong>屏蔽之前的python和pip的全局环境变量，默认使用conda环境配置</strong>，按照文档教程操作，即可将安装包下载到指定的环境路径下，工程就找到安装的依赖包。</p>
+<p>原因：对conda、python环境配置的不熟悉，用户全局环境的配置以及pip安装依赖包的操作不了解。</p>
 <span id="more"></span>
 
+<h2 id="定位过程"><a href="#定位过程" class="headerlink" title="定位过程"></a>定位过程</h2><p>1.开始对着教程，进行了包安装，如下</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pip install torch==version</span><br><span class="line">jupyter notebook</span><br></pre></td></tr></table></figure>
+<p>结果工程里报错，torch、sensor各种包都找不到；但之前使用conda activate已激活环境。</p>
+<p>2.再次重新安装pip install<br>还是找不到，用vscode中打开也找不到(其实和IDE工具无关)<br>3.网上搜索答案<br>一顿尝试，无果；没有解决问题；其实这时已经怀疑是不是和pip的全局配置有关了，但对python环境的不熟，没有去深度思考。</p>
+<p>4.自我尝试解决-更新内核或环境？<br>在notebook更换一下内核，还是有问题；<br>在vscode将环境切换到base中，依赖包问题解决，这时基本确定是安装包是没有安装到指定的环境中，而是安装到默认的base环境路径下；</p>
+<p>再次尝试pip安装，发现包安装路径是在默认的python全局环境路径下面；</p>
+<p>进入到指定环境路径下，使用.&#x2F;env&#x2F;bin&#x2F;pip 安装，这次发现安装包正确地下载到指定环境下，工程导入依赖包问题也解决。</p>
+<p>5.继续深入<br>发现只要直接使用pip就会下载到全局路径，<strong>这是因为之前安装python时，在系统环境配置中配置指定了pip的路径</strong>，所以使用pip会直接下载到全局的路径下去，如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#Python</span><br><span class="line">export PYTHON_HOME=/opt/homebrew/Cellar/python@3.9/3.9.10</span><br><span class="line">alias python=$&#123;PYTHON_HOME&#125;&quot;/bin/python3.9&quot;</span><br><span class="line">alias python3=$&#123;PYTHON_HOME&#125;&quot;/bin/python3&quot;</span><br><span class="line">alias pip3=$&#123;PYTHON_HOME&#125;&quot;/bin/pip3&quot;</span><br><span class="line">alias pip=$&#123;PYTHON_HOME&#125;&quot;/bin/pip3&quot;</span><br><span class="line">export PATH=$&#123;PATH&#125;:...$&#123;PYTHON_HOME&#125;/bin:</span><br></pre></td></tr></table></figure>
+<p>直接运行pip 命令，都会走用户环境里的pip命令即alias指定的那个路径，python指令也是，会覆盖conda的配置；</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">which pip</span><br><span class="line">#输出：pip: aliased to /opt/homebrew/Cellar/python@3.9/3.9.10/bin/pip3</span><br><span class="line">pip -V</span><br><span class="line">#输出：pip 23.0.1 from /opt/homebrew/lib/python3.9/site-packages/pip (python 3.9)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">which python</span><br><span class="line">#输出：python: aliased to /opt/homebrew/Cellar/python@3.9/3.9.10/bin/python3.9</span><br><span class="line">python --version</span><br><span class="line">#输出：Python 3.9.10</span><br></pre></td></tr></table></figure>
+<p>所以安装conda后，可以将python配置的环境屏蔽掉：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">which pip</span><br><span class="line"># 输出:/opt/anaconda3/bin/pip</span><br><span class="line">pip -V</span><br><span class="line"># 输出：pip 21.2.4 from /opt/anaconda3/lib/python3.9/site-packages/pip (python 3.9)</span><br><span class="line">which python</span><br><span class="line"># 输出：/opt/anaconda3/bin/python</span><br><span class="line">python --version</span><br><span class="line"># 输出：Python 3.9.7</span><br></pre></td></tr></table></figure>
+<p>查看当前python的环境，*代表当前环境</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">conda info -e</span><br><span class="line">输出：</span><br><span class="line"># conda environments:</span><br><span class="line">#</span><br><span class="line">base                  *  /opt/anaconda3</span><br><span class="line">d2l                      /opt/anaconda3/envs/d2l</span><br><span class="line">my_env                   /opt/anaconda3/envs/my_env</span><br></pre></td></tr></table></figure>
+<p>切换到指定环境</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">conda activate d2l</span><br><span class="line">conda info -e</span><br><span class="line">输出：</span><br><span class="line"># conda environments:</span><br><span class="line">#</span><br><span class="line">base                    /opt/anaconda3</span><br><span class="line">d2l                  *  /opt/anaconda3/envs/d2l</span><br></pre></td></tr></table></figure>
+
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>1.使用指定环境下的pip:在虚拟环境下xxx的bin目录下，执行pip，即可将安装包模块下载到虚拟环境中,如：.&#x2F;envs&#x2F;xxx&#x2F;bin&#x2F;pip install<br>虚拟环境的安装包路径.&#x2F;envs&#x2F;xxx&#x2F;lib&#x2F;<a href="mailto:&#112;&#121;&#x74;&#x68;&#111;&#110;&#x40;&#x33;&#46;&#x39;">&#112;&#121;&#x74;&#x68;&#111;&#110;&#x40;&#x33;&#46;&#x39;</a>&#x2F;site-packages&#x2F;</p>
+<p>2.屏蔽pip的全局环境配置，使用conda</p>
+<p>3.使用–target选项：pip install --tartget&#x3D;.&#x2F;envs&#x2F;xxx&#x2F;lib&#x2F;<a href="mailto:&#112;&#121;&#x74;&#x68;&#111;&#110;&#x40;&#51;&#x2e;&#x39;">&#112;&#121;&#x74;&#x68;&#111;&#110;&#x40;&#51;&#x2e;&#x39;</a>&#x2F;site-packages&#x2F;</p>
+<h2 id="回顾"><a href="#回顾" class="headerlink" title="回顾"></a>回顾</h2><p>1.现象：依赖包的找不到-&gt;为什么找不到-&gt;没有安装-&gt;为什么没有安装？明明已经安装-&gt;涉及到python、conda环境的问题！</p>
+<p>2.中途某段时间被牵引到Homebrew disutils这个工具的问题上去了,以为是这个问题导致安装失败！这个误导过程仍然是对问题的本质没有深入理解，定位问题没有逻辑性和线索；然后对Python工程的依赖、安装、虚拟环境等知识点的不熟悉；</p>
+<p>DEPRECATION: Configuring installation scheme with distutils config files is deprecated and will no longer work in the near future. If you are using a Homebrew or Linuxbrew Python, please see discussion at <a href="https://github.com/Homebrew/homebrew-core/issues/76621">https://github.com/Homebrew/homebrew-core/issues/76621</a></p>
+<p>3.Python在安装依赖包这一点上和Maven、Gradle构建工程有不同，不同点在于maven或gradle配置工程的依赖包都是在统一的路径下，根据groupid&#x2F;artifactid&#x2F;version来区分，但Python工程不一样，它基于自己的工程的环境，相同的包可能在不同的环境下出现多次；</p>
+<p>4.重新理清归纳问题才能正确的解决问题:”pip install 安装包下载到全局环境路径中，而不是虚拟环境下”；对问题的清晰认知和准确定位，是真正解决问题的前提，如果对问题没有清晰准确的认识，那如同盲人摸象、瞎子过河，只知其一，浪费很多时间，最后问题也得不到解决。</p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>对新事物的尝试和探索，会碰到各种问题，掌握正确解决问题的思维方式和方案，加上对底层基础和背后逻辑的掌握，然后对事物原理的追根溯源，就能真正意义上地解决问题和把握新事物。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://www.cnblogs.com/bigtreei/p/15094293.html">https://www.cnblogs.com/bigtreei/p/15094293.html</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/522468985">https://zhuanlan.zhihu.com/p/522468985</a></p>
+<p><a href="https://pythonguidecn.readthedocs.io/zh/latest/dev/virtualenvs.html">Pipenv &amp; 虚拟环境</a></p>
+<h1 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h1><ul>
+<li>conda：</li>
+</ul>
+<p>Conda是一个开源的包管理器和环境管理系统，用于管理和部署不同版本的软件包和依赖项。Conda可以同时管理多个环境，每个环境可以包含不同版本的Python解释器以及其他库和依赖项。在本质上，Conda是一个跨平台的软件包管理系统，可用于管理Python软件包，以及其他一些编程语言的软件包。</p>
+<p>下面是Conda的一些主要特点和使用原理：</p>
+<ol>
+<li>包管理器：Conda作为一个包管理器，可以轻松地安装、升级、删除软件包，以及查看已安装的包列表。Conda还可以处理软件包之间的依赖关系，以确保在安装新软件包时不会出现依赖冲突。</li>
+<li>环境管理器：Conda还可以管理多个环境，每个环境可以包含不同版本的Python解释器和其他库和依赖项。这使得用户可以轻松地创建和维护不同的开发环境，以及为不同的项目配置不同的环境。</li>
+<li>跨平台：Conda可以在多种操作系统上运行，包括Windows、macOS和Linux等。</li>
+<li>渠道：Conda的包管理系统是基于渠道的，可以从不同的渠道安装软件包，包括Anaconda官方渠道、conda-forge、PyPI等。用户可以在不同的渠道之间切换，并管理自己的私有渠道。</li>
+<li>兼容性：Conda可以管理多个版本的Python解释器和不同的软件包版本，以确保不同版本的软件包可以兼容。</li>
+</ol>
+<p>总之，Conda提供了一种方便、灵活和可扩展的方式来管理Python软件包和环境，使得用户可以更好地管理自己的开发环境，以及更方便地分享和部署自己的Python应用程序。</p>
 <ul>
-<li>ClashX：<br>一款基于Clash核心开发的免费、开源的网络代理工具，支持多种协议和代理模式，可以在Mac电脑上实现科学上网。<br>ClashX的特点包括：<br>多协议支持：ClashX支持Shadowsocks、V2Ray、Trojan等多种协议，用户可以根据需要自由切换。<br>多代理模式支持：ClashX支持全局代理、PAC代理、域名代理等多种代理模式，用户可以根据需要选择不同的代理方式。<br>智能规则引擎：ClashX内置强大的规则引擎，可以自动根据用户的需求选择最佳的代理节点。<br>界面友好：ClashX的界面简洁、易用，用户可以轻松设置和管理代理配置。</li>
-<li>GPT：<br>人工智能多模式大模型。</li>
-<li>GPT SDK(chatgpt-java)：<br>ChatGPT Java 版本，OpenAI ChatGPT 的逆向工程 SDK，可扩展用于聊天机器人等。<br><a href="https://github.com/PlexPt/chatgpt-java">chatgpt-java</a><br><a href="https://icspec.com/news/article-details/2133492?type=prefecture">简介</a></li>
-<li>gpt-server：<br>基于GPT-SDK拓展的javaWeb服务工程Demo。</li>
+<li><a href="https://github.com/conda/conda.git">conda源码</a></li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//默认是8080端口</span><br><span class="line">java -jar gpt-server.jar</span><br></pre></td></tr></table></figure>
-<h2 id="安装配置步骤："><a href="#安装配置步骤：" class="headerlink" title="安装配置步骤："></a>安装配置步骤：</h2><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>去<a href="https://github.com/Dreamacro/clash/releases">资源包地址</a>下载安装包,选择对应操作系统的资源；</p>
-<img src="../../imgs/image-20230408093022471.png" alt="image-20230408093022471" style="zoom:33%;" />
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 以linux x64为例</span><br><span class="line">cd ~/software</span><br><span class="line">curl https://github.com/Dreamacro/clash/releases/download/v1.14.0/clash-linux-amd64-v3-v1.14.0.gz</span><br><span class="line">gunzip clash-linux-amd64-v3-v1.14.0.gz</span><br></pre></td></tr></table></figure>
-
-<p>建议在当前用户的.config文件夹下，新建一个clash文件夹，所有与clash相关的文件配置都放在其中</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cd ~/.config</span><br><span class="line">mkdir clash &amp;&amp; cd clash</span><br></pre></td></tr></table></figure>
-
-<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><h4 id="订阅模式"><a href="#订阅模式" class="headerlink" title="订阅模式"></a>订阅模式</h4><p>将自己的配置文件放入clash文件夹路径下：~&#x2F;.config&#x2F;clash</p>
-<ul>
-<li><p>config.yaml<br>clash代理的配置文件</p>
-</li>
-<li><p>Country.mmdb<br>文件利用 GeoIP2 服务能识别互联网用户的地点位置，以供规则分流时使用；一般的网络服务提供了 Clash 订阅链接，可以直接下载链接指向的文件内容，保存到 config.yaml 中。或者使用订阅转换服务，将其它订阅转换为 Clash 订阅。<br>这里推荐使用订阅转换服务，转换后的配置文件已添加更为强大的分流规则。就可以将 Clash 一直保持后台运行，自动分流，且会自动选择最优节点。</p>
-</li>
-<li><p>软连接(可选)；如果不使用这个，开启clash就得使用文件的绝对路径。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 这里新建了一个clash文件，将启动脚本/root/software/clash-linux-amd64-v1.14.0链接到此文件，就不</span><br><span class="line"># 用每次定位到软件启动脚本那里；ln -s source_file tartget_file</span><br><span class="line">ln -s /root/software/clash-linux-amd64-v1.14.0 clash</span><br></pre></td></tr></table></figure></li>
-</ul>
-<p><img src="/../../imgs/image-20230408094245416.png" alt="image-20230408094245416"></p>
-<p>注意：实际操作中发现，如果没有创建~&#x2F;.config&#x2F;clash文件夹路径，会报二进制文件无法执行的错误！</p>
-<h2 id="基础使用"><a href="#基础使用" class="headerlink" title="基础使用"></a>基础使用</h2><ul>
-<li>开启，启动后即可访问代理<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">./clash</span><br></pre></td></tr></table></figure></li>
-<li>后台开启</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nohub clash</span><br></pre></td></tr></table></figure>
-
-<h2 id="使用代理"><a href="#使用代理" class="headerlink" title="使用代理"></a>使用代理</h2><p>使用Export命令使用代理，Clash 运行后，其在后台监听某一端口。Ubuntu 下使用代理，需要 export<br> 命令。根据 config 配置文件可以查看到Clash 代理端口（订阅转换后，端口为7890），设置系统代理命令为：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890</span><br></pre></td></tr></table></figure>
-
-<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>测试一下，通过部署自己创建的gpt-server工程，，调用gpt的api接口，效果如下：</p>
-<p><img src="/../../imgs/image-20230408125300901.png" alt="image-20230408125300901"></p>
-<p><img src="/../../imgs/image-20230408125140521.png" alt="image-20230408125140521"></p>
-<h2 id="进阶使用"><a href="#进阶使用" class="headerlink" title="进阶使用"></a>进阶使用</h2><ul>
-<li><p>变为系统服务</p>
-<p>Treat Clash as a daemon,将Clash实现常驻后台运行、开机启动等。</p>
-<p>1.配置systemd服务<br>Linux系统使用systemd作为启动服务器管理机制，首先把Clash可执行文件拷贝到**&#x2F;usr&#x2F;local&#x2F;bin**目录，相关配置拷贝到&#x2F;etc&#x2F;clash目录</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo mkdir /etc/clash</span><br><span class="line">sudo cp clash /usr/local/bin</span><br><span class="line">sudo cp config.yaml /etc/clash</span><br><span class="line">sudo cp Country.mmdb /etc/clash</span><br></pre></td></tr></table></figure></li>
-</ul>
-<p>​	  2.创建systemd服务配置文件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo vi /etc/systemd/system/clash.service</span><br></pre></td></tr></table></figure>
-<p>配置内容如下：</p>
-<blockquote>
-<p>[Unit]</p>
-</blockquote>
-<blockquote>
-<p>Description&#x3D;Clash daemon, A rule-based proxy in Go.</p>
-</blockquote>
-<blockquote>
-<p>After&#x3D;network.target</p>
-</blockquote>
-<blockquote>
-<p>[Service]</p>
-</blockquote>
-<blockquote>
-<p>Type&#x3D;simple</p>
-</blockquote>
-<blockquote>
-<p>Restart&#x3D;always</p>
-</blockquote>
-<blockquote>
-<p>ExecStart&#x3D;&#x2F;usr&#x2F;local&#x2F;bin&#x2F;clash -d &#x2F;etc&#x2F;clash</p>
-</blockquote>
-<blockquote>
-<p>[Install]</p>
-</blockquote>
-<blockquote>
-<p>WantedBy&#x3D;multi-user.target<br>​		3.使用systemd</p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//Clash开机自启动</span><br><span class="line">sudo systemctl enable clash</span><br></pre></td></tr></table></figure>
-
-<p>4.开启clash</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo systemctl start clash</span><br></pre></td></tr></table></figure>
-<p>5.查看Clash日志</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo systemctl status clash</span><br><span class="line">sudo journalctl -xe</span><br></pre></td></tr></table></figure>
-<h2 id="未完成的后续功能"><a href="#未完成的后续功能" class="headerlink" title="未完成的后续功能"></a>未完成的后续功能</h2><ul>
-<li><input disabled="" type="checkbox"> clash_dashbord面板</li>
-<li><input disabled="" type="checkbox"> Docker化安装配置Clash</li>
-</ul>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://blog.iswiftai.com/posts/clash-linux/">https://blog.iswiftai.com/posts/clash-linux/</a></p>
-<p><a href="https://blog.zzsqwq.cn/posts/how-to-use-clash-on-linux/">容器化安装</a></p>
 ]]></content>
       <categories>
-        <category>环境搭建</category>
+        <category>bug</category>
       </categories>
       <tags>
-        <tag>gpt</tag>
-        <tag>clash</tag>
-        <tag>linux</tag>
-        <tag>systemd</tag>
-        <tag>proxy</tag>
-        <tag>网络代理</tag>
+        <tag>python</tag>
+        <tag>pip</tag>
+        <tag>conda</tag>
+        <tag>虚拟环境</tag>
+        <tag>用户环境变量</tag>
+        <tag>site-packages</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>有关git rebase的一点记录</title>
+    <url>/2023/09/04/%E6%9C%89%E5%85%B3%E6%9C%80%E8%BF%91git%20rebase%E7%9A%84%E4%B8%80%E7%82%B9%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>最近有几个场景需求都牵涉到rebase这个操作，所以有必要对rebas做一个总结和进一步学习。</p>
+<h2 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h2><p>1.修改提交记录</p>
+<p>2.合并提交记录</p>
+<p>3.合并分支</p>
+<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>rebase:变基</p>
+<p>merge:合并</p>
+<p>commit:提交</p>
+<p>fast-forward merge:快进合并</p>
+<p>branch:分支</p>
+<p>Head:这个翻译是头部；我的理解是当前活动状态的游标或指针；可以是当前分支的头部，也可以是某一个提交的指向…</p>
+<p>topicbranch：目标分支</p>
+<p>basebranch：基础分支</p>
+<p>其中，需要理解一个概念<strong>快进合并()</strong></p>
+<blockquote>
+<p>什么是变基？</p>
+</blockquote>
+<p>要理解变基，先理解一个更常见的概念”合并(Merge)”。</p>
+<p>合并很好理解，就是直接将2个分支合并到一个分支上，其实变基的最终目的也是一样。但2者不同之处是合并会产生一个新的提交，而变基不会，从提交图解上来看，它的提交记录更像是一个串行的，而合并更像是2条河流有一个merge节点。</p>
+<p>我很希望文档中的一段描述：**变基就好些<code>重新播放</code>一样，将提交到某一分支(topicbranch)上的所有修改都移到另一分支上(basebranch)**。重放这个词很准确地说出了rebase变基所做的事情。</p>
+<h2 id="文档分析"><a href="#文档分析" class="headerlink" title="文档分析"></a>文档分析</h2><ul>
+<li>git rebase basebranch</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git checkout experiment</span><br><span class="line">git rebase master</span><br><span class="line">//这时experiment分支其实已经是基于master分支构建了</span><br></pre></td></tr></table></figure>
+
+<p>变基时，会找到2个分支（topicbranch experiment和基底分支basebranch master)的共同祖先C2，然后对比当前分支(experiment)的历次提交，提取相应的修改并存为临时文件，然后将当前分支指向目标基底C3，最后以此将之前另存为临时文件的修改依序应用。以上是官方解释，有点饶，简单点说，就是把<strong>自动提交差异放到共同祖先提交节点后</strong>，当然如果和基底分支提交有冲突confilt。是需要手工处理的。</p>
+<p><img src="https://git-scm.com/book/en/v2/images/basic-rebase-3.png"></p>
+<p>然后对master分支<strong>快进合并</strong>**</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git checkout mater</span><br><span class="line">git merge experiment</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://git-scm.com/book/en/v2/images/basic-rebase-4.png"></p>
+<p>再放一张直接Merge的图式：</p>
+<p><img src="https://git-scm.com/book/en/v2/images/basic-rebase-2.png" alt="image-20230904112928395"></p>
+<p>看看C5节点，就是自动生成的新的快照。</p>
+<ul>
+<li>git rebase onto</li>
+</ul>
+<p>取出另外分支的提交，简单说，就是将非直接checkout的分支的提交合并。</p>
+<p>如从master上分出server分支，再从server分支分出client分支。</p>
+<p><img src="/../../imgs/image-20230904114325678.png" alt="image-20230904114325678"></p>
+<p>如果master只需要C8,C9，而不想合并C3，那么如何操作？</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git rebase --onto master server client</span><br></pre></td></tr></table></figure>
+
+<p>以上命令的意思是：“取出 <code>client</code> 分支，找出它从 <code>server</code> 分支分歧之后的补丁， 然后把这些补丁在 <code>master</code> 分支上重放一遍，让 <code>client</code> 看起来像直接基于 <code>master</code> 修改一样”。这理解起来有一点复杂，不过效果非常酷。</p>
+<p>这需要对自己的每次提交的内容得非常清楚！</p>
+<ul>
+<li>注意！！！</li>
+</ul>
+<p><strong>如果提交存在于你的仓库之外，而别人可能基于这些提交进行开发，那么不要执行变基</strong></p>
+<p>通俗点讲：尽量避免对已到远端的提交(origin)进行变基，一般对自己本地分支(local)使用。</p>
+<p>因为，远端仓库，别人也可能基于这些提交进行开发，如果你执行的变基，同时强推倒远端仓库，别人pull之后，他的提交线就会混乱，同时他在push，你再pull，就会导致你的提交线会混乱。是不是很绕，有点难理解。下面结合图示将描述简单化；</p>
+<p>场景流程如下：</p>
+<p>1.当前状态：我通过pull远端，将teamone的提交合并，当前我在C7上。git.team1.com是远端库</p>
+<p><img src="/../../imgs/perils-of-rebasing-2.png"></p>
+<p>2.如果teamone不想merge，不想记录C6的merge，他采用的rebase变基，然后强推push –force，这时远端及本地的状态及提交记录如下图；</p>
+<p>远端的C4,C6消失，多了一个C4&#96;.</p>
+<p>本地不变。</p>
+<p><img src="/../../imgs/perils-of-rebasing-3.png"></p>
+<p>3.这时你执行pull，将会合并2个提交历史的内容，生成一个新的合并提交。最终仓库会如图：</p>
+<p>因为C4&#96;是新的，而本地C4,C6并未消失(本地未执行rebase，只有teamone执行)，所以会有一个C8.</p>
+<p><img src="/../../imgs/perils-of-rebasing-4.png"></p>
+<p>这样会导致提交异常混乱，你会发现C4和C4&#96;的相同的提交在你的仓库里重复出现了2次。如果你再push，又会将C4,C6重新推送到服务器上去。这回就会让teamone困惑了。因为他之前rebase的操作就是要将C4和C6丢弃。</p>
+<blockquote>
+<p>那么如何解决？</p>
+</blockquote>
+<p>用变基解决变基(推荐)</p>
+<p>如果团队中的某人强制推送并覆盖了一些你所基于的提交，你需要做的就是检查你做了哪些修改，以及他们覆盖了哪些修改。</p>
+<p><strong>Git 除了对整个提交计算 SHA-1 校验和以外，也对本次提交所引入的修改计算了校验和——即 “patch-id”。</strong></p>
+<p>使用git rebase，git会自动检查自己和对方的差异，再进行合并。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git rebase remote/maser</span><br></pre></td></tr></table></figure>
+
+<p>推荐使用 <strong>git pull –rebase</strong>而不是git pull</p>
+<p>git pull –rebase 等于git fetch | git rebase remote&#x2F;mater</p>
+<p>同时，可以设置git config –global pull.rebase true.这样你再使用git pull时，是默认使用选项–rebase的。</p>
+<ul>
+<li>变基 vs 合并</li>
+</ul>
+<p>​	无所谓那种更好，关键看针对的场景和开发者的使用理念。有人认为提交历史就是记录发生什么，有人认为是项目中发发生的事，无需记录不必要的记录。</p>
+<p>总的原则是，只对尚未推送或分享给别人的本地修改执行变基操作清理历史， 从不对已推送至别处的提交执行变基操作，像我的习惯是，针对功能性分支基本采用rebase，对于主线记录版本的分支比如main使用merge。</p>
+<h2 id="rebase-commitID"><a href="#rebase-commitID" class="headerlink" title="rebase commitID"></a>rebase commitID</h2><p>rebase 除了可以对branch分支进行操作，还可以指定commitID来进行各种操作场景：</p>
+<p>1.合并提交</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//前开后闭</span><br><span class="line">git rebase commitID1 commitID2</span><br><span class="line">//对Head之后的第2个提交进行变基</span><br><span class="line">git rebase HEAD~2</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>2.修改提交</p>
+<p>选项：</p>
+<p>p :对commit执行选择，选择提交</p>
+<p>r：选择提交，但是修改提交信息</p>
+<p>e :针对提交做修订</p>
+<p>s :选择提交，并合并到上一个提交中</p>
+<p>f:选择提交，但只保留上一个提交的日志</p>
+<p>其实rebase commitID从字面可以理解，也是重新变基，只是这是基于commitId为基础，所以rebase后会新建临时分支出来。</p>
+<p>在每一个选择提交操作上，可以执行</p>
+<p>git rebase –continue:继续变基，调到下一个commit</p>
+<p>git rebase –abort:放弃变基</p>
+<p>git rebase –edit-todo：继续变基，进行变基代办事项</p>
+<p>git commit –amend : 修改提交信息</p>
+<h2 id="备注"><a href="#备注" class="headerlink" title="备注"></a>备注</h2><p>主要内容和图<a href="https://git-scm.com/book/zh/v2/Git-%E5%88%86%E6%94%AF-%E5%8F%98%E5%9F%BA">依据</a></p>
+]]></content>
+      <categories>
+        <category>git</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+        <tag>技巧</tag>
       </tags>
   </entry>
   <entry>
@@ -714,186 +894,6 @@
       </categories>
       <tags>
         <tag>安全</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>有关git rebase的一点记录</title>
-    <url>/2023/09/04/%E6%9C%89%E5%85%B3%E6%9C%80%E8%BF%91git%20rebase%E7%9A%84%E4%B8%80%E7%82%B9%E8%AE%B0%E5%BD%95/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>最近有几个场景需求都牵涉到rebase这个操作，所以有必要对rebas做一个总结和进一步学习。</p>
-<h2 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h2><p>1.修改提交记录</p>
-<p>2.合并提交记录</p>
-<p>3.合并分支</p>
-<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>rebase:变基</p>
-<p>merge:合并</p>
-<p>commit:提交</p>
-<p>fast-forward merge:快进合并</p>
-<p>branch:分支</p>
-<p>Head:这个翻译是头部；我的理解是当前活动状态的游标或指针；可以是当前分支的头部，也可以是某一个提交的指向…</p>
-<p>topicbranch：目标分支</p>
-<p>basebranch：基础分支</p>
-<p>其中，需要理解一个概念<strong>快进合并()</strong></p>
-<blockquote>
-<p>什么是变基？</p>
-</blockquote>
-<p>要理解变基，先理解一个更常见的概念”合并(Merge)”。</p>
-<p>合并很好理解，就是直接将2个分支合并到一个分支上，其实变基的最终目的也是一样。但2者不同之处是合并会产生一个新的提交，而变基不会，从提交图解上来看，它的提交记录更像是一个串行的，而合并更像是2条河流有一个merge节点。</p>
-<p>我很希望文档中的一段描述：**变基就好些<code>重新播放</code>一样，将提交到某一分支(topicbranch)上的所有修改都移到另一分支上(basebranch)**。重放这个词很准确地说出了rebase变基所做的事情。</p>
-<h2 id="文档分析"><a href="#文档分析" class="headerlink" title="文档分析"></a>文档分析</h2><ul>
-<li>git rebase basebranch</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git checkout experiment</span><br><span class="line">git rebase master</span><br><span class="line">//这时experiment分支其实已经是基于master分支构建了</span><br></pre></td></tr></table></figure>
-
-<p>变基时，会找到2个分支（topicbranch experiment和基底分支basebranch master)的共同祖先C2，然后对比当前分支(experiment)的历次提交，提取相应的修改并存为临时文件，然后将当前分支指向目标基底C3，最后以此将之前另存为临时文件的修改依序应用。以上是官方解释，有点饶，简单点说，就是把<strong>自动提交差异放到共同祖先提交节点后</strong>，当然如果和基底分支提交有冲突confilt。是需要手工处理的。</p>
-<p><img src="https://git-scm.com/book/en/v2/images/basic-rebase-3.png"></p>
-<p>然后对master分支<strong>快进合并</strong>**</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git checkout mater</span><br><span class="line">git merge experiment</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://git-scm.com/book/en/v2/images/basic-rebase-4.png"></p>
-<p>再放一张直接Merge的图式：</p>
-<p><img src="https://git-scm.com/book/en/v2/images/basic-rebase-2.png" alt="image-20230904112928395"></p>
-<p>看看C5节点，就是自动生成的新的快照。</p>
-<ul>
-<li>git rebase onto</li>
-</ul>
-<p>取出另外分支的提交，简单说，就是将非直接checkout的分支的提交合并。</p>
-<p>如从master上分出server分支，再从server分支分出client分支。</p>
-<p><img src="/../../imgs/image-20230904114325678.png" alt="image-20230904114325678"></p>
-<p>如果master只需要C8,C9，而不想合并C3，那么如何操作？</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git rebase --onto master server client</span><br></pre></td></tr></table></figure>
-
-<p>以上命令的意思是：“取出 <code>client</code> 分支，找出它从 <code>server</code> 分支分歧之后的补丁， 然后把这些补丁在 <code>master</code> 分支上重放一遍，让 <code>client</code> 看起来像直接基于 <code>master</code> 修改一样”。这理解起来有一点复杂，不过效果非常酷。</p>
-<p>这需要对自己的每次提交的内容得非常清楚！</p>
-<ul>
-<li>注意！！！</li>
-</ul>
-<p><strong>如果提交存在于你的仓库之外，而别人可能基于这些提交进行开发，那么不要执行变基</strong></p>
-<p>通俗点讲：尽量避免对已到远端的提交(origin)进行变基，一般对自己本地分支(local)使用。</p>
-<p>因为，远端仓库，别人也可能基于这些提交进行开发，如果你执行的变基，同时强推倒远端仓库，别人pull之后，他的提交线就会混乱，同时他在push，你再pull，就会导致你的提交线会混乱。是不是很绕，有点难理解。下面结合图示将描述简单化；</p>
-<p>场景流程如下：</p>
-<p>1.当前状态：我通过pull远端，将teamone的提交合并，当前我在C7上。git.team1.com是远端库</p>
-<p><img src="/../../imgs/perils-of-rebasing-2.png"></p>
-<p>2.如果teamone不想merge，不想记录C6的merge，他采用的rebase变基，然后强推push –force，这时远端及本地的状态及提交记录如下图；</p>
-<p>远端的C4,C6消失，多了一个C4&#96;.</p>
-<p>本地不变。</p>
-<p><img src="/../../imgs/perils-of-rebasing-3.png"></p>
-<p>3.这时你执行pull，将会合并2个提交历史的内容，生成一个新的合并提交。最终仓库会如图：</p>
-<p>因为C4&#96;是新的，而本地C4,C6并未消失(本地未执行rebase，只有teamone执行)，所以会有一个C8.</p>
-<p><img src="/../../imgs/perils-of-rebasing-4.png"></p>
-<p>这样会导致提交异常混乱，你会发现C4和C4&#96;的相同的提交在你的仓库里重复出现了2次。如果你再push，又会将C4,C6重新推送到服务器上去。这回就会让teamone困惑了。因为他之前rebase的操作就是要将C4和C6丢弃。</p>
-<blockquote>
-<p>那么如何解决？</p>
-</blockquote>
-<p>用变基解决变基(推荐)</p>
-<p>如果团队中的某人强制推送并覆盖了一些你所基于的提交，你需要做的就是检查你做了哪些修改，以及他们覆盖了哪些修改。</p>
-<p><strong>Git 除了对整个提交计算 SHA-1 校验和以外，也对本次提交所引入的修改计算了校验和——即 “patch-id”。</strong></p>
-<p>使用git rebase，git会自动检查自己和对方的差异，再进行合并。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git rebase remote/maser</span><br></pre></td></tr></table></figure>
-
-<p>推荐使用 <strong>git pull –rebase</strong>而不是git pull</p>
-<p>git pull –rebase 等于git fetch | git rebase remote&#x2F;mater</p>
-<p>同时，可以设置git config –global pull.rebase true.这样你再使用git pull时，是默认使用选项–rebase的。</p>
-<ul>
-<li>变基 vs 合并</li>
-</ul>
-<p>​	无所谓那种更好，关键看针对的场景和开发者的使用理念。有人认为提交历史就是记录发生什么，有人认为是项目中发发生的事，无需记录不必要的记录。</p>
-<p>总的原则是，只对尚未推送或分享给别人的本地修改执行变基操作清理历史， 从不对已推送至别处的提交执行变基操作，像我的习惯是，针对功能性分支基本采用rebase，对于主线记录版本的分支比如main使用merge。</p>
-<h2 id="rebase-commitID"><a href="#rebase-commitID" class="headerlink" title="rebase commitID"></a>rebase commitID</h2><p>rebase 除了可以对branch分支进行操作，还可以指定commitID来进行各种操作场景：</p>
-<p>1.合并提交</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//前开后闭</span><br><span class="line">git rebase commitID1 commitID2</span><br><span class="line">//对Head之后的第2个提交进行变基</span><br><span class="line">git rebase HEAD~2</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>2.修改提交</p>
-<p>选项：</p>
-<p>p :对commit执行选择，选择提交</p>
-<p>r：选择提交，但是修改提交信息</p>
-<p>e :针对提交做修订</p>
-<p>s :选择提交，并合并到上一个提交中</p>
-<p>f:选择提交，但只保留上一个提交的日志</p>
-<p>其实rebase commitID从字面可以理解，也是重新变基，只是这是基于commitId为基础，所以rebase后会新建临时分支出来。</p>
-<p>在每一个选择提交操作上，可以执行</p>
-<p>git rebase –continue:继续变基，调到下一个commit</p>
-<p>git rebase –abort:放弃变基</p>
-<p>git rebase –edit-todo：继续变基，进行变基代办事项</p>
-<p>git commit –amend : 修改提交信息</p>
-<h2 id="备注"><a href="#备注" class="headerlink" title="备注"></a>备注</h2><p>主要内容和图<a href="https://git-scm.com/book/zh/v2/Git-%E5%88%86%E6%94%AF-%E5%8F%98%E5%9F%BA">依据</a></p>
-]]></content>
-      <categories>
-        <category>git</category>
-      </categories>
-      <tags>
-        <tag>git</tag>
-        <tag>技巧</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>解决pip安装后，找不到依赖包的问题</title>
-    <url>/2023/04/07/%E8%A7%A3%E5%86%B3pip%E5%AE%89%E8%A3%85%E5%90%8E%E4%BE%9D%E8%B5%96%E5%8C%85%E4%B8%8D%E7%94%9F%E6%95%88%E7%9A%84%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<h1 id="解决pip安装后，找不到依赖包的问题"><a href="#解决pip安装后，找不到依赖包的问题" class="headerlink" title="解决pip安装后，找不到依赖包的问题"></a>解决pip安装后，找不到依赖包的问题</h1><p>最近接触Python、conda，在使用过程中碰到了一个奇怪的问题，参照文档conda激活环境，pip install安装依赖包后，但是工程中却始终各种找不到各种依赖包的错误，先将原因、定位过程、解决方法以及一些思考记录下来；如果文字中有错误或者不合适的描述，请指正。</p>
-<h2 id="原因："><a href="#原因：" class="headerlink" title="原因："></a>原因：</h2><p>表象：按照文档教程pip install安装之后，仍然提示工程环境中没有安装对应的依赖包，这有点类似java和android工程中，通过maven或gradle配置后，在编译中仍然无法找到对应的依赖模块包或类的错误。</p>
-<p>解决：针对本人遇到的情况，<strong>屏蔽之前的python和pip的全局环境变量，默认使用conda环境配置</strong>，按照文档教程操作，即可将安装包下载到指定的环境路径下，工程就找到安装的依赖包。</p>
-<p>原因：对conda、python环境配置的不熟悉，用户全局环境的配置以及pip安装依赖包的操作不了解。</p>
-<span id="more"></span>
-
-<h2 id="定位过程"><a href="#定位过程" class="headerlink" title="定位过程"></a>定位过程</h2><p>1.开始对着教程，进行了包安装，如下</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pip install torch==version</span><br><span class="line">jupyter notebook</span><br></pre></td></tr></table></figure>
-<p>结果工程里报错，torch、sensor各种包都找不到；但之前使用conda activate已激活环境。</p>
-<p>2.再次重新安装pip install<br>还是找不到，用vscode中打开也找不到(其实和IDE工具无关)<br>3.网上搜索答案<br>一顿尝试，无果；没有解决问题；其实这时已经怀疑是不是和pip的全局配置有关了，但对python环境的不熟，没有去深度思考。</p>
-<p>4.自我尝试解决-更新内核或环境？<br>在notebook更换一下内核，还是有问题；<br>在vscode将环境切换到base中，依赖包问题解决，这时基本确定是安装包是没有安装到指定的环境中，而是安装到默认的base环境路径下；</p>
-<p>再次尝试pip安装，发现包安装路径是在默认的python全局环境路径下面；</p>
-<p>进入到指定环境路径下，使用.&#x2F;env&#x2F;bin&#x2F;pip 安装，这次发现安装包正确地下载到指定环境下，工程导入依赖包问题也解决。</p>
-<p>5.继续深入<br>发现只要直接使用pip就会下载到全局路径，<strong>这是因为之前安装python时，在系统环境配置中配置指定了pip的路径</strong>，所以使用pip会直接下载到全局的路径下去，如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#Python</span><br><span class="line">export PYTHON_HOME=/opt/homebrew/Cellar/python@3.9/3.9.10</span><br><span class="line">alias python=$&#123;PYTHON_HOME&#125;&quot;/bin/python3.9&quot;</span><br><span class="line">alias python3=$&#123;PYTHON_HOME&#125;&quot;/bin/python3&quot;</span><br><span class="line">alias pip3=$&#123;PYTHON_HOME&#125;&quot;/bin/pip3&quot;</span><br><span class="line">alias pip=$&#123;PYTHON_HOME&#125;&quot;/bin/pip3&quot;</span><br><span class="line">export PATH=$&#123;PATH&#125;:...$&#123;PYTHON_HOME&#125;/bin:</span><br></pre></td></tr></table></figure>
-<p>直接运行pip 命令，都会走用户环境里的pip命令即alias指定的那个路径，python指令也是，会覆盖conda的配置；</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">which pip</span><br><span class="line">#输出：pip: aliased to /opt/homebrew/Cellar/python@3.9/3.9.10/bin/pip3</span><br><span class="line">pip -V</span><br><span class="line">#输出：pip 23.0.1 from /opt/homebrew/lib/python3.9/site-packages/pip (python 3.9)</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">which python</span><br><span class="line">#输出：python: aliased to /opt/homebrew/Cellar/python@3.9/3.9.10/bin/python3.9</span><br><span class="line">python --version</span><br><span class="line">#输出：Python 3.9.10</span><br></pre></td></tr></table></figure>
-<p>所以安装conda后，可以将python配置的环境屏蔽掉：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">which pip</span><br><span class="line"># 输出:/opt/anaconda3/bin/pip</span><br><span class="line">pip -V</span><br><span class="line"># 输出：pip 21.2.4 from /opt/anaconda3/lib/python3.9/site-packages/pip (python 3.9)</span><br><span class="line">which python</span><br><span class="line"># 输出：/opt/anaconda3/bin/python</span><br><span class="line">python --version</span><br><span class="line"># 输出：Python 3.9.7</span><br></pre></td></tr></table></figure>
-<p>查看当前python的环境，*代表当前环境</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">conda info -e</span><br><span class="line">输出：</span><br><span class="line"># conda environments:</span><br><span class="line">#</span><br><span class="line">base                  *  /opt/anaconda3</span><br><span class="line">d2l                      /opt/anaconda3/envs/d2l</span><br><span class="line">my_env                   /opt/anaconda3/envs/my_env</span><br></pre></td></tr></table></figure>
-<p>切换到指定环境</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">conda activate d2l</span><br><span class="line">conda info -e</span><br><span class="line">输出：</span><br><span class="line"># conda environments:</span><br><span class="line">#</span><br><span class="line">base                    /opt/anaconda3</span><br><span class="line">d2l                  *  /opt/anaconda3/envs/d2l</span><br></pre></td></tr></table></figure>
-
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>1.使用指定环境下的pip:在虚拟环境下xxx的bin目录下，执行pip，即可将安装包模块下载到虚拟环境中,如：.&#x2F;envs&#x2F;xxx&#x2F;bin&#x2F;pip install<br>虚拟环境的安装包路径.&#x2F;envs&#x2F;xxx&#x2F;lib&#x2F;<a href="mailto:&#x70;&#121;&#x74;&#x68;&#x6f;&#x6e;&#x40;&#x33;&#46;&#57;">&#x70;&#121;&#x74;&#x68;&#x6f;&#x6e;&#x40;&#x33;&#46;&#57;</a>&#x2F;site-packages&#x2F;</p>
-<p>2.屏蔽pip的全局环境配置，使用conda</p>
-<p>3.使用–target选项：pip install --tartget&#x3D;.&#x2F;envs&#x2F;xxx&#x2F;lib&#x2F;<a href="mailto:&#x70;&#x79;&#116;&#x68;&#x6f;&#x6e;&#x40;&#51;&#46;&#x39;">&#x70;&#x79;&#116;&#x68;&#x6f;&#x6e;&#x40;&#51;&#46;&#x39;</a>&#x2F;site-packages&#x2F;</p>
-<h2 id="回顾"><a href="#回顾" class="headerlink" title="回顾"></a>回顾</h2><p>1.现象：依赖包的找不到-&gt;为什么找不到-&gt;没有安装-&gt;为什么没有安装？明明已经安装-&gt;涉及到python、conda环境的问题！</p>
-<p>2.中途某段时间被牵引到Homebrew disutils这个工具的问题上去了,以为是这个问题导致安装失败！这个误导过程仍然是对问题的本质没有深入理解，定位问题没有逻辑性和线索；然后对Python工程的依赖、安装、虚拟环境等知识点的不熟悉；</p>
-<p>DEPRECATION: Configuring installation scheme with distutils config files is deprecated and will no longer work in the near future. If you are using a Homebrew or Linuxbrew Python, please see discussion at <a href="https://github.com/Homebrew/homebrew-core/issues/76621">https://github.com/Homebrew/homebrew-core/issues/76621</a></p>
-<p>3.Python在安装依赖包这一点上和Maven、Gradle构建工程有不同，不同点在于maven或gradle配置工程的依赖包都是在统一的路径下，根据groupid&#x2F;artifactid&#x2F;version来区分，但Python工程不一样，它基于自己的工程的环境，相同的包可能在不同的环境下出现多次；</p>
-<p>4.重新理清归纳问题才能正确的解决问题:”pip install 安装包下载到全局环境路径中，而不是虚拟环境下”；对问题的清晰认知和准确定位，是真正解决问题的前提，如果对问题没有清晰准确的认识，那如同盲人摸象、瞎子过河，只知其一，浪费很多时间，最后问题也得不到解决。</p>
-<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>对新事物的尝试和探索，会碰到各种问题，掌握正确解决问题的思维方式和方案，加上对底层基础和背后逻辑的掌握，然后对事物原理的追根溯源，就能真正意义上地解决问题和把握新事物。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://www.cnblogs.com/bigtreei/p/15094293.html">https://www.cnblogs.com/bigtreei/p/15094293.html</a></p>
-<p><a href="https://zhuanlan.zhihu.com/p/522468985">https://zhuanlan.zhihu.com/p/522468985</a></p>
-<p><a href="https://pythonguidecn.readthedocs.io/zh/latest/dev/virtualenvs.html">Pipenv &amp; 虚拟环境</a></p>
-<h1 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h1><ul>
-<li>conda：</li>
-</ul>
-<p>Conda是一个开源的包管理器和环境管理系统，用于管理和部署不同版本的软件包和依赖项。Conda可以同时管理多个环境，每个环境可以包含不同版本的Python解释器以及其他库和依赖项。在本质上，Conda是一个跨平台的软件包管理系统，可用于管理Python软件包，以及其他一些编程语言的软件包。</p>
-<p>下面是Conda的一些主要特点和使用原理：</p>
-<ol>
-<li>包管理器：Conda作为一个包管理器，可以轻松地安装、升级、删除软件包，以及查看已安装的包列表。Conda还可以处理软件包之间的依赖关系，以确保在安装新软件包时不会出现依赖冲突。</li>
-<li>环境管理器：Conda还可以管理多个环境，每个环境可以包含不同版本的Python解释器和其他库和依赖项。这使得用户可以轻松地创建和维护不同的开发环境，以及为不同的项目配置不同的环境。</li>
-<li>跨平台：Conda可以在多种操作系统上运行，包括Windows、macOS和Linux等。</li>
-<li>渠道：Conda的包管理系统是基于渠道的，可以从不同的渠道安装软件包，包括Anaconda官方渠道、conda-forge、PyPI等。用户可以在不同的渠道之间切换，并管理自己的私有渠道。</li>
-<li>兼容性：Conda可以管理多个版本的Python解释器和不同的软件包版本，以确保不同版本的软件包可以兼容。</li>
-</ol>
-<p>总之，Conda提供了一种方便、灵活和可扩展的方式来管理Python软件包和环境，使得用户可以更好地管理自己的开发环境，以及更方便地分享和部署自己的Python应用程序。</p>
-<ul>
-<li><a href="https://github.com/conda/conda.git">conda源码</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>bug</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>pip</tag>
-        <tag>conda</tag>
-        <tag>虚拟环境</tag>
-        <tag>用户环境变量</tag>
-        <tag>site-packages</tag>
       </tags>
   </entry>
 </search>
