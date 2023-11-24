@@ -21,17 +21,17 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"thorjay.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.13.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"utterances","storage":true,"lazyload":false,"nav":null,"activeClass":"utterances"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="[TOC] 前言需求：目前想体验GPT服务的能力，都得通过一个网络代理；比如实现一个对接GPT接口的api的服务，就得需要代理去访问，所以选择通过Clash实现。 介绍 Clash：Clash是一个开源的跨平台网络代理工具，使用Golang语言编写，支持多种代理协议和代理模式。Clash的特点包括：多协议支持：Clash支持Shadowsocks、V2Ray、Trojan等多种协议，用户可以根据需">
+    <meta name="description" content="[TOC] 前言 需求：目前想体验GPT服务的能力，都得通过一个网络代理；比如实现一个对接GPT接口的api的服务，就得需要代理去访问，所以选择通过Clash实现。 介绍  Clash： Clash是一个开源的跨平台网络代理工具，使用Golang语言编写，支持多种代理协议和代理模式。 Clash的特点包括： 多协议支持：Clash支持Shadowsocks、V2Ray、Trojan等多种协议，用户">
 <meta property="og:type" content="article">
 <meta property="og:title" content="对接GPT第一步-clash的安装">
 <meta property="og:url" content="https://thorjay.github.io/2023/04/08/linux%E5%AF%B9clash%E7%9A%84%E5%AE%89%E8%A3%85%E3%80%81%E9%85%8D%E7%BD%AE%E3%80%81%E4%BD%BF%E7%94%A8/index.html">
 <meta property="og:site_name" content="jay&#39;lab">
-<meta property="og:description" content="[TOC] 前言需求：目前想体验GPT服务的能力，都得通过一个网络代理；比如实现一个对接GPT接口的api的服务，就得需要代理去访问，所以选择通过Clash实现。 介绍 Clash：Clash是一个开源的跨平台网络代理工具，使用Golang语言编写，支持多种代理协议和代理模式。Clash的特点包括：多协议支持：Clash支持Shadowsocks、V2Ray、Trojan等多种协议，用户可以根据需">
+<meta property="og:description" content="[TOC] 前言 需求：目前想体验GPT服务的能力，都得通过一个网络代理；比如实现一个对接GPT接口的api的服务，就得需要代理去访问，所以选择通过Clash实现。 介绍  Clash： Clash是一个开源的跨平台网络代理工具，使用Golang语言编写，支持多种代理协议和代理模式。 Clash的特点包括： 多协议支持：Clash支持Shadowsocks、V2Ray、Trojan等多种协议，用户">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://thorjay.github.io/2023/04/imgs/image-20230408093022471.png">
-<meta property="og:image" content="https://thorjay.github.io/imgs/image-20230408094245416.png">
-<meta property="og:image" content="https://thorjay.github.io/imgs/image-20230408125300901.png">
-<meta property="og:image" content="https://thorjay.github.io/imgs/image-20230408125140521.png">
+<meta property="og:image" content="https://thorjay.github.io/2023/04/imgs/image-20230408094245416.png">
+<meta property="og:image" content="https://thorjay.github.io/2023/04/imgs/image-20230408125300901.png">
+<meta property="og:image" content="https://thorjay.github.io/2023/04/imgs/image-20230408125140521.png">
 <meta property="article:published_time" content="2023-04-08T05:20:07.000Z">
 <meta property="article:modified_time" content="2023-09-01T14:58:39.775Z">
 <meta property="article:author" content="小森">
@@ -160,7 +160,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E6%AD%A5%E9%AA%A4%EF%BC%9A"><span class="nav-number">1.2.</span> <span class="nav-text">安装配置步骤：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-number">1.2.1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE"><span class="nav-number">1.2.2.</span> <span class="nav-text">配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%A2%E9%98%85%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">订阅模式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8"><span class="nav-number">1.3.</span> <span class="nav-text">基础使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E4%BB%A3%E7%90%86"><span class="nav-number">1.4.</span> <span class="nav-text">使用代理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95"><span class="nav-number">1.5.</span> <span class="nav-text">测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8"><span class="nav-number">1.6.</span> <span class="nav-text">进阶使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AA%E5%AE%8C%E6%88%90%E7%9A%84%E5%90%8E%E7%BB%AD%E5%8A%9F%E8%83%BD"><span class="nav-number">1.7.</span> <span class="nav-text">未完成的后续功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">1.8.</span> <span class="nav-text">参考</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E6%AD%A5%E9%AA%A4%EF%BC%9A"><span class="nav-number">1.2.</span> <span class="nav-text">安装配置步骤：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-number">1.2.1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE"><span class="nav-number">1.2.2.</span> <span class="nav-text">配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%A2%E9%98%85%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">订阅模式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8"><span class="nav-number">1.3.</span> <span class="nav-text">基础使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E4%BB%A3%E7%90%86"><span class="nav-number">1.4.</span> <span class="nav-text">使用代理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95"><span class="nav-number">1.5.</span> <span class="nav-text">测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8"><span class="nav-number">1.6.</span> <span class="nav-text">进阶使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AA%E5%AE%8C%E6%88%90%E7%9A%84%E5%90%8E%E7%BB%AD%E5%8A%9F%E8%83%BD"><span class="nav-number">1.7.</span> <span class="nav-text">未完成的后续功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">1.8.</span> <span class="nav-text">参考</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -173,7 +173,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-count">12</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -184,7 +184,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-count">33</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -282,55 +282,92 @@
     
     <div class="post-body" itemprop="articleBody">
         <p>[TOC]</p>
-<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>需求：目前想体验GPT服务的能力，都得通过一个网络代理；比如实现一个对接GPT接口的api的服务，就得需要代理去访问，所以选择通过Clash实现。</p>
-<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><ul>
-<li>Clash：<br>Clash是一个开源的跨平台网络代理工具，使用Golang语言编写，支持多种代理协议和代理模式。<br>Clash的特点包括：<br>多协议支持：Clash支持Shadowsocks、V2Ray、Trojan等多种协议，用户可以根据需要自由切换。<br>多代理模式支持：Clash支持全局代理、PAC代理、域名代理等多种代理模式，用户可以根据需要选择不同的代理方式。<br>智能规则引擎：Clash内置强大的规则引擎，可以自动根据用户的需求选择最佳的代理节点。<br>支持多平台：Clash支持Windows、MacOS、Linux等多种操作系统，用户可以在不同的平台上使用Clash。<br>总的来说，Clash是一款功能强大的网络代理工具，可以帮助用户实现科学上网，访问被封锁的网站和服务。同时，Clash也是一个开源项目，用户可以自由地查看和修改Clash的源代码。<br><a target="_blank" rel="noopener" href="https://github.com/Dreamacro/clash">开源地址</a></li>
+<h1>前言</h1>
+<p>需求：目前想体验GPT服务的能力，都得通过一个网络代理；比如实现一个对接GPT接口的api的服务，就得需要代理去访问，所以选择通过Clash实现。</p>
+<h2 id="介绍">介绍</h2>
+<ul>
+<li>Clash：<br>
+Clash是一个开源的跨平台网络代理工具，使用Golang语言编写，支持多种代理协议和代理模式。<br>
+Clash的特点包括：<br>
+多协议支持：Clash支持Shadowsocks、V2Ray、Trojan等多种协议，用户可以根据需要自由切换。<br>
+多代理模式支持：Clash支持全局代理、PAC代理、域名代理等多种代理模式，用户可以根据需要选择不同的代理方式。<br>
+智能规则引擎：Clash内置强大的规则引擎，可以自动根据用户的需求选择最佳的代理节点。<br>
+支持多平台：Clash支持Windows、MacOS、Linux等多种操作系统，用户可以在不同的平台上使用Clash。<br>
+总的来说，Clash是一款功能强大的网络代理工具，可以帮助用户实现科学上网，访问被封锁的网站和服务。同时，Clash也是一个开源项目，用户可以自由地查看和修改Clash的源代码。<br>
+<a target="_blank" rel="noopener" href="https://github.com/Dreamacro/clash">开源地址</a></li>
 </ul>
 <span id="more"></span>
-
 <ul>
-<li>ClashX：<br>一款基于Clash核心开发的免费、开源的网络代理工具，支持多种协议和代理模式，可以在Mac电脑上实现科学上网。<br>ClashX的特点包括：<br>多协议支持：ClashX支持Shadowsocks、V2Ray、Trojan等多种协议，用户可以根据需要自由切换。<br>多代理模式支持：ClashX支持全局代理、PAC代理、域名代理等多种代理模式，用户可以根据需要选择不同的代理方式。<br>智能规则引擎：ClashX内置强大的规则引擎，可以自动根据用户的需求选择最佳的代理节点。<br>界面友好：ClashX的界面简洁、易用，用户可以轻松设置和管理代理配置。</li>
-<li>GPT：<br>人工智能多模式大模型。</li>
-<li>GPT SDK(chatgpt-java)：<br>ChatGPT Java 版本，OpenAI ChatGPT 的逆向工程 SDK，可扩展用于聊天机器人等。<br><a target="_blank" rel="noopener" href="https://github.com/PlexPt/chatgpt-java">chatgpt-java</a><br><a target="_blank" rel="noopener" href="https://icspec.com/news/article-details/2133492?type=prefecture">简介</a></li>
-<li>gpt-server：<br>基于GPT-SDK拓展的javaWeb服务工程Demo。</li>
+<li>ClashX：<br>
+一款基于Clash核心开发的免费、开源的网络代理工具，支持多种协议和代理模式，可以在Mac电脑上实现科学上网。<br>
+ClashX的特点包括：<br>
+多协议支持：ClashX支持Shadowsocks、V2Ray、Trojan等多种协议，用户可以根据需要自由切换。<br>
+多代理模式支持：ClashX支持全局代理、PAC代理、域名代理等多种代理模式，用户可以根据需要选择不同的代理方式。<br>
+智能规则引擎：ClashX内置强大的规则引擎，可以自动根据用户的需求选择最佳的代理节点。<br>
+界面友好：ClashX的界面简洁、易用，用户可以轻松设置和管理代理配置。</li>
+<li>GPT：<br>
+人工智能多模式大模型。</li>
+<li>GPT SDK(chatgpt-java)：<br>
+ChatGPT Java 版本，OpenAI ChatGPT 的逆向工程 SDK，可扩展用于聊天机器人等。<br>
+<a target="_blank" rel="noopener" href="https://github.com/PlexPt/chatgpt-java">chatgpt-java</a><br>
+<a target="_blank" rel="noopener" href="https://icspec.com/news/article-details/2133492?type=prefecture">简介</a></li>
+<li>gpt-server：<br>
+基于GPT-SDK拓展的javaWeb服务工程Demo。</li>
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//默认是8080端口</span><br><span class="line">java -jar gpt-server.jar</span><br></pre></td></tr></table></figure>
-<h2 id="安装配置步骤："><a href="#安装配置步骤：" class="headerlink" title="安装配置步骤："></a>安装配置步骤：</h2><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>去<a target="_blank" rel="noopener" href="https://github.com/Dreamacro/clash/releases">资源包地址</a>下载安装包,选择对应操作系统的资源；</p>
+<h2 id="安装配置步骤：">安装配置步骤：</h2>
+<h3 id="安装">安装</h3>
+<p>去<a target="_blank" rel="noopener" href="https://github.com/Dreamacro/clash/releases">资源包地址</a>下载安装包,选择对应操作系统的资源；</p>
 <img src="../../imgs/image-20230408093022471.png" alt="image-20230408093022471" style="zoom:33%;" />
-
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 以linux x64为例</span><br><span class="line">cd ~/software</span><br><span class="line">curl https://github.com/Dreamacro/clash/releases/download/v1.14.0/clash-linux-amd64-v3-v1.14.0.gz</span><br><span class="line">gunzip clash-linux-amd64-v3-v1.14.0.gz</span><br></pre></td></tr></table></figure>
-
 <p>建议在当前用户的.config文件夹下，新建一个clash文件夹，所有与clash相关的文件配置都放在其中</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd ~/.config</span><br><span class="line">mkdir clash &amp;&amp; cd clash</span><br></pre></td></tr></table></figure>
-
-<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><h4 id="订阅模式"><a href="#订阅模式" class="headerlink" title="订阅模式"></a>订阅模式</h4><p>将自己的配置文件放入clash文件夹路径下：~&#x2F;.config&#x2F;clash</p>
+<h3 id="配置">配置</h3>
+<h4 id="订阅模式">订阅模式</h4>
+<p>将自己的配置文件放入clash文件夹路径下：~/.config/clash</p>
 <ul>
-<li><p>config.yaml<br>clash代理的配置文件</p>
+<li>
+<p>config.yaml<br>
+clash代理的配置文件</p>
 </li>
-<li><p>Country.mmdb<br>文件利用 GeoIP2 服务能识别互联网用户的地点位置，以供规则分流时使用；一般的网络服务提供了 Clash 订阅链接，可以直接下载链接指向的文件内容，保存到 config.yaml 中。或者使用订阅转换服务，将其它订阅转换为 Clash 订阅。<br>这里推荐使用订阅转换服务，转换后的配置文件已添加更为强大的分流规则。就可以将 Clash 一直保持后台运行，自动分流，且会自动选择最优节点。</p>
+<li>
+<p>Country.mmdb<br>
+文件利用 GeoIP2 服务能识别互联网用户的地点位置，以供规则分流时使用；一般的网络服务提供了 Clash 订阅链接，可以直接下载链接指向的文件内容，保存到 config.yaml 中。或者使用订阅转换服务，将其它订阅转换为 Clash 订阅。<br>
+这里推荐使用订阅转换服务，转换后的配置文件已添加更为强大的分流规则。就可以将 Clash 一直保持后台运行，自动分流，且会自动选择最优节点。</p>
 </li>
-<li><p>软连接(可选)；如果不使用这个，开启clash就得使用文件的绝对路径。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 这里新建了一个clash文件，将启动脚本/root/software/clash-linux-amd64-v1.14.0链接到此文件，就不</span><br><span class="line"># 用每次定位到软件启动脚本那里；ln -s source_file tartget_file</span><br><span class="line">ln -s /root/software/clash-linux-amd64-v1.14.0 clash</span><br></pre></td></tr></table></figure></li>
+<li>
+<p>软连接(可选)；如果不使用这个，开启clash就得使用文件的绝对路径。</p>
+</li>
 </ul>
-<p><img src="/../../imgs/image-20230408094245416.png" alt="image-20230408094245416"></p>
-<p>注意：实际操作中发现，如果没有创建~&#x2F;.config&#x2F;clash文件夹路径，会报二进制文件无法执行的错误！</p>
-<h2 id="基础使用"><a href="#基础使用" class="headerlink" title="基础使用"></a>基础使用</h2><ul>
-<li>开启，启动后即可访问代理<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./clash</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 这里新建了一个clash文件，将启动脚本/root/software/clash-linux-amd64-v1.14.0链接到此文件，就不</span><br><span class="line"># 用每次定位到软件启动脚本那里；ln -s source_file tartget_file</span><br><span class="line">ln -s /root/software/clash-linux-amd64-v1.14.0 clash</span><br></pre></td></tr></table></figure>
+<p><img src="../../imgs/image-20230408094245416.png" alt="image-20230408094245416"></p>
+<p>注意：实际操作中发现，如果没有创建~/.config/clash文件夹路径，会报二进制文件无法执行的错误！</p>
+<h2 id="基础使用">基础使用</h2>
+<ul>
+<li>开启，启动后即可访问代理</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./clash</span><br></pre></td></tr></table></figure>
+<ul>
 <li>后台开启</li>
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohub clash</span><br></pre></td></tr></table></figure>
-
-<h2 id="使用代理"><a href="#使用代理" class="headerlink" title="使用代理"></a>使用代理</h2><p>使用Export命令使用代理，Clash 运行后，其在后台监听某一端口。Ubuntu 下使用代理，需要 export<br> 命令。根据 config 配置文件可以查看到Clash 代理端口（订阅转换后，端口为7890），设置系统代理命令为：</p>
+<h2 id="使用代理">使用代理</h2>
+<p>使用Export命令使用代理，Clash 运行后，其在后台监听某一端口。Ubuntu 下使用代理，需要 export<br>
+命令。根据 config 配置文件可以查看到Clash 代理端口（订阅转换后，端口为7890），设置系统代理命令为：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890</span><br></pre></td></tr></table></figure>
-
-<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>测试一下，通过部署自己创建的gpt-server工程，，调用gpt的api接口，效果如下：</p>
-<p><img src="/../../imgs/image-20230408125300901.png" alt="image-20230408125300901"></p>
-<p><img src="/../../imgs/image-20230408125140521.png" alt="image-20230408125140521"></p>
-<h2 id="进阶使用"><a href="#进阶使用" class="headerlink" title="进阶使用"></a>进阶使用</h2><ul>
-<li><p>变为系统服务</p>
+<h2 id="测试">测试</h2>
+<p>测试一下，通过部署自己创建的gpt-server工程，，调用gpt的api接口，效果如下：</p>
+<p><img src="../../imgs/image-20230408125300901.png" alt="image-20230408125300901"></p>
+<p><img src="../../imgs/image-20230408125140521.png" alt="image-20230408125140521"></p>
+<h2 id="进阶使用">进阶使用</h2>
+<ul>
+<li>
+<p>变为系统服务</p>
 <p>Treat Clash as a daemon,将Clash实现常驻后台运行、开机启动等。</p>
-<p>1.配置systemd服务<br>Linux系统使用systemd作为启动服务器管理机制，首先把Clash可执行文件拷贝到**&#x2F;usr&#x2F;local&#x2F;bin**目录，相关配置拷贝到&#x2F;etc&#x2F;clash目录</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir /etc/clash</span><br><span class="line">sudo cp clash /usr/local/bin</span><br><span class="line">sudo cp config.yaml /etc/clash</span><br><span class="line">sudo cp Country.mmdb /etc/clash</span><br></pre></td></tr></table></figure></li>
+<p>1.配置systemd服务<br>
+Linux系统使用systemd作为启动服务器管理机制，首先把Clash可执行文件拷贝到**/usr/local/bin**目录，相关配置拷贝到/etc/clash目录</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir /etc/clash</span><br><span class="line">sudo cp clash /usr/local/bin</span><br><span class="line">sudo cp config.yaml /etc/clash</span><br><span class="line">sudo cp Country.mmdb /etc/clash</span><br></pre></td></tr></table></figure>
+</li>
 </ul>
 <p>​	  2.创建systemd服务配置文件</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vi /etc/systemd/system/clash.service</span><br></pre></td></tr></table></figure>
@@ -339,40 +376,42 @@
 <p>[Unit]</p>
 </blockquote>
 <blockquote>
-<p>Description&#x3D;Clash daemon, A rule-based proxy in Go.</p>
+<p>Description=Clash daemon, A rule-based proxy in Go.</p>
 </blockquote>
 <blockquote>
-<p>After&#x3D;network.target</p>
+<p>After=network.target</p>
 </blockquote>
 <blockquote>
 <p>[Service]</p>
 </blockquote>
 <blockquote>
-<p>Type&#x3D;simple</p>
+<p>Type=simple</p>
 </blockquote>
 <blockquote>
-<p>Restart&#x3D;always</p>
+<p>Restart=always</p>
 </blockquote>
 <blockquote>
-<p>ExecStart&#x3D;&#x2F;usr&#x2F;local&#x2F;bin&#x2F;clash -d &#x2F;etc&#x2F;clash</p>
+<p>ExecStart=/usr/local/bin/clash -d /etc/clash</p>
 </blockquote>
 <blockquote>
 <p>[Install]</p>
 </blockquote>
 <blockquote>
-<p>WantedBy&#x3D;multi-user.target<br>​		3.使用systemd</p>
+<p>WantedBy=multi-user.target<br>
+​		3.使用systemd</p>
 </blockquote>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//Clash开机自启动</span><br><span class="line">sudo systemctl enable clash</span><br></pre></td></tr></table></figure>
-
 <p>4.开启clash</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl start clash</span><br></pre></td></tr></table></figure>
 <p>5.查看Clash日志</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl status clash</span><br><span class="line">sudo journalctl -xe</span><br></pre></td></tr></table></figure>
-<h2 id="未完成的后续功能"><a href="#未完成的后续功能" class="headerlink" title="未完成的后续功能"></a>未完成的后续功能</h2><ul>
-<li><input disabled="" type="checkbox"> clash_dashbord面板</li>
-<li><input disabled="" type="checkbox"> Docker化安装配置Clash</li>
+<h2 id="未完成的后续功能">未完成的后续功能</h2>
+<ul>
+<li>[ ] clash_dashbord面板</li>
+<li>[ ] Docker化安装配置Clash</li>
 </ul>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://blog.iswiftai.com/posts/clash-linux/">https://blog.iswiftai.com/posts/clash-linux/</a></p>
+<h2 id="参考">参考</h2>
+<p><a target="_blank" rel="noopener" href="https://blog.iswiftai.com/posts/clash-linux/">https://blog.iswiftai.com/posts/clash-linux/</a></p>
 <p><a target="_blank" rel="noopener" href="https://blog.zzsqwq.cn/posts/how-to-use-clash-on-linux/">容器化安装</a></p>
 
     </div>

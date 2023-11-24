@@ -21,29 +21,33 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"thorjay.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.13.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"utterances","storage":true,"lazyload":false,"nav":null,"activeClass":"utterances"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="需求及场景  角度测量  将手机变成一个指南针或者一个水平仪的数据；要实现这种效果，就得通过上一篇文章Android传感器介绍及使用中介绍的传感器来获取相应的数据。  坐标系  方位水平测量是以世界坐标系为基准的，详情见上一篇文章Android传感器介绍及使用中的传感器事件数据章节。  传感器  使用两种传感器来：  地磁场传感器 加速度计传感器">
+    <meta name="description" content="介绍 关于AOP，需要了解面向切面编程 Aspect of Program； 面向切面编程主要是相对于面向对象编程来讲，如果面向对象是针对某个对象封装来纵向实现逻辑，那么面向切面就是针对这些对象实现横向逻辑实现。  场景 登录鉴权 日志 数据统计，行为分析 几种实现机制  动态代理  面向切面针对的是方法，而不是对象；所以在动态代理类中，我们需要定义接口，利用接口中的方法JoinPoint来定义切">
 <meta property="og:type" content="article">
-<meta property="og:title" content="传感器_方位水平测量">
-<meta property="og:url" content="https://thorjay.github.io/2022/09/21/%E4%BC%A0%E6%84%9F%E5%99%A8_%E6%96%B9%E4%BD%8D%E6%B0%B4%E5%B9%B3%E6%B5%8B%E9%87%8F/index.html">
+<meta property="og:title" content="AOP(一)_关AOP">
+<meta property="og:url" content="https://thorjay.github.io/2023/11/21/AOP(%E4%B8%80)-%E6%9C%89%E5%85%B3AOP/index.html">
 <meta property="og:site_name" content="jay&#39;lab">
-<meta property="og:description" content="需求及场景  角度测量  将手机变成一个指南针或者一个水平仪的数据；要实现这种效果，就得通过上一篇文章Android传感器介绍及使用中介绍的传感器来获取相应的数据。  坐标系  方位水平测量是以世界坐标系为基准的，详情见上一篇文章Android传感器介绍及使用中的传感器事件数据章节。  传感器  使用两种传感器来：  地磁场传感器 加速度计传感器">
+<meta property="og:description" content="介绍 关于AOP，需要了解面向切面编程 Aspect of Program； 面向切面编程主要是相对于面向对象编程来讲，如果面向对象是针对某个对象封装来纵向实现逻辑，那么面向切面就是针对这些对象实现横向逻辑实现。  场景 登录鉴权 日志 数据统计，行为分析 几种实现机制  动态代理  面向切面针对的是方法，而不是对象；所以在动态代理类中，我们需要定义接口，利用接口中的方法JoinPoint来定义切">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-09-21T09:32:49.006Z">
-<meta property="article:modified_time" content="2023-09-15T13:16:59.799Z">
+<meta property="og:image" content="https://thorjay.github.io/2023/11/imgs/image-20231121144035025.png">
+<meta property="og:image" content="https://thorjay.github.io/2023/11/imgs/image-20231123103714729.png">
+<meta property="og:image" content="https://thorjay.github.io/2023/11/imgs/image-20231123111714858.png">
+<meta property="og:image" content="https://thorjay.github.io/2023/11/imgs/image-20231124102512434.png">
+<meta property="article:published_time" content="2023-11-21T03:00:43.148Z">
+<meta property="article:modified_time" content="2023-11-24T03:13:47.427Z">
 <meta property="article:author" content="小森">
-<meta property="article:tag" content="Android">
-<meta property="article:tag" content="传感器">
+<meta property="article:tag" content="AOP">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://thorjay.github.io/2023/11/imgs/image-20231121144035025.png">
 
 
-<link rel="canonical" href="https://thorjay.github.io/2022/09/21/%E4%BC%A0%E6%84%9F%E5%99%A8_%E6%96%B9%E4%BD%8D%E6%B0%B4%E5%B9%B3%E6%B5%8B%E9%87%8F/">
+<link rel="canonical" href="https://thorjay.github.io/2023/11/21/AOP(%E4%B8%80)-%E6%9C%89%E5%85%B3AOP/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://thorjay.github.io/2022/09/21/%E4%BC%A0%E6%84%9F%E5%99%A8_%E6%96%B9%E4%BD%8D%E6%B0%B4%E5%B9%B3%E6%B5%8B%E9%87%8F/","path":"2022/09/21/传感器_方位水平测量/","title":"传感器_方位水平测量"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://thorjay.github.io/2023/11/21/AOP(%E4%B8%80)-%E6%9C%89%E5%85%B3AOP/","path":"2023/11/21/AOP(一)-有关AOP/","title":"AOP(一)_关AOP"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>传感器_方位水平测量 | jay'lab</title>
+<title>AOP(一)_关AOP | jay'lab</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-241326189-1"></script>
   <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-241326189-1","only_pageview":false}</script>
@@ -151,7 +155,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9C%80%E6%B1%82%E5%8F%8A%E5%9C%BA%E6%99%AF"><span class="nav-number">1.</span> <span class="nav-text">需求及场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E4%BB%A3%E7%A0%81"><span class="nav-number">2.</span> <span class="nav-text">关键代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A1%88%E5%88%97"><span class="nav-number">3.</span> <span class="nav-text">案列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TODO"><span class="nav-number">4.</span> <span class="nav-text">TODO</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%BA%E6%99%AF"><span class="nav-number">2.</span> <span class="nav-text">场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%A0%E7%A7%8D%E5%AE%9E%E7%8E%B0%E6%9C%BA%E5%88%B6"><span class="nav-number">3.</span> <span class="nav-text">几种实现机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5"><span class="nav-number">4.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="nav-number">5.</span> <span class="nav-text">生命周期</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">6.</span> <span class="nav-text">其他</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E6%A1%88%E5%88%97"><span class="nav-number">7.</span> <span class="nav-text">代码案列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">8.</span> <span class="nav-text">参考</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -214,7 +218,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://thorjay.github.io/2022/09/21/%E4%BC%A0%E6%84%9F%E5%99%A8_%E6%96%B9%E4%BD%8D%E6%B0%B4%E5%B9%B3%E6%B5%8B%E9%87%8F/">
+    <link itemprop="mainEntityOfPage" href="https://thorjay.github.io/2023/11/21/AOP(%E4%B8%80)-%E6%9C%89%E5%85%B3AOP/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -227,12 +231,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="传感器_方位水平测量 | jay'lab">
+      <meta itemprop="name" content="AOP(一)_关AOP | jay'lab">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          传感器_方位水平测量
+          AOP(一)_关AOP
         </h1>
 
         <div class="post-meta-container">
@@ -243,16 +247,7 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2022-09-21 17:32:49" itemprop="dateCreated datePublished" datetime="2022-09-21T17:32:49+08:00">2022-09-21</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a>
-        </span>
+      <time title="创建时间：2023-11-21 11:00:43" itemprop="dateCreated datePublished" datetime="2023-11-21T11:00:43+08:00">2023-11-21</time>
     </span>
 
   
@@ -272,43 +267,54 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h2 id="需求及场景">需求及场景</h2>
+        <h2 id="介绍">介绍</h2>
+<p>关于AOP，需要了解面向切面编程 Aspect of Program；</p>
+<p>面向切面编程主要是相对于面向对象编程来讲，如果面向对象是针对某个对象封装来纵向实现逻辑，那么面向切面就是针对这些对象实现横向逻辑实现。</p>
+<p><img src="../../imgs/image-20231121144035025.png" alt="image-20231121144035025"></p>
+<h2 id="场景">场景</h2>
+<p>登录鉴权</p>
+<p>日志</p>
+<p>数据统计，行为分析</p>
+<h2 id="几种实现机制">几种实现机制</h2>
 <ul>
-<li>角度测量</li>
+<li>动态代理</li>
 </ul>
-<p>将手机变成一个指南针或者一个水平仪的数据；要实现这种效果，就得通过上一篇文章<a href="/2022/09/20/Android%E4%BC%A0%E6%84%9F%E5%99%A8%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8/" title="Android传感器介绍及使用.md">Android传感器介绍及使用</a>中介绍的传感器来获取相应的数据。</p>
+<p>面向切面针对的是方法，而不是对象；所以在动态代理类中，我们需要定义接口，利用接口中的方法JoinPoint来定义切入面；利用Object InvocationHandler. invoke(Object proxy, Method method, Object[] args) throws Throwable方法，实现Advice切入逻辑(切入面方法before和after)；利用Proxy.newIntance()生成动态代理类生成接口对象，代理业务逻辑类。</p>
+<p>动态代理的核心其实就是代理对象的生成，即Proxy.newProxyInstance(classLoader, proxyInterface, handler)。</p>
+<blockquote>
+<p>核心：</p>
+</blockquote>
+<p>围绕下图AOP动态代理</p>
+<p>1.JoinPoint(<strong>拦截点，如某个业务方法</strong>)&amp;PointCut：定义被代理类Business的切入方法的接口。</p>
+<p>2.Advice(<strong>要切入的逻辑</strong>):实现切面类InvocationHandler，实现切面逻辑的织入方法 invoke(Object proxy, Method method, Object[] args) throws Throwable</p>
+<p>3.织入器:织入器Proxy通过在切面中定义pointcut来搜索目标（被代理类）的JoinPoint(切入点)，然后把要切入的逻辑（Advice）织入到目标对象里，生成代理类newProxyInstance。</p>
+<p><img src="../../imgs/image-20231123103714729.png" alt="image-20231123103714729"></p>
 <ul>
-<li>坐标系</li>
+<li>动态字节码</li>
 </ul>
-<p>方位水平测量是以世界坐标系为基准的，详情见上一篇文章<a href="/2022/09/20/Android%E4%BC%A0%E6%84%9F%E5%99%A8%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8/" title="Android传感器介绍及使用.md">Android传感器介绍及使用</a>中的传感器事件数据章节。</p>
-<ul>
-<li>传感器</li>
-</ul>
-<p>使用两种传感器来：</p>
-<ul>
-<li>地磁场传感器</li>
-<li>加速度计传感器</li>
-</ul>
-<span id="more"></span>  
-<h2 id="关键代码">关键代码</h2>
-<ul>
-<li>获取地磁场和加速度计传感器 &amp;&amp; 注册监听事件</li>
-</ul>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sensorMgr.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)?.also &#123;</span><br><span class="line">        accSensor -&gt; sensorMgr.registerListener(sensorEventListener,accSensor,SensorManager.SENSOR_DELAY_NORMAL,SensorManager.SENSOR_DELAY_UI)</span><br><span class="line">&#125;</span><br><span class="line">sensorMgr.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)?.also &#123;</span><br><span class="line">        magSensor -&gt; sensorMgr.registerListener(sensorEventListener,magSensor,SensorManager.SENSOR_DELAY_NORMAL,SensorManager.SENSOR_DELAY_UI)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>传感器数据处理</li>
-</ul>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">event?.sensor?.type.let &#123;</span><br><span class="line">    <span class="keyword">when</span>(it)&#123;</span><br><span class="line">        <span class="comment">//加速度(带重力)</span></span><br><span class="line">        Sensor.TYPE_ACCELEROMETER -&gt; System.arraycopy(event?.values,<span class="number">0</span>,accelerometerReading,<span class="number">0</span>,accelerometerReading.size)</span><br><span class="line">        <span class="comment">//磁力</span></span><br><span class="line">        Sensor.TYPE_MAGNETIC_FIELD -&gt; System.arraycopy(event?.values,<span class="number">0</span>,magnetometerReading,<span class="number">0</span>,magnetometerReading.size)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">val</span> cal = DegreeDataCal(accelerometerReading,magnetometerReading)</span><br><span class="line">    cal.cal().let &#123;</span><br><span class="line">        result -&gt; viewModel.updateAngel(result = AngelData(result[<span class="number">0</span>], result[<span class="number">1</span>], result[<span class="number">2</span>]))</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>角度计算</li>
-</ul>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//旋转矩阵</span></span><br><span class="line"><span class="keyword">val</span> rotationMatrix = FloatArray(<span class="number">9</span>)</span><br><span class="line"><span class="comment">//计算旋转矩阵数据</span></span><br><span class="line">SensorManager.getRotationMatrix(rotationMatrix,<span class="literal">null</span>,accArray,magArray)</span><br><span class="line"><span class="comment">//手机屏幕分别沿着x,y,z的旋转数据</span></span><br><span class="line"><span class="keyword">val</span> orientationAngles = FloatArray(<span class="number">3</span>)</span><br><span class="line">rotationMatrix.forEach &#123;</span><br><span class="line">    it.let &#123; Timber.i(it.toString()) &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//计算屏幕方向数据</span></span><br><span class="line">SensorManager.getOrientation(rotationMatrix,orientationAngles)</span><br></pre></td></tr></table></figure>
-<h2 id="案列">案列</h2>
-<p><a target="_blank" rel="noopener" href="https://github.com/thorjay/sensor_orientation">代码仓库</a></p>
-<h2 id="TODO">TODO</h2>
-<ul>
-<li>[ ] 界面显示</li>
-</ul>
+<p>相比于动态代理，动态字节码生成技术实现AOP原理是在运行期间目标字节码加载后，生成目标类的子类。将切面逻辑加入到子类中，所以是不需要基于接口的。</p>
+<p>Cglib包，强大的高性能代码生成库，运行期间拓展Java类和实现Java接口。在运行期间基于底层字节码技术ASM，在子类中采用方法拦截拦截父类方法的调用，并织入横切逻辑。</p>
+<blockquote>
+<p>核心：</p>
+</blockquote>
+<p>1.Advice:实现方法拦截器MethodInterceptor中Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable，编写切入逻辑。</p>
+<p>2.使用织入器Enhancer，导入被代理类(SuperClass)Busi及拦截器逻辑(织入的逻辑)AspectIntercept，创建子类。</p>
+<p><img src="../../imgs/image-20231123111714858.png" alt="image-20231123111714858"></p>
+<h2 id="概念">概念</h2>
+<p>理解AOP中几个基础概念</p>
+<p>Joinpoint</p>
+<p>PointCut</p>
+<p>Advice</p>
+<p>织入器</p>
+<h2 id="生命周期">生命周期</h2>
+<p><img src="../../imgs/image-20231124102512434.png" alt="image-20231124102512434"></p>
+<h2 id="其他">其他</h2>
+<p>AspectJ</p>
+<p>SpringAOP</p>
+<p>Javassit</p>
+<h2 id="代码案列">代码案列</h2>
+<h2 id="参考">参考</h2>
+<p><a target="_blank" rel="noopener" href="https://www.iteye.com/topic/1116696">AOP的实现机制</a></p>
 
     </div>
 
@@ -318,22 +324,18 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/Android/" rel="tag"># Android</a>
-              <a href="/tags/%E4%BC%A0%E6%84%9F%E5%99%A8/" rel="tag"># 传感器</a>
+              <a href="/tags/AOP/" rel="tag"># AOP</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2022/09/20/Android%E4%BC%A0%E6%84%9F%E5%99%A8%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8/" rel="prev" title="Android传感器介绍及使用.md">
-                  <i class="fa fa-chevron-left"></i> Android传感器介绍及使用.md
+                <a href="/2023/11/05/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E6%9E%9A%E4%B8%BE%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" rel="prev" title="设计模式-枚举工厂模式">
+                  <i class="fa fa-chevron-left"></i> 设计模式-枚举工厂模式
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2022/09/22/%E4%BD%BF%E7%94%A8Github%E5%92%8CHexo%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BA%E5%85%8D%E8%B4%B9%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="next" title="使用Github和Hexo快速搭建免费个人博客">
-                  使用Github和Hexo快速搭建免费个人博客 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>

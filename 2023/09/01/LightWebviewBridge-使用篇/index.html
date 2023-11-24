@@ -21,14 +21,14 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"thorjay.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.13.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"utterances","storage":true,"lazyload":false,"nav":null,"activeClass":"utterances"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="[TOC] LightWebviewBridge-使用篇介绍LightWebviewBridge定位为一个轻量级、小而美的Hybrid混合APP解决方案工具，帮助开发者快速实现H5APP或内嵌H5界面功能，只聚焦于业务功能开发，而不用关注H5和Native的通信实现，便可快速实现相应业务功能，达到类似小程序、公众号的效果； 链接地址 效果 解决方案目前市面上平台APP中的H5应用(如小程序、快应用">
+    <meta name="description" content="[TOC] LightWebviewBridge-使用篇 介绍 LightWebviewBridge定位为一个轻量级、小而美的Hybrid混合APP解决方案工具，帮助开发者快速实现H5APP或内嵌H5界面功能，只聚焦于业务功能开发，而不用关注H5和Native的通信实现，便可快速实现相应业务功能，达到类似小程序、公众号的效果； 链接地址 效果  解决方案 目前市面上平台APP中的H5应用(如小程序">
 <meta property="og:type" content="article">
 <meta property="og:title" content="LightWebviewBridge-使用篇">
 <meta property="og:url" content="https://thorjay.github.io/2023/09/01/LightWebviewBridge-%E4%BD%BF%E7%94%A8%E7%AF%87/index.html">
 <meta property="og:site_name" content="jay&#39;lab">
-<meta property="og:description" content="[TOC] LightWebviewBridge-使用篇介绍LightWebviewBridge定位为一个轻量级、小而美的Hybrid混合APP解决方案工具，帮助开发者快速实现H5APP或内嵌H5界面功能，只聚焦于业务功能开发，而不用关注H5和Native的通信实现，便可快速实现相应业务功能，达到类似小程序、公众号的效果； 链接地址 效果 解决方案目前市面上平台APP中的H5应用(如小程序、快应用">
+<meta property="og:description" content="[TOC] LightWebviewBridge-使用篇 介绍 LightWebviewBridge定位为一个轻量级、小而美的Hybrid混合APP解决方案工具，帮助开发者快速实现H5APP或内嵌H5界面功能，只聚焦于业务功能开发，而不用关注H5和Native的通信实现，便可快速实现相应业务功能，达到类似小程序、公众号的效果； 链接地址 效果  解决方案 目前市面上平台APP中的H5应用(如小程序">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://thorjay.github.io/imgs/demo.gif">
+<meta property="og:image" content="https://thorjay.github.io/2023/09/imgs/demo.gif">
 <meta property="article:published_time" content="2023-09-01T14:20:07.000Z">
 <meta property="article:modified_time" content="2023-09-02T03:45:59.187Z">
 <meta property="article:author" content="小森">
@@ -41,7 +41,7 @@
 <meta property="article:tag" content="解决方案">
 <meta property="article:tag" content="LightWebviewBridge">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://thorjay.github.io/imgs/demo.gif">
+<meta name="twitter:image" content="https://thorjay.github.io/2023/09/imgs/demo.gif">
 
 
 <link rel="canonical" href="https://thorjay.github.io/2023/09/01/LightWebviewBridge-%E4%BD%BF%E7%94%A8%E7%AF%87/">
@@ -159,7 +159,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#LightWebviewBridge-%E4%BD%BF%E7%94%A8%E7%AF%87"><span class="nav-number">1.</span> <span class="nav-text">LightWebviewBridge-使用篇</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.1.</span> <span class="nav-text">介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%88%E6%9E%9C"><span class="nav-number">1.1.1.</span> <span class="nav-text">效果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-number">1.1.2.</span> <span class="nav-text">解决方案</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3-%E5%9F%BA%E7%A1%80%E5%9C%BA%E6%99%AF"><span class="nav-number">1.2.</span> <span class="nav-text">使用详解-基础场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-%E8%BF%9B%E9%98%B6"><span class="nav-number">1.3.</span> <span class="nav-text">使用-进阶</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">1.4.</span> <span class="nav-text">后记</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">LightWebviewBridge-使用篇</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.1.</span> <span class="nav-text">介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%88%E6%9E%9C"><span class="nav-number">1.1.1.</span> <span class="nav-text">效果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-number">1.1.2.</span> <span class="nav-text">解决方案</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3-%E5%9F%BA%E7%A1%80%E5%9C%BA%E6%99%AF"><span class="nav-number">1.2.</span> <span class="nav-text">使用详解-基础场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-%E8%BF%9B%E9%98%B6"><span class="nav-number">1.3.</span> <span class="nav-text">使用-进阶</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">1.4.</span> <span class="nav-text">后记</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -172,7 +172,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-count">12</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -183,7 +183,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-count">33</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -281,42 +281,49 @@
     
     <div class="post-body" itemprop="articleBody">
         <p>[TOC]</p>
-<h1 id="LightWebviewBridge-使用篇"><a href="#LightWebviewBridge-使用篇" class="headerlink" title="LightWebviewBridge-使用篇"></a>LightWebviewBridge-使用篇</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p><code>LightWebviewBridge</code>定位为一个轻量级、小而美的Hybrid混合APP解决方案工具，帮助开发者快速实现H5APP或内嵌H5界面功能，只聚焦于业务功能开发，而不用关注H5和Native的通信实现，便可快速实现相应业务功能，达到类似<code>小程序、公众号</code>的效果；</p>
+<h1>LightWebviewBridge-使用篇</h1>
+<h2 id="介绍">介绍</h2>
+<p><code>LightWebviewBridge</code>定位为一个轻量级、小而美的Hybrid混合APP解决方案工具，帮助开发者快速实现H5APP或内嵌H5界面功能，只聚焦于业务功能开发，而不用关注H5和Native的通信实现，便可快速实现相应业务功能，达到类似<code>小程序、公众号</code>的效果；</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/thorjay/LightWebviewBridge">链接地址</a></p>
-<h3 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h3><p><img src="/../../imgs/demo.gif" alt="demo"></p>
-<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>目前市面上平台APP中的H5应用(如小程序、快应用、流应用…)，这类程序或应用的概念的实现大都是围绕WebView而开展，实现H5与Native的通信能力，可能各自的具体细节和标准不同。</p>
+<h3 id="效果">效果</h3>
+<p><img src="../../imgs/demo.gif" alt="demo"></p>
+<h3 id="解决方案">解决方案</h3>
+<p>目前市面上平台APP中的H5应用(如小程序、快应用、流应用…)，这类程序或应用的概念的实现大都是围绕WebView而开展，实现H5与Native的通信能力，可能各自的具体细节和标准不同。</p>
 <p>如果只需要实现H5调用原生能力，比如小程序的秒开、扫码获取信息、分享链接获取应用等众多场景，目前主流的方案要么过大，得深度集成；要么只是一个实现介绍，具体得自己从头实现，而与业务侧深度绑定；</p>
 <p>有没有一个即能快速集成，又将H5-Native通信的能力封装完成，而让开发者只轻松地关注业务实现，同时将公用能力模块化，<code>LightWebviewBridge</code>正是出于这个目的而诞生。</p>
-<h2 id="使用详解-基础场景"><a href="#使用详解-基础场景" class="headerlink" title="使用详解-基础场景"></a>使用详解-基础场景</h2><p>文字介绍得比较详细，尽量让闭环流程中的每个细节都解释到位，实际开发中代码比较少。</p>
+<h2 id="使用详解-基础场景">使用详解-基础场景</h2>
+<p>文字介绍得比较详细，尽量让闭环流程中的每个细节都解释到位，实际开发中代码比较少。</p>
 <blockquote>
 <p>初始化</p>
 </blockquote>
 <p>将框架上下文对象BridgeContext和webview(案列中是BaseWebView)绑定。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">WebViewBridge.initJsInterface(bridgeContext,mWebview)</span><br></pre></td></tr></table></figure>
-
 <blockquote>
 <p>场景-创建二维码</p>
 </blockquote>
 <p>这是一个典型且常用的业务场景，实现如何从H5输入数据，通过原生实现，再返回H5执行的过程。</p>
 <p>1.Native端：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">class Qr : NativeFunc&#123;    </span><br><span class="line">    fun createQr(data : String)&#123;</span><br><span class="line">        val bitmap = CodeUtils.createQRCode(data,600)</span><br><span class="line">        val bytes = ConvertUtils.bitmap2Bytes(bitmap)</span><br><span class="line">        val base64 = EncodeUtils.base64Encode2String(bytes)</span><br><span class="line">        callbackToJS(base64)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;    </span><br><span class="line">   </span><br></pre></td></tr></table></figure>
-
 <ul>
-<li><p>类：Qr；继承NativeFunc。</p>
+<li>
+<p>类：Qr；继承NativeFunc。</p>
 </li>
-<li><p>方法：createQr；与类一起配置到bridgeConfig.json。</p>
+<li>
+<p>方法：createQr；与类一起配置到bridgeConfig.json。</p>
 </li>
-<li><p>方法参数：data : String；从H5端的API中传入，数据格式根据业务功能约定。</p>
+<li>
+<p>方法参数：data : String；从H5端的API中传入，数据格式根据业务功能约定。</p>
 </li>
-<li><p>回调方法：callbackToJS；固定API，实现从Native端将数据返回给H5。</p>
+<li>
+<p>回调方法：callbackToJS；固定API，实现从Native端将数据返回给H5。</p>
 </li>
-<li><p>回调方法参数：base64：String；从Native端返回，数据格式根据业务功能约定。</p>
+<li>
+<p>回调方法参数：base64：String；从Native端返回，数据格式根据业务功能约定。</p>
 </li>
 </ul>
 <p>2.配置</p>
 <p>文件<strong>bridgeConfig.json</strong>，位于assets目录下</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;functions&quot;: &#123;</span><br><span class="line">  	...</span><br><span class="line">    &quot;createQr&quot;: &#123;</span><br><span class="line">      &quot;methodName&quot;: &quot;createQr&quot;,</span><br><span class="line">      &quot;className&quot;: &quot;com.rj.lightwebviewbridge.functions.Qr&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    ...</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <ul>
 <li>“createQr”:调用原生能力的唯一ID</li>
 <li>“methodName”：方法名</li>
@@ -324,15 +331,15 @@
 </ul>
 <p>3.H5调用</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">function createQr()&#123;</span><br><span class="line">    let data = document.getElementById(&quot;qrData&quot;).value</span><br><span class="line">    callToNative(&quot;createQr&quot;,data,function (response) &#123;</span><br><span class="line">        document.getElementById(&quot;qrImg&quot;).src = &quot;data:image/jpeg;base64,&quot; + response</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <ul>
 <li>callToNative：API，调用原生能力，与Native通信；三个参数，即请求体(Request)3元素。</li>
 <li>“createQr”(必填)：3元素之一，原生能力的唯一ID，与bridgeConfig.json中配置对应。</li>
-<li>data(可选)：3元素之二，传给Native端的数据，与Native中的*<em>方法参数</em>data对应。</li>
+<li>data(可选)：3元素之二，传给Native端的数据，与Native中的**方法参数*data对应。</li>
 <li>function(可选) ：3元素之三，JS回调函数，接收Native端的回调数据再执行。</li>
 <li>response：Native端的返回的业务数据，对应Native中的回调方法参数base64。</li>
 </ul>
-<h2 id="使用-进阶"><a href="#使用-进阶" class="headerlink" title="使用-进阶"></a>使用-进阶</h2><blockquote>
+<h2 id="使用-进阶">使用-进阶</h2>
+<blockquote>
 <p>场景-扫码</p>
 </blockquote>
 <p>借助相机扫码二维码、条形码等，然后将数据返回给H5再处理。其中相机能力H5端是无法实现的。</p>
@@ -341,13 +348,12 @@
 <li>需要通过ActivityStarter+LifecycleObserver，将唤起能力放入scanQR方法中，代码如下：</li>
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">fun scanQR()&#123;</span><br><span class="line">toScan()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">private fun toScan()&#123;</span><br><span class="line">        val intent = Intent(context.getContext(),FullScreenQRCodeScanActivity::class.java)</span><br><span class="line">        scanStarter = context.getActivityStarter(&quot;scanQr&quot;)!!</span><br><span class="line">        scanStarter.startActivity(intent)&#123;</span><br><span class="line">                result: ActivityResult -&gt;</span><br><span class="line">            if (result.resultCode == Activity.RESULT_OK) &#123;</span><br><span class="line">                val intent = result.data</span><br><span class="line">                val result = intent!!.getStringExtra(CameraScan.SCAN_RESULT)</span><br><span class="line">                callbackToJS(result)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
 <ul>
 <li>在加载WebView的上下文对象(Activity|Fragment)中初始化添加</li>
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">bridgeContext = BridgeContext(this.requireActivity())</span><br><span class="line"></span><br><span class="line">val scanObserver = ScanObserver(this.requireActivity().activityResultRegistry)</span><br><span class="line">lifecycle.addObserver(scanObserver)</span><br><span class="line">bridgeContext.addActivityStarter(&quot;scanQr&quot;,scanObserver)</span><br></pre></td></tr></table></figure>
-
-<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>H5的资源可以放在本地，也可以部署到服务器；本地的效果就类似小程序，秒开；远端的效果是类似公众号，需要加载。</p>
+<h2 id="后记">后记</h2>
+<p>H5的资源可以放在本地，也可以部署到服务器；本地的效果就类似小程序，秒开；远端的效果是类似公众号，需要加载。</p>
 <p>如果大家觉得有用，请关注<a target="_blank" rel="noopener" href="https://github.com/thorjay/LightWebviewBridge">GitHub</a>或<a target="_blank" rel="noopener" href="https://gitee.com/larry_jay/LightWebviewBridge">码云</a>，欢迎大家留言，谢谢！</p>
 
     </div>
