@@ -21,23 +21,23 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"thorjay.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.13.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"utterances","storage":true,"lazyload":false,"nav":null,"activeClass":"utterances"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="[TOC] git自动配置仓库用户信息 进行git提交时，发现commit记录中的Author(用户名和邮箱)与当前仓库的账户名和邮箱不匹配。特别是在操作不同项目仓库(公司仓库和私人仓库)或者多用户(Github账号，Gitee账号，公司git账号等)。这种情况是因为未配置当前仓库的用户信息，而默认使用全局配置信息导致的。 如何解决，方案如下： 解决方案 查看用户信息(可选) 确认全局用户信息 1">
+    <meta name="description" content="[TOC] git自动配置仓库用户信息进行git提交时，发现commit记录中的Author(用户名和邮箱)与当前仓库的账户名和邮箱不匹配。特别是在操作不同项目仓库(公司仓库和私人仓库)或者多用户(Github账号，Gitee账号，公司git账号等)。这种情况是因为未配置当前仓库的用户信息，而默认使用全局配置信息导致的。 如何解决，方案如下： 解决方案查看用户信息(可选)确认全局用户信息 123g">
 <meta property="og:type" content="article">
 <meta property="og:title" content="git自动配置仓库用户信息">
 <meta property="og:url" content="https://thorjay.github.io/2023/08/10/git%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E4%BB%93%E5%BA%93%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF/index.html">
 <meta property="og:site_name" content="jay&#39;lab">
-<meta property="og:description" content="[TOC] git自动配置仓库用户信息 进行git提交时，发现commit记录中的Author(用户名和邮箱)与当前仓库的账户名和邮箱不匹配。特别是在操作不同项目仓库(公司仓库和私人仓库)或者多用户(Github账号，Gitee账号，公司git账号等)。这种情况是因为未配置当前仓库的用户信息，而默认使用全局配置信息导致的。 如何解决，方案如下： 解决方案 查看用户信息(可选) 确认全局用户信息 1">
+<meta property="og:description" content="[TOC] git自动配置仓库用户信息进行git提交时，发现commit记录中的Author(用户名和邮箱)与当前仓库的账户名和邮箱不匹配。特别是在操作不同项目仓库(公司仓库和私人仓库)或者多用户(Github账号，Gitee账号，公司git账号等)。这种情况是因为未配置当前仓库的用户信息，而默认使用全局配置信息导致的。 如何解决，方案如下： 解决方案查看用户信息(可选)确认全局用户信息 123g">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://thorjay.github.io/2023/08/imgs/image-20230810201441355.png">
-<meta property="og:image" content="https://thorjay.github.io/2023/08/imgs//image-20230810201508279.png">
+<meta property="og:image" content="https://thorjay.github.io/imgs/image-20230810201441355.png">
+<meta property="og:image" content="https://thorjay.github.io/imgs/image-20230810201508279.png">
 <meta property="article:published_time" content="2023-08-10T15:50:45.000Z">
-<meta property="article:modified_time" content="2023-08-10T16:07:23.858Z">
+<meta property="article:modified_time" content="2024-07-01T01:39:25.753Z">
 <meta property="article:author" content="小森">
 <meta property="article:tag" content="git">
 <meta property="article:tag" content="技巧">
 <meta property="article:tag" content="github">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://thorjay.github.io/2023/08/imgs/image-20230810201441355.png">
+<meta name="twitter:image" content="https://thorjay.github.io/imgs/image-20230810201441355.png">
 
 
 <link rel="canonical" href="https://thorjay.github.io/2023/08/10/git%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E4%BB%93%E5%BA%93%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF/">
@@ -155,7 +155,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">git自动配置仓库用户信息</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-number">1.1.</span> <span class="nav-text">解决方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF-%E5%8F%AF%E9%80%89"><span class="nav-number">1.1.1.</span> <span class="nav-text">查看用户信息(可选)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%A1%881-%E6%89%8B%E5%8A%A8%E9%85%8D%E7%BD%AE"><span class="nav-number">1.1.2.</span> <span class="nav-text">方案1 手动配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%A1%882-%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE"><span class="nav-number">1.1.3.</span> <span class="nav-text">方案2 自动配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">1.2.</span> <span class="nav-text">后记</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#git%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E4%BB%93%E5%BA%93%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF"><span class="nav-number">1.</span> <span class="nav-text">git自动配置仓库用户信息</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-number">1.1.</span> <span class="nav-text">解决方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF-%E5%8F%AF%E9%80%89"><span class="nav-number">1.1.1.</span> <span class="nav-text">查看用户信息(可选)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%A1%881-%E6%89%8B%E5%8A%A8%E9%85%8D%E7%BD%AE"><span class="nav-number">1.1.2.</span> <span class="nav-text">方案1 手动配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%A1%882-%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE"><span class="nav-number">1.1.3.</span> <span class="nav-text">方案2 自动配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">1.2.</span> <span class="nav-text">后记</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -168,18 +168,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-count">14</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">15</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-count">39</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -277,47 +277,46 @@
     
     <div class="post-body" itemprop="articleBody">
         <p>[TOC]</p>
-<h1>git自动配置仓库用户信息</h1>
-<p>进行git提交时，发现commit记录中的Author(用户名和邮箱)与当前仓库的账户名和邮箱不匹配。特别是在操作不同项目仓库(<strong>公司仓库和私人仓库</strong>)或者多用户(<strong>Github账号，Gitee账号，公司git账号等</strong>)。这种情况是因为未配置当前仓库的用户信息，而默认使用全局配置信息导致的。</p>
+<h1 id="git自动配置仓库用户信息"><a href="#git自动配置仓库用户信息" class="headerlink" title="git自动配置仓库用户信息"></a>git自动配置仓库用户信息</h1><p>进行git提交时，发现commit记录中的Author(用户名和邮箱)与当前仓库的账户名和邮箱不匹配。特别是在操作不同项目仓库(<strong>公司仓库和私人仓库</strong>)或者多用户(<strong>Github账号，Gitee账号，公司git账号等</strong>)。这种情况是因为未配置当前仓库的用户信息，而默认使用全局配置信息导致的。</p>
 <p>如何解决，方案如下：</p>
-<h2 id="解决方案">解决方案</h2>
-<h3 id="查看用户信息-可选">查看用户信息(可选)</h3>
-<p>确认全局用户信息</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><h3 id="查看用户信息-可选"><a href="#查看用户信息-可选" class="headerlink" title="查看用户信息(可选)"></a>查看用户信息(可选)</h3><p>确认全局用户信息</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git config --global --list</span><br><span class="line">#或者</span><br><span class="line">git config -l</span><br></pre></td></tr></table></figure>
 <p>提交结果：</p>
-<p><img src="../../imgs/image-20230810201441355.png" alt="image-20230810201441355"></p>
-<h3 id="方案1-手动配置">方案1 手动配置</h3>
-<p>这个针对较少的项目仓库操作。</p>
+<p><img src="/../../imgs/image-20230810201441355.png" alt="image-20230810201441355"></p>
+<h3 id="方案1-手动配置"><a href="#方案1-手动配置" class="headerlink" title="方案1 手动配置"></a>方案1 手动配置</h3><p>这个针对较少的项目仓库操作。</p>
 <p>1.进入指定仓库路径下</p>
 <p>2.手动修改<strong>当前仓库</strong>配置</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#（可选）查看确认当前仓库的配置信息</span><br><span class="line">git config --local --list</span><br><span class="line">git config user.name localuser</span><br><span class="line">git config user.email local@email.com</span><br></pre></td></tr></table></figure>
+
 <p>提交结果：</p>
-<p><img src="../../imgs//image-20230810201508279.png" alt="image-20230810201508279"></p>
-<h3 id="方案2-自动配置">方案2 自动配置</h3>
-<p>针对较多的仓库或用户使用，通过在全局<code>.gitconfig</code>配置文件中使用<strong>includeIf</strong>条件来自动加载不同的用户配置。</p>
+<p><img src="/../../imgs/image-20230810201508279.png" alt="image-20230810201508279"></p>
+<h3 id="方案2-自动配置"><a href="#方案2-自动配置" class="headerlink" title="方案2 自动配置"></a>方案2 自动配置</h3><p>针对较多的仓库或用户使用，通过在全局<code>.gitconfig</code>配置文件中使用<strong>includeIf</strong>条件来自动加载不同的用户配置。</p>
 <p>1、首先，创建对应仓库的配置文件</p>
 <p>假设你有两个不同的 Git 用户，一个用于工作项目(work)，另一个用于个人项目(personal)，那就创建2个对应文件，比如.gitconfig_personal和.gitconfig_work</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi .gitconfig_personal</span><br></pre></td></tr></table></figure>
+
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[user]</span><br><span class="line">    name = Your Personal Name</span><br><span class="line">    email = personal@example.com</span><br></pre></td></tr></table></figure>
+
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi .gitconfig_work</span><br></pre></td></tr></table></figure>
+
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[user]</span><br><span class="line">    name = Your Work Name</span><br><span class="line">    email = work@example.com</span><br></pre></td></tr></table></figure>
+
 <p>2、最后，配置第一步中的文件</p>
 <p>在全局配置文件<code>~.gitconfig</code>中，使用 <code>includeIf</code> 来根据不同的条件(比如:仓库路径)加载上面的配置文件,这样就会根据不同项目或工作场景，针对<code>gitdir</code>指定的路径去加载对应path的配置文件，从而使用不同的 Git 用户配置，而不是默认的全局配置Git用户。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[includeIf &quot;gitdir:~/work/&quot;]</span><br><span class="line">    path = ~/.gitconfig_work</span><br><span class="line"></span><br><span class="line">[includeIf &quot;gitdir:~/personal/&quot;]</span><br><span class="line">    path = ~/.gitconfig_personal</span><br></pre></td></tr></table></figure>
+
 <blockquote>
 <p>注意:</p>
-<p>1.git仓库路径末尾需要带上/，不然可能无法识别到</p>
+<p>1.git仓库路径末尾需要带上&#x2F;，不然可能无法识别到</p>
 <p>2.如果一个目录下的所有仓库都对应相同的user，可以使用目录路径来替换</p>
 </blockquote>
-<h2 id="后记">后记</h2>
-<ul>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><ul>
 <li>Git用户名 vs git仓库账户</li>
 </ul>
-<p>Git用户名(本地)：在终端上使用Git，需要配置用户信息(用户名和email)，表示是&quot;谁&quot;在操作Git，来提交代码等等一系列操作。</p>
+<p>Git用户名(本地)：在终端上使用Git，需要配置用户信息(用户名和email)，表示是”谁”在操作Git，来提交代码等等一系列操作。</p>
 <p>Git仓库账户(远端):如果需要使用代码托管的git服务，比如Github，Gitee等，就需要账号信息(账号名和email)来进行注册或登录。一般使用https操作仓库时，会将账号信息配置到仓库的config中；但使用ssh操作时，并不会。</p>
 <ul>
-<li>
-<p>includeIf</p>
+<li><p>includeIf</p>
 <p>gitconfig 中的 includeIf 是 Git 2.13 版本引入的一个功能，它允许你在一个用户主配置文件中为特定的条件包含其他配置文件。这对于多用户管理以及在不同的项目或环境中使用不同的 Git 配置非常有用。通过 includeIf，你可以基于一些条件来加载特定的配置。</p>
 </li>
 </ul>
@@ -368,7 +367,7 @@
 
 <div class="copyright">
   &copy; 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2025</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

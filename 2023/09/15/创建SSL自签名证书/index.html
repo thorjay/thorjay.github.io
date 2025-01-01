@@ -21,12 +21,12 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"thorjay.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.13.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"utterances","storage":true,"lazyload":false,"nav":null,"activeClass":"utterances"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="[toc] 背景 记录一下创建SSL自签名的过程，因为本地测试，需要将WEB应用HTTP切换到HTTPS，这需要证书。 环境 openssl安装，这个不麻烦，可以去问GPT或者自行搜索，不同系统环境操作不一样。 在我的mac上使用Homebrew安装的： 1brew install openssl 密钥 需要先生成一个rsa密钥 12&#x2F;&#x2F;生成一个rsa私钥，des3算法，1024位openssl">
+    <meta name="description" content="[toc] 背景记录一下创建SSL自签名的过程，因为本地测试，需要将WEB应用HTTP切换到HTTPS，这需要证书。 环境openssl安装，这个不麻烦，可以去问GPT或者自行搜索，不同系统环境操作不一样。 在我的mac上使用Homebrew安装的： 1brew install openssl  密钥需要先生成一个rsa密钥 12&#x2F;&#x2F;生成一个rsa私钥，des3算法，1024位openssl ge">
 <meta property="og:type" content="article">
 <meta property="og:title" content="创建SSL自签名证书">
 <meta property="og:url" content="https://thorjay.github.io/2023/09/15/%E5%88%9B%E5%BB%BASSL%E8%87%AA%E7%AD%BE%E5%90%8D%E8%AF%81%E4%B9%A6/index.html">
 <meta property="og:site_name" content="jay&#39;lab">
-<meta property="og:description" content="[toc] 背景 记录一下创建SSL自签名的过程，因为本地测试，需要将WEB应用HTTP切换到HTTPS，这需要证书。 环境 openssl安装，这个不麻烦，可以去问GPT或者自行搜索，不同系统环境操作不一样。 在我的mac上使用Homebrew安装的： 1brew install openssl 密钥 需要先生成一个rsa密钥 12&#x2F;&#x2F;生成一个rsa私钥，des3算法，1024位openssl">
+<meta property="og:description" content="[toc] 背景记录一下创建SSL自签名的过程，因为本地测试，需要将WEB应用HTTP切换到HTTPS，这需要证书。 环境openssl安装，这个不麻烦，可以去问GPT或者自行搜索，不同系统环境操作不一样。 在我的mac上使用Homebrew安装的： 1brew install openssl  密钥需要先生成一个rsa密钥 12&#x2F;&#x2F;生成一个rsa私钥，des3算法，1024位openssl ge">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-09-15T09:30:03.986Z">
 <meta property="article:modified_time" content="2023-09-15T13:49:46.955Z">
@@ -163,18 +163,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-count">14</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">15</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-count">39</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -292,39 +292,36 @@
     
     <div class="post-body" itemprop="articleBody">
         <p>[toc]</p>
-<h2 id="背景">背景</h2>
-<p>记录一下创建SSL自签名的过程，因为本地测试，需要将WEB应用HTTP切换到HTTPS，这需要证书。</p>
-<h2 id="环境">环境</h2>
-<p>openssl安装，这个不麻烦，可以去问GPT或者自行搜索，不同系统环境操作不一样。</p>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>记录一下创建SSL自签名的过程，因为本地测试，需要将WEB应用HTTP切换到HTTPS，这需要证书。</p>
+<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><p>openssl安装，这个不麻烦，可以去问GPT或者自行搜索，不同系统环境操作不一样。</p>
 <p>在我的mac上使用Homebrew安装的：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install openssl</span><br></pre></td></tr></table></figure>
-<h2 id="密钥">密钥</h2>
-<p>需要先生成一个rsa密钥</p>
+
+<h2 id="密钥"><a href="#密钥" class="headerlink" title="密钥"></a>密钥</h2><p>需要先生成一个rsa密钥</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//生成一个rsa私钥，des3算法，1024位</span><br><span class="line">openssl genrsa -des3 -out mykey.key 1024</span><br></pre></td></tr></table></figure>
-<h2 id="证书签名请求">证书签名请求</h2>
-<p>生成CSR(证书签名请求)</p>
+
+<h2 id="证书签名请求"><a href="#证书签名请求" class="headerlink" title="证书签名请求"></a>证书签名请求</h2><p>生成CSR(证书签名请求)</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl req -new -key mykey.key -out mycsr.csr</span><br></pre></td></tr></table></figure>
-<h2 id="签名证书">签名证书</h2>
-<p>利用上面👆🏻2个文件生成crt签名证书文件</p>
+
+
+
+<h2 id="签名证书"><a href="#签名证书" class="headerlink" title="签名证书"></a>签名证书</h2><p>利用上面👆🏻2个文件生成crt签名证书文件</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//-in 证书签名请求 -signkey 密钥文件 -out 输出证书文件 -days 证书有效期(天)</span><br><span class="line">openssl x509 -req -in mycsr.csr -signkey mykey.key -out mycrt.crt -days 3650</span><br></pre></td></tr></table></figure>
+
 <p>-outform 证书格式，默认是PEM,如果需要DER格式，可以生命**–outform der**。</p>
 <p>另外，自签名证书，对浏览器来说，颁发机构是为知的，需要被认可的机构颁发证书。</p>
 <p>如果需要，可以在腾讯云或阿里云上去申请。</p>
-<h2 id="拓展">拓展</h2>
-<blockquote>
+<h2 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h2><blockquote>
 <p>SSL与SSH</p>
 </blockquote>
 <p>都是用于加密通信的协议</p>
 <p>相同点：</p>
 <ul>
-<li>
-<p>加密通信：保护数据在传输过程中的机密性和完整性，通过加密通信来防止第三方未经授权的访问或数据篡改。</p>
+<li><p>加密通信：保护数据在传输过程中的机密性和完整性，通过加密通信来防止第三方未经授权的访问或数据篡改。</p>
 </li>
-<li>
-<p>密钥交换：都使用密钥交换协议来建立安全连接。SSH通常使用Diffie-Hellman协议，而SSL使用TLS握手过程。</p>
+<li><p>密钥交换：都使用密钥交换协议来建立安全连接。SSH通常使用Diffie-Hellman协议，而SSL使用TLS握手过程。</p>
 </li>
-<li>
-<p>双向认证：都支持双向认证，这意味着客户端和服务器都可以验证对方的身份，确保连接的安全性。</p>
+<li><p>双向认证：都支持双向认证，这意味着客户端和服务器都可以验证对方的身份，确保连接的安全性。</p>
 </li>
 </ul>
 <p>区别：</p>
@@ -333,11 +330,10 @@
 <tr>
 <th></th>
 <th>SSH</th>
-<th>SSL/TLS</th>
+<th>SSL&#x2F;TLS</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>作用</td>
 <td>用于安全远程连接另一台机器以发送命令，提供一个加密终端会话</td>
 <td>用于在双方之间安全传输数据，通常是网站访问者和网站服务器的在应用层的安全通信，比如HTTPS,WSS,SMTPS,FTPS…</td>
@@ -372,8 +368,7 @@
 <td>Secure Shell</td>
 <td>Secure Sockets Layer</td>
 </tr>
-</tbody>
-</table>
+</tbody></table>
 <blockquote>
 <p>openssl</p>
 </blockquote>
@@ -381,8 +376,8 @@
 <p>主要功能及作用：</p>
 <ol>
 <li><strong>加密和解密支持：</strong> OpenSSL 提供了多种加密和解密算法，包括对称加密（如AES、DES）、非对称加密（如RSA、DSA）、散列函数（如SHA-1、SHA-256）和消息认证码（MAC）等。这些功能使得 OpenSSL 能够保护数据的机密性和完整性。</li>
-<li><strong>SSL/TLS 实现：</strong> OpenSSL 提供了 SSL（Secure Sockets Layer）和 TLS（Transport Layer Security）协议的实现，用于建立安全的网络通信。这使得 OpenSSL 能够支持安全的 Web 通信（HTTPS）以及其他网络协议的安全版本，如SMTPS、FTPS等。</li>
-<li><strong>数字证书和公钥基础设施（PKI）：</strong> OpenSSL 包括工具和库，用于生成和管理数字证书、私钥和公钥。这对于创建自签名证书、为服务器配置 SSL/TLS 和进行身份验证非常有用。</li>
+<li><strong>SSL&#x2F;TLS 实现：</strong> OpenSSL 提供了 SSL（Secure Sockets Layer）和 TLS（Transport Layer Security）协议的实现，用于建立安全的网络通信。这使得 OpenSSL 能够支持安全的 Web 通信（HTTPS）以及其他网络协议的安全版本，如SMTPS、FTPS等。</li>
+<li><strong>数字证书和公钥基础设施（PKI）：</strong> OpenSSL 包括工具和库，用于生成和管理数字证书、私钥和公钥。这对于创建自签名证书、为服务器配置 SSL&#x2F;TLS 和进行身份验证非常有用。</li>
 <li><strong>密码学功能：</strong> OpenSSL 提供了丰富的密码学功能，包括随机数生成、伪随机数生成、大数运算和数字签名等。这些功能为安全通信提供了基础支持。</li>
 <li><strong>跨平台：</strong> OpenSSL 是一个跨平台的库，可在多种操作系统上运行，包括Linux、Unix、Windows等。这使得它适用于各种不同的应用程序和环境。</li>
 <li><strong>开源：</strong> OpenSSL 是一个开源项目，使用 OpenSSL 的源代码可以在 OpenSSL 许可证（类似于双重许可证）下自由使用和分发。</li>
@@ -395,15 +390,19 @@
 <p>PEM（Privacy-Enhanced Mail）和DER（Distinguished Encoding Rules）都是用于表示和编码数据的格式标准，它们通常与加密和安全领域有关。</p>
 <p>PEM 是一种基于文本的编码格式，通常用于表示各种数据，包括数字证书、私钥、公钥、证书请求和其他加密相关的数据。PEM 格式使用 Base64 编码将二进制数据转换为文本，同时包含头部和尾部标记，以标识数据类型。PEM 文件通常使用扩展名 <code>.pem</code>，<code>.crt</code> 或 <code>.key</code>。PEM 格式是人类可读的，容易查看和编辑，因此在许多场景下广泛使用，如证书文件、密钥文件和配置文件。文件实例：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">-----BEGIN CERTIFICATE-----</span><br><span class="line">MIICyzCCAbOgAwIBAgIJAMWf3MfqN6/0MA0GCSqGSIb3DQEBCwUAMBMxETAPBgNV</span><br><span class="line">...</span><br><span class="line">-----END CERTIFICATE-----</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
 <p>DER 是一种二进制编码格式，通常用于表示复杂的数据结构，如数字证书和证书撤销列表（CRL）。DER 使用一组规则来编码数据，以确保数据在不同系统上的一致性。DER 格式不包含可读的文本标记，因此不像 PEM 格式那样容易查看。DER 格式的数据通常更紧凑，因为它没有 Base64 编码所需的额外字符。示例 DER 编码数据（十六进制表示）：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">30820122300D06092A864886F70D01010105000382010F003082010A02820101...</span><br></pre></td></tr></table></figure>
+
 <p>通常，当您从网络上下载数字证书时，它们将以DER格式提供。浏览器和操作系统可以理解DER格式的证书，因为它是一种标准格式。</p>
 <p>将PEM格式转为DER格式</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl x509 -outform der -in certificate.pem -out certificate.der</span><br></pre></td></tr></table></figure>
+
 <blockquote>
 <p>SSH生成公私钥</p>
 </blockquote>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//rsa密钥类型，-b 长度为2048 -f 密钥路径</span><br><span class="line">ssh-keygen -t rsa -b 2048 -f ~/.ssh/id_rsa</span><br></pre></td></tr></table></figure>
+
 <ol>
 <li>当命令执行时，您将被提示输入一个密码来保护您的私钥。这个密码是可选的，如果您希望私钥受到额外的保护，可以设置密码。否则，您可以直接按回车键留空。</li>
 <li>密钥对生成完成后，私钥存储在 <code>~/.ssh/id_rsa</code>，而公钥存储在 <code>~/.ssh/id_rsa.pub</code>。私钥是私有的，绝对不应该共享，而公钥可以在需要的地方共享，如远程服务器。</li>
@@ -453,7 +452,7 @@
 
 <div class="copyright">
   &copy; 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2025</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

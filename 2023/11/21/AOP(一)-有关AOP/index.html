@@ -21,23 +21,23 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"thorjay.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.13.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"utterances","storage":true,"lazyload":false,"nav":null,"activeClass":"utterances"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="介绍 关于AOP，需要了解面向切面编程 Aspect of Program； 面向切面编程主要是相对于面向对象编程来讲，如果面向对象是针对某个对象封装来纵向实现逻辑，那么面向切面就是针对这些对象实现横向逻辑实现。  场景 登录鉴权 日志 数据统计，行为分析 几种实现机制  动态代理  面向切面针对的是方法，而不是对象；所以在动态代理类中，我们需要定义接口，利用接口中的方法JoinPoint来定义切">
+    <meta name="description" content="介绍关于AOP，需要了解面向切面编程 Aspect of Program； 面向切面编程主要是相对于面向对象编程来讲，如果面向对象是针对某个对象封装来纵向实现逻辑，那么面向切面就是针对这些对象实现横向逻辑实现。  场景登录鉴权 日志 数据统计，行为分析 几种实现机制 动态代理  面向切面针对的是方法，而不是对象；所以在动态代理类中，我们需要定义接口，利用接口中的方法JoinPoint来定义切入面；">
 <meta property="og:type" content="article">
 <meta property="og:title" content="AOP(一)_关AOP">
 <meta property="og:url" content="https://thorjay.github.io/2023/11/21/AOP(%E4%B8%80)-%E6%9C%89%E5%85%B3AOP/index.html">
 <meta property="og:site_name" content="jay&#39;lab">
-<meta property="og:description" content="介绍 关于AOP，需要了解面向切面编程 Aspect of Program； 面向切面编程主要是相对于面向对象编程来讲，如果面向对象是针对某个对象封装来纵向实现逻辑，那么面向切面就是针对这些对象实现横向逻辑实现。  场景 登录鉴权 日志 数据统计，行为分析 几种实现机制  动态代理  面向切面针对的是方法，而不是对象；所以在动态代理类中，我们需要定义接口，利用接口中的方法JoinPoint来定义切">
+<meta property="og:description" content="介绍关于AOP，需要了解面向切面编程 Aspect of Program； 面向切面编程主要是相对于面向对象编程来讲，如果面向对象是针对某个对象封装来纵向实现逻辑，那么面向切面就是针对这些对象实现横向逻辑实现。  场景登录鉴权 日志 数据统计，行为分析 几种实现机制 动态代理  面向切面针对的是方法，而不是对象；所以在动态代理类中，我们需要定义接口，利用接口中的方法JoinPoint来定义切入面；">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://thorjay.github.io/2023/11/imgs/image-20231121144035025.png">
-<meta property="og:image" content="https://thorjay.github.io/2023/11/imgs/image-20231123103714729.png">
-<meta property="og:image" content="https://thorjay.github.io/2023/11/imgs/image-20231123111714858.png">
-<meta property="og:image" content="https://thorjay.github.io/2023/11/imgs/image-20231124102512434.png">
+<meta property="og:image" content="https://thorjay.github.io/imgs/image-20231121144035025.png">
+<meta property="og:image" content="https://thorjay.github.io/imgs/image-20231123103714729.png">
+<meta property="og:image" content="https://thorjay.github.io/imgs/image-20231123111714858.png">
+<meta property="og:image" content="https://thorjay.github.io/imgs/image-20231124102512434.png">
 <meta property="article:published_time" content="2023-11-21T03:00:43.148Z">
 <meta property="article:modified_time" content="2023-11-24T03:13:47.427Z">
 <meta property="article:author" content="小森">
 <meta property="article:tag" content="AOP">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://thorjay.github.io/2023/11/imgs/image-20231121144035025.png">
+<meta name="twitter:image" content="https://thorjay.github.io/imgs/image-20231121144035025.png">
 
 
 <link rel="canonical" href="https://thorjay.github.io/2023/11/21/AOP(%E4%B8%80)-%E6%9C%89%E5%85%B3AOP/">
@@ -168,18 +168,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-count">14</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">15</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-count">39</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -267,16 +267,13 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h2 id="介绍">介绍</h2>
-<p>关于AOP，需要了解面向切面编程 Aspect of Program；</p>
+        <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>关于AOP，需要了解面向切面编程 Aspect of Program；</p>
 <p>面向切面编程主要是相对于面向对象编程来讲，如果面向对象是针对某个对象封装来纵向实现逻辑，那么面向切面就是针对这些对象实现横向逻辑实现。</p>
-<p><img src="../../imgs/image-20231121144035025.png" alt="image-20231121144035025"></p>
-<h2 id="场景">场景</h2>
-<p>登录鉴权</p>
+<p><img src="/../../imgs/image-20231121144035025.png" alt="image-20231121144035025"></p>
+<h2 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h2><p>登录鉴权</p>
 <p>日志</p>
 <p>数据统计，行为分析</p>
-<h2 id="几种实现机制">几种实现机制</h2>
-<ul>
+<h2 id="几种实现机制"><a href="#几种实现机制" class="headerlink" title="几种实现机制"></a>几种实现机制</h2><ul>
 <li>动态代理</li>
 </ul>
 <p>面向切面针对的是方法，而不是对象；所以在动态代理类中，我们需要定义接口，利用接口中的方法JoinPoint来定义切入面；利用Object InvocationHandler. invoke(Object proxy, Method method, Object[] args) throws Throwable方法，实现Advice切入逻辑(切入面方法before和after)；利用Proxy.newIntance()生成动态代理类生成接口对象，代理业务逻辑类。</p>
@@ -288,33 +285,28 @@
 <p>1.JoinPoint(<strong>拦截点，如某个业务方法</strong>)&amp;PointCut：定义被代理类Business的切入方法的接口。</p>
 <p>2.Advice(<strong>要切入的逻辑</strong>):实现切面类InvocationHandler，实现切面逻辑的织入方法 invoke(Object proxy, Method method, Object[] args) throws Throwable</p>
 <p>3.织入器:织入器Proxy通过在切面中定义pointcut来搜索目标（被代理类）的JoinPoint(切入点)，然后把要切入的逻辑（Advice）织入到目标对象里，生成代理类newProxyInstance。</p>
-<p><img src="../../imgs/image-20231123103714729.png" alt="image-20231123103714729"></p>
+<p><img src="/../../imgs/image-20231123103714729.png" alt="image-20231123103714729"></p>
 <ul>
 <li>动态字节码</li>
 </ul>
 <p>相比于动态代理，动态字节码生成技术实现AOP原理是在运行期间目标字节码加载后，生成目标类的子类。将切面逻辑加入到子类中，所以是不需要基于接口的。</p>
 <p>Cglib包，强大的高性能代码生成库，运行期间拓展Java类和实现Java接口。在运行期间基于底层字节码技术ASM，在子类中采用方法拦截拦截父类方法的调用，并织入横切逻辑。</p>
 <blockquote>
-<p>核心：</p>
+<p> 核心：</p>
 </blockquote>
 <p>1.Advice:实现方法拦截器MethodInterceptor中Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable，编写切入逻辑。</p>
 <p>2.使用织入器Enhancer，导入被代理类(SuperClass)Busi及拦截器逻辑(织入的逻辑)AspectIntercept，创建子类。</p>
-<p><img src="../../imgs/image-20231123111714858.png" alt="image-20231123111714858"></p>
-<h2 id="概念">概念</h2>
-<p>理解AOP中几个基础概念</p>
+<p><img src="/../../imgs/image-20231123111714858.png" alt="image-20231123111714858"></p>
+<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>理解AOP中几个基础概念</p>
 <p>Joinpoint</p>
 <p>PointCut</p>
 <p>Advice</p>
 <p>织入器</p>
-<h2 id="生命周期">生命周期</h2>
-<p><img src="../../imgs/image-20231124102512434.png" alt="image-20231124102512434"></p>
-<h2 id="其他">其他</h2>
-<p>AspectJ</p>
+<h2 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h2><p><img src="/../../imgs/image-20231124102512434.png" alt="image-20231124102512434"></p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>AspectJ</p>
 <p>SpringAOP</p>
 <p>Javassit</p>
-<h2 id="代码案列">代码案列</h2>
-<h2 id="参考">参考</h2>
-<p><a target="_blank" rel="noopener" href="https://www.iteye.com/topic/1116696">AOP的实现机制</a></p>
+<h2 id="代码案列"><a href="#代码案列" class="headerlink" title="代码案列"></a>代码案列</h2><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://www.iteye.com/topic/1116696">AOP的实现机制</a></p>
 
     </div>
 
@@ -336,6 +328,9 @@
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/2024/06/12/%E5%86%85%E9%83%A8%E8%AE%BE%E5%A4%87%E5%BA%93%E5%AD%98%E7%AE%A1%E7%90%86%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%BC%80%E5%8F%91%E7%9A%84%E4%B8%80%E6%AC%A1%E8%AE%B0%E5%BD%95/" rel="next" title="内存设备课程管理系统设计与开发">
+                  内存设备课程管理系统设计与开发 <i class="fa fa-chevron-right"></i>
+                </a>
             </div>
           </div>
     </footer>
@@ -357,7 +352,7 @@
 
 <div class="copyright">
   &copy; 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2025</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

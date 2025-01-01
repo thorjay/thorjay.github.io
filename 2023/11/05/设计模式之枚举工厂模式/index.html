@@ -21,14 +21,14 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"thorjay.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.13.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"utterances","storage":true,"lazyload":false,"nav":null,"activeClass":"utterances"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="[TOC] 介绍 背景 GOF 在 1994 年，由 Erich Gamma、Richard Helm、Ralph Johnson 和 John Vlissides 四人合著出版了一本名为 Design Patterns - Elements of Reusable Object-Oriented Software（中文译名：设计模式 - 可复用的面向对象软件元素） 的书，该书首次提到了软件开发中">
+    <meta name="description" content="[TOC] 介绍背景GOF在 1994 年，由 Erich Gamma、Richard Helm、Ralph Johnson 和 John Vlissides 四人合著出版了一本名为 Design Patterns - Elements of Reusable Object-Oriented Software（中文译名：设计模式 - 可复用的面向对象软件元素） 的书，该书首次提到了软件开发中设计模">
 <meta property="og:type" content="article">
 <meta property="og:title" content="设计模式-枚举工厂模式">
 <meta property="og:url" content="https://thorjay.github.io/2023/11/05/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E6%9E%9A%E4%B8%BE%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/index.html">
 <meta property="og:site_name" content="jay&#39;lab">
-<meta property="og:description" content="[TOC] 介绍 背景 GOF 在 1994 年，由 Erich Gamma、Richard Helm、Ralph Johnson 和 John Vlissides 四人合著出版了一本名为 Design Patterns - Elements of Reusable Object-Oriented Software（中文译名：设计模式 - 可复用的面向对象软件元素） 的书，该书首次提到了软件开发中">
+<meta property="og:description" content="[TOC] 介绍背景GOF在 1994 年，由 Erich Gamma、Richard Helm、Ralph Johnson 和 John Vlissides 四人合著出版了一本名为 Design Patterns - Elements of Reusable Object-Oriented Software（中文译名：设计模式 - 可复用的面向对象软件元素） 的书，该书首次提到了软件开发中设计模">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://thorjay.github.io/2023/11/imgs/%E6%9E%9A%E4%B8%BE%E5%B7%A5%E5%8E%82%E7%B1%BB%E5%85%B3%E7%B3%BB%E5%9B%BE.png">
+<meta property="og:image" content="https://thorjay.github.io/imgs/%E6%9E%9A%E4%B8%BE%E5%B7%A5%E5%8E%82%E7%B1%BB%E5%85%B3%E7%B3%BB%E5%9B%BE.png">
 <meta property="article:published_time" content="2023-11-05T13:49:57.000Z">
 <meta property="article:modified_time" content="2023-11-06T07:00:41.693Z">
 <meta property="article:author" content="小森">
@@ -37,7 +37,7 @@
 <meta property="article:tag" content="FunctionalInterface">
 <meta property="article:tag" content="Lambda表达式">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://thorjay.github.io/2023/11/imgs/%E6%9E%9A%E4%B8%BE%E5%B7%A5%E5%8E%82%E7%B1%BB%E5%85%B3%E7%B3%BB%E5%9B%BE.png">
+<meta name="twitter:image" content="https://thorjay.github.io/imgs/%E6%9E%9A%E4%B8%BE%E5%B7%A5%E5%8E%82%E7%B1%BB%E5%85%B3%E7%B3%BB%E5%9B%BE.png">
 
 
 <link rel="canonical" href="https://thorjay.github.io/2023/11/05/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E6%9E%9A%E4%B8%BE%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/">
@@ -155,7 +155,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%83%8C%E6%99%AF"><span class="nav-number">1.1.</span> <span class="nav-text">背景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#GOF"><span class="nav-number">1.1.1.</span> <span class="nav-text">GOF</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.2.</span> <span class="nav-text">设计模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.2.1.</span> <span class="nav-text">工厂模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%BA%E6%99%AF"><span class="nav-number">1.3.</span> <span class="nav-text">场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%9B%BE"><span class="nav-number">1.4.</span> <span class="nav-text">类图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Demo%E4%BB%A3%E7%A0%81"><span class="nav-number">1.5.</span> <span class="nav-text">Demo代码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">参考：</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%83%8C%E6%99%AF"><span class="nav-number">1.1.</span> <span class="nav-text">背景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#GOF"><span class="nav-number">1.1.1.</span> <span class="nav-text">GOF</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.2.</span> <span class="nav-text">设计模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.2.1.</span> <span class="nav-text">工厂模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%BA%E6%99%AF"><span class="nav-number">1.3.</span> <span class="nav-text">场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%9B%BE"><span class="nav-number">1.4.</span> <span class="nav-text">类图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Demo%E4%BB%A3%E7%A0%81"><span class="nav-number">1.5.</span> <span class="nav-text">Demo代码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%EF%BC%9A"><span class="nav-number">2.</span> <span class="nav-text">参考：</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -168,18 +168,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-count">14</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">15</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-count">39</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -277,45 +277,43 @@
     
     <div class="post-body" itemprop="articleBody">
         <p>[TOC]</p>
-<h1>介绍</h1>
-<h2 id="背景">背景</h2>
-<h3 id="GOF">GOF</h3>
-<p>在 1994 年，由 Erich Gamma、Richard Helm、Ralph Johnson 和 John Vlissides 四人合著出版了一本名为 <strong>Design Patterns - Elements of Reusable Object-Oriented Software（中文译名：设计模式 - 可复用的面向对象软件元素）</strong> 的书，该书首次提到了软件开发中设计模式的概念。</p>
+<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><h3 id="GOF"><a href="#GOF" class="headerlink" title="GOF"></a>GOF</h3><p>在 1994 年，由 Erich Gamma、Richard Helm、Ralph Johnson 和 John Vlissides 四人合著出版了一本名为 <strong>Design Patterns - Elements of Reusable Object-Oriented Software（中文译名：设计模式 - 可复用的面向对象软件元素）</strong> 的书，该书首次提到了软件开发中设计模式的概念。</p>
 <p>四位作者合称 <strong>GOF（全拼 Gang of Four）</strong>。他们所提出的设计模式主要是基于以下的面向对象设计原则。</p>
 <ul>
 <li>对接口编程而不是对实现编程。</li>
 <li>优先使用对象组合而不是继承。</li>
 </ul>
-<h2 id="设计模式">设计模式</h2>
-<ul>
+<h2 id="设计模式"><a href="#设计模式" class="headerlink" title="设计模式"></a>设计模式</h2><ul>
 <li>创建型模式</li>
 <li>结构型模式</li>
 <li>行为型模式</li>
 </ul>
 <p>本篇介绍的<strong>工厂模式</strong>属于设计模式中的<strong>构造者模式</strong>。</p>
-<h3 id="工厂模式">工厂模式</h3>
-<p>工厂模式提供了一种将<strong>对象的实例化过程</strong>封装在工厂类中的方式。通过使用工厂模式，可以将对象的<strong>创建与使用代码</strong>分离解耦，提供一种<strong>统一的接口</strong>来创建不同类型的对象。</p>
+<h3 id="工厂模式"><a href="#工厂模式" class="headerlink" title="工厂模式"></a>工厂模式</h3><p>工厂模式提供了一种将<strong>对象的实例化过程</strong>封装在工厂类中的方式。通过使用工厂模式，可以将对象的<strong>创建与使用代码</strong>分离解耦，提供一种<strong>统一的接口</strong>来创建不同类型的对象。</p>
 <p>在工厂模式中，我们在创建对象时不会对客户端使用时暴露创建逻辑，并且是通过使用一个共同的接口来指向新创建的对象。</p>
-<h2 id="场景">场景</h2>
-<p>我目前面对一个业务功能场景，需要基于Netty，使用WebSocket+Stomp协议来处理消息。其中对消息帧的解析处理，需要根据不同消息数据帧(StompFrame)的类型采取不同的处理方式。这些类型有：建立连接(Connect)、断开连接(DisConnect)、发送(Send)、订阅(Subcribe)、取消订阅(Unsubcribe)等，但是消息通道是同一个，这个场景就是典型的创建和使用需要分离，使用统一的接口来处理不同类型的消息。</p>
+<h2 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h2><p>我目前面对一个业务功能场景，需要基于Netty，使用WebSocket+Stomp协议来处理消息。其中对消息帧的解析处理，需要根据不同消息数据帧(StompFrame)的类型采取不同的处理方式。这些类型有：建立连接(Connect)、断开连接(DisConnect)、发送(Send)、订阅(Subcribe)、取消订阅(Unsubcribe)等，但是消息通道是同一个，这个场景就是典型的创建和使用需要分离，使用统一的接口来处理不同类型的消息。</p>
 <p>在编写代码实现功能过程中，有多种解决方案。如下：</p>
 <ul>
 <li>方案1：判断选择if-else</li>
 </ul>
 <p>一般情况，最直观会去采用类型标记+if-else或switch条件判断来，伪码如下：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">if(commnd.equal(StompCommand.CONNECT))&#123;</span><br><span class="line">	processor = new ConnectProcesser();</span><br><span class="line">&#125;else if(commnd.equal(StompCommand.DISCONNECT))&#123;</span><br><span class="line">	processor = new DisConnectProcesser();</span><br><span class="line">&#125;else if()&#123;</span><br><span class="line">	...	</span><br><span class="line">&#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>方案2：工厂模式</li>
 </ul>
 <p>定义一个接口IStompProcessor，抽象消息处理方法process(ctx,frame),然后使用一个映射表Map，将类型与实际处理对象建立映射。伪码如下：</p>
 <p>1.抽象接口：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public interface IStompProcesser&#123; void process(ctx,frame)&#125;</span><br></pre></td></tr></table></figure>
+
 <p>2.每个具体实现：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public ConnectProcesser extends IStompProcesser&#123;</span><br><span class="line">	void process(ctx,frame)&#123;</span><br><span class="line">		...connect的具体实现..</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public SendProcesser extends IStompProcesser&#123;</span><br><span class="line">	void process(ctx,frame)&#123;</span><br><span class="line">		...send的具体实现..</span><br><span class="line">	&#125;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>3.工厂类：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public StompProcesserManager&#123;</span><br><span class="line">    Map&lt;StompCommand, IStompProcesser&gt; map = new 	HashMap&lt;StompCommand, IStompProcesser&gt;(7);</span><br><span class="line">    map.put(StompCommand.CONNECT, new ConnectProcesser());</span><br><span class="line">    map.put(StompCommand.SEND, new SendProcesser());</span><br><span class="line">    map.put(StompCommand.SUBSCRIBE, new SubscribeProcesser());</span><br><span class="line">    map.put(StompCommand.UNSUBSCRIBE, new UnsubscribeProcesser());</span><br><span class="line">    map.put(StompCommand.ERROR, new ErrorProcesser());</span><br><span class="line">    map.put(StompCommand.DISCONNECT, new DisconnectProcesser());</span><br><span class="line">    processers = Collections.unmodifiableMap(map);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>4.具体调用：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">//IStompProcesser为抽象接口。通过StompProcesserManager将map的处理消息对象取出来</span><br><span class="line">IStompProcesser stompProcesser = StompProcesserManager将.getProcesser(frame.command());</span><br><span class="line">StompFrame returnFrame = stompProcesser.process(ctx, frame);</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>方案3：枚举工厂模式(抽象工厂模式)</li>
 </ul>
@@ -323,13 +321,15 @@
 <p>与方法2工厂模式相比，第1，2步定义抽象接口和具体实现类都是一样的。</p>
 <p>在设计工厂类时，通过枚举封装。实现类的插入和调用都通过枚举类来实现。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">/**定义泛型工厂类*/</span><br><span class="line">    public enum Type&#123;</span><br><span class="line">        CONNECT(1, StompCommand.CONNECT, ConnectProcessor::new),</span><br><span class="line">        SEND(2, StompCommand.SEND, SendProcessor::new),</span><br><span class="line">        ...</span><br><span class="line"></span><br><span class="line">        public final int index;</span><br><span class="line"></span><br><span class="line">        public final StompCommand command;</span><br><span class="line"></span><br><span class="line">        public final StompProcessorFunction factory;</span><br><span class="line"></span><br><span class="line">        Type(int index, StompCommand command, StompProcessorFunction factory) &#123;</span><br><span class="line">            this.index = index;</span><br><span class="line">            this.command = command;</span><br><span class="line">            this.factory = factory;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public int getIndex() &#123;</span><br><span class="line">            return this.index;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public  StompCommand getCommand() &#123;</span><br><span class="line">            return this.command;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public static final Type[] MAPPING = new Type[]&#123;</span><br><span class="line">          CONNECT</span><br><span class="line">        &#125;;</span><br><span class="line">//通过类型标记command获取枚举</span><br><span class="line">        public static Type fromCommand(StompCommand command) throws IllegalArgumentException&#123;</span><br><span class="line">            switch (command)&#123;</span><br><span class="line">                case CONNECT:</span><br><span class="line">                    return CONNECT;</span><br><span class="line">                case SEND:</span><br><span class="line">                    return SEND;</span><br><span class="line">                case SUBSCRIBE:</span><br><span class="line">                    return SUBSCRIBE;</span><br><span class="line">                case UNSUBSCRIBE:</span><br><span class="line">                    return UNSUBSCRIBE;</span><br><span class="line">                case DISCONNECT:</span><br><span class="line">                    return DISCONNECT;</span><br><span class="line">            &#125;</span><br><span class="line">            throw new IllegalArgumentException(&quot;Unknown command: &quot; + command);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
 <p>4.定义一个枚举工厂类创建方法。通过采用Java8之后的函数方法，来具体实现类的构造。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * @desc 处理器工厂方法</span><br><span class="line">*/</span><br><span class="line">@FunctionalInterface</span><br><span class="line">public interface StompProcessorFunction &#123;</span><br><span class="line">    IStompProcessor create();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>6.调用</p>
 <p>通过传入类型标记msg.command()，获取需要的枚举类型Type，通过Type得到具体工程类factory，通过factory得到具体的实现类IStompProcessorImpl。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">IStompProcessor iStompProcessor = IStompProcessor.Type.fromCommand(msg.command()).factory.create();</span><br><span class="line">        iStompProcessor.process(ctx,msg);</span><br></pre></td></tr></table></figure>
-<h2 id="类图">类图</h2>
-<p><img src="../../imgs/%E6%9E%9A%E4%B8%BE%E5%B7%A5%E5%8E%82%E7%B1%BB%E5%85%B3%E7%B3%BB%E5%9B%BE.png" alt="枚举工厂类关系图"></p>
+
+<h2 id="类图"><a href="#类图" class="headerlink" title="类图"></a>类图</h2><p><img src="/../../imgs/%E6%9E%9A%E4%B8%BE%E5%B7%A5%E5%8E%82%E7%B1%BB%E5%85%B3%E7%B3%BB%E5%9B%BE.png" alt="枚举工厂类关系图"></p>
 <p>1.接口及实现类</p>
 <p>IStomProcessor：接口</p>
 <p>ConnectProcessor:接口实现类</p>
@@ -339,11 +339,9 @@
 <p>StompProcessorFunction:每个具体实现类的构造函数类。输出返回IStomProcessor</p>
 <p>4.调用实现</p>
 <p>通过类型command和工厂类Type，构建具体实现类。</p>
-<h2 id="Demo代码">Demo代码</h2>
-<p>一个生成不同厂商汽车的案列：</p>
+<h2 id="Demo代码"><a href="#Demo代码" class="headerlink" title="Demo代码"></a>Demo代码</h2><p>一个生成不同厂商汽车的案列：</p>
 <p><a target="_blank" rel="noopener" href="https://gitee.com/larry_jay/design/tree/main/src/main/java/factory">https://gitee.com/larry_jay/design/tree/main/src/main/java/factory</a></p>
-<h1>参考：</h1>
-<p><a target="_blank" rel="noopener" href="https://www.runoob.com/design-pattern/design-pattern-intro.html">https://www.runoob.com/design-pattern/design-pattern-intro.html</a></p>
+<h1 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h1><p><a target="_blank" rel="noopener" href="https://www.runoob.com/design-pattern/design-pattern-intro.html">https://www.runoob.com/design-pattern/design-pattern-intro.html</a></p>
 
     </div>
 
@@ -392,7 +390,7 @@
 
 <div class="copyright">
   &copy; 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2025</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
